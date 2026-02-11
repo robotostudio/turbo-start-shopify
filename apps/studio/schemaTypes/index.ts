@@ -1,9 +1,20 @@
-import { pageBuilderBlocks } from "@/schemaTypes/blocks/index";
-import { definitions } from "@/schemaTypes/definitions/index";
-import { documents, singletons } from "@/schemaTypes/documents/index";
+import { pageBuilderBlocks } from "@/schemaTypes/blocks";
+import { definitions } from "@/schemaTypes/definitions";
+import { documents, singletons } from "@/schemaTypes/documents";
+import { annotations, objects } from "@/schemaTypes/objects";
+import { portableTextSimpleType } from "./portableText/portableTextSimpleType";
+import { portableTextType } from "./portableText/portableTextType";
 
 // Creating a new constant 'schemaTypes' which is a copy of the 'documents' array
-export const schemaTypes = [...documents, ...definitions, ...pageBuilderBlocks];
+export const schemaTypes = [
+  ...documents,
+  ...objects,
+  ...annotations,
+  ...definitions,
+  ...pageBuilderBlocks,
+  portableTextSimpleType,
+  portableTextType,
+];
 
 // Creating a new constant 'schemaNames' which is an array of names extracted from the 'documents' array
 export const schemaNames = [...documents].map((doc) => doc.name);

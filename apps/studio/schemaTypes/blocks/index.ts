@@ -6,7 +6,7 @@ import { imageLinkCards } from "@/schemaTypes/blocks/image-link-cards";
 import { subscribeNewsletter } from "@/schemaTypes/blocks/subscribe-newsletter";
 
 export const pageBuilderBlocks = [
-  hero,
+  // hero,
   cta,
   featureCardsIcon,
   faqAccordion,

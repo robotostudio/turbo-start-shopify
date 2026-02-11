@@ -1,9 +1,11 @@
 import { assist } from "@sanity/assist";
+import { colorInput } from "@sanity/color-input";
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { presentationTool } from "sanity/presentation";
 import { structureTool } from "sanity/structure";
 import { unsplashImageAsset } from "sanity-plugin-asset-source-unsplash";
+import { imageHotspotArrayPlugin } from "sanity-plugin-hotspot-array";
 import { lucideIconPicker } from "sanity-plugin-lucide-icon-picker";
 import { media } from "sanity-plugin-media";
 
@@ -42,6 +44,8 @@ export default defineConfig({
     structureTool({
       structure,
     }),
+    colorInput(),
+    imageHotspotArrayPlugin(),
     presentationUrl(),
     visionTool(),
     lucideIconPicker(),
