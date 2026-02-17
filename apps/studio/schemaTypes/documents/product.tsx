@@ -2,8 +2,8 @@ import { TagIcon } from "@sanity/icons";
 import pluralize from "pluralize-esm";
 import { defineField, defineType } from "sanity";
 
-import ProductHiddenInput from "../../components/inputs/ProductHidden";
-import ShopifyDocumentStatus from "../../components/media/ShopifyDocumentStatus";
+import ProductHiddenInput from "../../components/inputs/product-hidden";
+import ShopifyDocumentStatus from "../../components/media/shopify-document-status";
 import { customRichText } from "@/schemaTypes/definitions/rich-text";
 import { GROUP, GROUPS } from "@/utils/constants";
 import { getPriceRange } from "../../utils/getPriceRange";

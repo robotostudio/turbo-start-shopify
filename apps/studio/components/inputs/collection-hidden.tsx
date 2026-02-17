@@ -1,6 +1,6 @@
 import { WarningOutlineIcon } from "@sanity/icons";
-import { StringFieldProps } from "sanity";
 import { Box, Card, Flex, Stack, Text } from "@sanity/ui";
+import type { StringFieldProps } from "sanity";
 
 export default function CollectionHiddenInput(props: StringFieldProps) {
   return (

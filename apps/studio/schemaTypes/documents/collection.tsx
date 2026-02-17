@@ -2,8 +2,8 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 import { PackageIcon } from "@sanity/icons";
 import { getExtension } from "@sanity/asset-utils";
 import pluralize from "pluralize-esm";
-import CollectionHiddenInput from "../../components/inputs/CollectionHidden";
-import ShopifyDocumentStatus from "../../components/media/ShopifyDocumentStatus";
+import CollectionHiddenInput from "../../components/inputs/collection-hidden";
+import ShopifyDocumentStatus from "../../components/media/shopify-document-status";
 import { GROUP, GROUPS } from "@/utils/constants";
 
 export const collection = defineType({

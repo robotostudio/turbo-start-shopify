@@ -6,7 +6,7 @@ import {
 } from "@sanity/icons";
 import type { FieldGroupDefinition } from "sanity";
 
-import ShopifyIcon from "@/components/icons/Shopify";
+import ShopifyIcon from "@/components/icons/shopify";
 
 // --- Field Groups (unified across all schemas) ---
 
