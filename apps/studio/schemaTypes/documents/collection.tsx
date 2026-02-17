@@ -1,130 +1,130 @@
+import { defineArrayMember, defineField, defineType } from "sanity";
+import { PackageIcon } from "@sanity/icons";
+import { getExtension } from "@sanity/asset-utils";
+import pluralize from "pluralize-esm";
+import CollectionHiddenInput from "../../components/inputs/CollectionHidden";
+import ShopifyDocumentStatus from "../../components/media/ShopifyDocumentStatus";
+import { GROUP, GROUPS } from "@/utils/constants";
 
-import {defineArrayMember, defineField, defineType} from 'sanity'
-import {PackageIcon} from '@sanity/icons'
-import {getExtension} from '@sanity/asset-utils'
-import pluralize from 'pluralize-esm'
-import CollectionHiddenInput from '../../components/inputs/CollectionHidden'
-import ShopifyDocumentStatus from '../../components/media/ShopifyDocumentStatus'
-import { GROUPS } from '../../constants'
-
-export const collectionType = defineType({
-  name: 'collection',
-  title: 'Collection',
-  type: 'document',
+export const collection = defineType({
+  name: "collection",
+  title: "Collection",
+  type: "document",
   icon: PackageIcon,
   groups: GROUPS,
+  description: "Shopify collection with editorial content and custom theming",
   fields: [
     defineField({
-      name: 'hidden',
-      type: 'string',
+      name: "hidden",
+      type: "string",
       components: {
         field: CollectionHiddenInput,
       },
-      hidden: ({parent}) => {
-        const isDeleted = parent?.store?.isDeleted
-        return !isDeleted
+      hidden: ({ parent }) => {
+        const isDeleted = parent?.store?.isDeleted;
+        return !isDeleted;
       },
     }),
     defineField({
-      name: 'titleProxy',
-      title: 'Title',
-      type: 'proxyString',
-      options: {field: 'store.title'},
+      name: "titleProxy",
+      title: "Title",
+      type: "proxyString",
+      options: { field: "store.title" },
     }),
     defineField({
-      name: 'slugProxy',
-      title: 'Slug',
-      type: 'proxyString',
-      options: {field: 'store.slug.current'},
+      name: "slugProxy",
+      title: "Slug",
+      type: "proxyString",
+      options: { field: "store.slug.current" },
     }),
     defineField({
-      name: 'colorTheme',
-      type: 'reference',
-      to: [{type: 'colorTheme'}],
-      group: 'theme',
+      name: "colorTheme",
+      type: "reference",
+      to: [{ type: "colorTheme" }],
+      group: GROUP.THEME,
     }),
     defineField({
-      name: 'vector',
-      title: 'Vector artwork',
-      type: 'image',
-      description: 'Displayed in collection links using color theme',
+      name: "vector",
+      title: "Vector artwork",
+      type: "image",
+      description: "Displayed in collection links using color theme",
       options: {
-        accept: 'image/svg+xml',
+        accept: "image/svg+xml",
       },
-      group: 'theme',
+      group: GROUP.THEME,
       validation: (Rule) =>
         Rule.custom((image) => {
           if (!image?.asset?._ref) {
-            return true
+            return true;
           }
 
-          const format = getExtension(image.asset._ref)
+          const format = getExtension(image.asset._ref);
 
-          if (format !== 'svg') {
-            return 'Image must be an SVG'
+          if (format !== "svg") {
+            return "Image must be an SVG";
           }
-          return true
+          return true;
         }),
     }),
     defineField({
-      name: 'showHero',
-      type: 'boolean',
-      description: 'If disabled, page title will be displayed instead',
-      group: 'editorial',
+      name: "showHero",
+      type: "boolean",
+      description: "If disabled, page title will be displayed instead",
+      group: GROUP.CONTENT,
     }),
     defineField({
-      name: 'hero',
-      type: 'hero',
-      hidden: ({document}) => !document?.showHero,
-      group: 'editorial',
+      name: "hero",
+      type: "hero",
+      hidden: ({ document }) => !document?.showHero,
+      group: GROUP.CONTENT,
     }),
     defineField({
-      name: 'modules',
-      type: 'array',
-      description: 'Editorial modules to associate with this collection',
+      name: "modules",
+      type: "array",
+      description: "Editorial modules to associate with this collection",
       of: [
-        defineArrayMember({type: 'callout'}),
-        defineArrayMember({type: 'callToAction'}),
-        defineArrayMember({type: 'image'}),
-        defineArrayMember({type: 'instagram'}),
+        defineArrayMember({ type: "callout" }),
+        defineArrayMember({ type: "callToAction" }),
+        defineArrayMember({ type: "image" }),
+        defineArrayMember({ type: "instagram" }),
       ],
-      group: 'editorial',
+      group: GROUP.CONTENT,
     }),
     defineField({
-      name: 'store',
-      title: 'Shopify',
-      type: 'shopifyCollection',
-      description: 'Collection data from Shopify (read-only)',
-      group: 'shopifySync',
+      name: "store",
+      title: "Shopify",
+      type: "shopifyCollection",
+      description: "Collection data from Shopify (read-only)",
+      group: GROUP.COMMERCE,
     }),
     defineField({
-      name: 'seo',
-      title: 'SEO',
-      type: 'seo',
-      group: 'seo',
+      name: "seo",
+      title: "SEO",
+      type: "seo",
+      group: GROUP.SEO,
     }),
   ],
   orderings: [
     {
-      name: 'titleAsc',
-      title: 'Title (A-Z)',
-      by: [{field: 'store.title', direction: 'asc'}],
+      name: "titleAsc",
+      title: "Title (A-Z)",
+      by: [{ field: "store.title", direction: "asc" }],
     },
     {
-      name: 'titleDesc',
-      title: 'Title (Z-A)',
-      by: [{field: 'store.title', direction: 'desc'}],
+      name: "titleDesc",
+      title: "Title (Z-A)",
+      by: [{ field: "store.title", direction: "desc" }],
     },
   ],
   preview: {
     select: {
-      imageUrl: 'store.imageUrl',
-      isDeleted: 'store.isDeleted',
-      rules: 'store.rules',
-      title: 'store.title',
+      imageUrl: "store.imageUrl",
+      isDeleted: "store.isDeleted",
+      rules: "store.rules",
+      title: "store.title",
     },
-    prepare({imageUrl, isDeleted, rules, title}) {
-      const ruleCount = rules?.length || 0
+    prepare({ imageUrl, isDeleted, rules, title }) {
+      const ruleCount = rules?.length || 0;
 
       return {
         media: (
@@ -135,9 +135,12 @@ export const collectionType = defineType({
             title={title}
           />
         ),
-        subtitle: ruleCount > 0 ? `Automated (${pluralize('rule', ruleCount, true)})` : 'Manual',
+        subtitle:
+          ruleCount > 0
+            ? `Automated (${pluralize("rule", ruleCount, true)})`
+            : "Manual",
         title,
-      }
+      };
     },
   },
-})
+});

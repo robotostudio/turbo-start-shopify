@@ -1,5 +1,5 @@
-import {ConfigContext} from 'sanity'
-import {StructureBuilder} from 'sanity/structure'
+import { ConfigContext } from "sanity";
+import { StructureBuilder } from "sanity/structure";
 
 /**
  * Helper for creating and typing composable structure parts.
@@ -7,5 +7,5 @@ import {StructureBuilder} from 'sanity/structure'
 export default function defineStructure<StructureType>(
   factory: (S: StructureBuilder, context: ConfigContext) => StructureType
 ) {
-  return factory
+  return factory;
 }

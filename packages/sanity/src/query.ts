@@ -34,6 +34,8 @@ const customLinkFragment = /* groq */ `
     "href": select(
       type == "internal" => internal->slug.current,
       type == "external" => external,
+      type == "email" => "mailto:" + email,
+      type == "product" => "/products/" + product->store.slug.current,
       "#"
     ),
   }
@@ -42,7 +44,17 @@ const customLinkFragment = /* groq */ `
 const markDefsFragment = /* groq */ `
   markDefs[]{
     ...,
-    ${customLinkFragment}
+    ${customLinkFragment},
+    _type == "linkInternal" => {
+      "href": reference->slug.current,
+    },
+    _type == "linkExternal" => {
+      "href": url,
+      "openInNewTab": newWindow,
+    },
+    _type == "linkEmail" => {
+      "href": "mailto:" + email,
+    },
   }
 `;
 
@@ -91,6 +103,8 @@ const buttonsFragment = /* groq */ `
     "href": select(
       url.type == "internal" => url.internal->slug.current,
       url.type == "external" => url.external,
+      url.type == "email" => "mailto:" + url.email,
+      url.type == "product" => "/products/" + url.product->store.slug.current,
       url.href
     ),
   }
@@ -115,6 +129,8 @@ const imageLinkCardsBlock = /* groq */ `
       "href": select(
         url.type == "internal" => url.internal->slug.current,
         url.type == "external" => url.external,
+        url.type == "email" => "mailto:" + url.email,
+        url.type == "product" => "/products/" + url.product->store.slug.current,
         url.href
       ),
       ${imageFragment},
@@ -150,6 +166,8 @@ const faqAccordionBlock = /* groq */ `
       "href": select(
         url.type == "internal" => url.internal->slug.current,
         url.type == "external" => url.external,
+        url.type == "email" => "mailto:" + url.email,
+        url.type == "product" => "/products/" + url.product->store.slug.current,
         url.href
       )
     }
@@ -330,6 +348,8 @@ export const queryFooterData = defineQuery(`
         "href": select(
           url.type == "internal" => url.internal->slug.current,
           url.type == "external" => url.external,
+          url.type == "email" => "mailto:" + url.email,
+          url.type == "product" => "/products/" + url.product->store.slug.current,
           url.href
         ),
       }
@@ -354,6 +374,8 @@ export const queryNavbarData = defineQuery(`
           "href": select(
             url.type == "internal" => url.internal->slug.current,
             url.type == "external" => url.external,
+            url.type == "email" => "mailto:" + url.email,
+            url.type == "product" => "/products/" + url.product->store.slug.current,
             url.href
           )
         }
@@ -366,6 +388,8 @@ export const queryNavbarData = defineQuery(`
         "href": select(
           url.type == "internal" => url.internal->slug.current,
           url.type == "external" => url.external,
+          url.type == "email" => "mailto:" + url.email,
+          url.type == "product" => "/products/" + url.product->store.slug.current,
           url.href
         )
       }

@@ -2,14 +2,14 @@ import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
 import {
   BookMarked,
   CogIcon,
-  File,
   FileText,
   HomeIcon,
   type LucideIcon,
   MessageCircle,
   PanelBottom,
-  PanelBottomIcon,
+  PanelTop,
   Settings2,
+  ShoppingBag,
   TrendingUpDown,
   User,
 } from "lucide-react";
@@ -19,87 +19,28 @@ import type {
 } from "sanity/structure";
 
 import { createSlugBasedStructure } from "@/components/nested-pages-structure";
-import type { SchemaType, SingletonType } from "@/schemaTypes/index";
-import { getTitleCase } from "@/utils/helper";
+import type { SingletonType } from "@/schemaTypes/index";
 
-type Base<T = SchemaType> = {
-  id?: string;
-  type: T;
-  preview?: boolean;
-  title?: string;
-  icon?: LucideIcon;
-};
-
-type CreateSingleTon = {
-  S: StructureBuilder;
-} & Base<SingletonType>;
-
-const createSingleTon = ({ S, type, title, icon }: CreateSingleTon) => {
-  const newTitle = title ?? getTitleCase(type);
+function singleton(
+  S: StructureBuilder,
+  type: SingletonType,
+  title: string,
+  icon?: LucideIcon
+) {
   return S.listItem()
-    .title(newTitle)
-    .icon(icon ?? File)
-    .child(S.document().schemaType(type).documentId(type));
-};
+    .title(title)
+    .icon(icon)
+    .child(S.document().schemaType(type).documentId(type).title(title));
+}
 
-type CreateList = {
-  S: StructureBuilder;
-} & Base;
-
-// This function creates a list item for a type. It takes a StructureBuilder instance (S),
-// a type, an icon, and a title as parameters. It generates a title for the type if not provided,
-// and uses a default icon if not provided. It then returns a list item with the generated or
-// provided title and icon.
-
-const createList = ({ S, type, icon, title, id }: CreateList) => {
-  const newTitle = title ?? getTitleCase(type);
-  return S.documentTypeListItem(type)
-    .id(id ?? type)
-    .title(newTitle)
-    .icon(icon ?? File);
-};
-
-type CreateIndexList = {
-  S: StructureBuilder;
-  list: Base;
-  index: Base<SingletonType>;
-  context: StructureResolverContext;
-};
-
-const createIndexListWithOrderableItems = ({
-  S,
-  index,
-  list,
-  context,
-}: CreateIndexList) => {
-  const indexTitle = index.title ?? getTitleCase(index.type);
-  const listTitle = list.title ?? getTitleCase(list.type);
-  return S.listItem()
-    .title(listTitle)
-    .icon(index.icon ?? File)
-    .child(
-      S.list()
-        .title(indexTitle)
-        .items([
-          S.listItem()
-            .title(indexTitle)
-            .icon(index.icon ?? File)
-            .child(
-              S.document()
-                .views([S.view.form()])
-                .schemaType(index.type)
-                .documentId(index.type)
-            ),
-          orderableDocumentListDeskItem({
-            type: list.type,
-            S,
-            context,
-            icon: list.icon ?? File,
-            title: `${listTitle}`,
-          }),
-        ])
-    );
-};
+function list(
+  S: StructureBuilder,
+  type: string,
+  title: string,
+  icon?: LucideIcon
+) {
+  return S.documentTypeListItem(type).title(title).icon(icon);
+}
 
 export const structure = (
   S: StructureBuilder,
@@ -108,41 +49,49 @@ export const structure = (
   S.list()
     .title("Content")
     .items([
-      createSingleTon({ S, type: "homePage", icon: HomeIcon }),
+      singleton(S, "homePage", "Home Page", HomeIcon),
       S.divider(),
+
+      // Content
       createSlugBasedStructure(S, "page"),
-      createList({
-        S,
-        type: "product",
-        title: "Products",
-        icon: MessageCircle,
-      }),
-      createList({
-        S,
-        type: "collection",
-        title: "Collections",
-        icon: File,
-      }),
-      createIndexListWithOrderableItems({
-        S,
-        index: { type: "blogIndex", icon: BookMarked },
-        list: { type: "blog", title: "Blogs", icon: FileText },
-        context,
-      }),
-      createList({
-        S,
-        type: "faq",
-        title: "FAQs",
-        icon: MessageCircle,
-      }),
-      createList({ S, type: "author", title: "Authors", icon: User }),
-      createList({
-        S,
-        type: "redirect",
-        title: "Redirects",
-        icon: TrendingUpDown,
-      }),
+      S.listItem()
+        .title("Blog")
+        .icon(BookMarked)
+        .child(
+          S.list()
+            .title("Blog")
+            .items([
+              singleton(S, "blogIndex", "Blog Settings", BookMarked),
+              orderableDocumentListDeskItem({
+                type: "blog",
+                S,
+                context,
+                icon: FileText,
+                title: "Blog Posts",
+              }),
+            ])
+        ),
+      list(S, "faq", "FAQs", MessageCircle),
+      list(S, "author", "Authors", User),
       S.divider(),
+
+      // Commerce
+      S.listItem()
+        .title("Commerce")
+        .icon(ShoppingBag)
+        .child(
+          S.list()
+            .title("Commerce")
+            .items([
+              list(S, "product", "Products", ShoppingBag),
+              list(S, "collection", "Collections", BookMarked),
+              list(S, "productVariant", "Product Variants", FileText),
+              list(S, "colorTheme", "Color Themes", Settings2),
+            ])
+        ),
+      S.divider(),
+
+      // Configuration
       S.listItem()
         .title("Site Configuration")
         .icon(Settings2)
@@ -150,24 +99,10 @@ export const structure = (
           S.list()
             .title("Site Configuration")
             .items([
-              createSingleTon({
-                S,
-                type: "navbar",
-                title: "Navigation",
-                icon: PanelBottom,
-              }),
-              createSingleTon({
-                S,
-                type: "footer",
-                title: "Footer",
-                icon: PanelBottomIcon,
-              }),
-              createSingleTon({
-                S,
-                type: "settings",
-                title: "Global Settings",
-                icon: CogIcon,
-              }),
+              singleton(S, "navbar", "Navigation", PanelTop),
+              singleton(S, "footer", "Footer", PanelBottom),
+              singleton(S, "settings", "Global Settings", CogIcon),
+              list(S, "redirect", "Redirects", TrendingUpDown),
             ])
         ),
     ]);

@@ -6,7 +6,7 @@ import {
 } from "sanity";
 
 import { PathnameFieldComponent } from "@/components/slug-field-component";
-import { GROUP } from "@/utils/constant";
+import { GROUP } from "@/utils/constants";
 import {
   createSlugValidator,
   getDocumentTypeConfig,
@@ -29,7 +29,7 @@ export const buttonsField = defineField({
 
 export const pageBuilderField = defineField({
   name: "pageBuilder",
-  group: GROUP.MAIN_CONTENT,
+  group: GROUP.CONTENT,
   type: "pageBuilder",
   description:
     "Build your page by adding different sections like text, images, and other content blocks",

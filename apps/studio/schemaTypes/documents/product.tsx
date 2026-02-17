@@ -4,15 +4,18 @@ import { defineField, defineType } from "sanity";
 
 import ProductHiddenInput from "../../components/inputs/ProductHidden";
 import ShopifyDocumentStatus from "../../components/media/ShopifyDocumentStatus";
-import { GROUPS } from "../../constants";
+import { customRichText } from "@/schemaTypes/definitions/rich-text";
+import { GROUP, GROUPS } from "@/utils/constants";
 import { getPriceRange } from "../../utils/getPriceRange";
 
-export const productType = defineType({
+export const product = defineType({
   name: "product",
   title: "Product",
   type: "document",
   icon: TagIcon,
   groups: GROUPS,
+  description:
+    "Shopify product with editorial content, synced via Shopify Connect",
   fields: [
     defineField({
       name: "hidden",
@@ -43,24 +46,38 @@ export const productType = defineType({
       name: "colorTheme",
       type: "reference",
       to: [{ type: "colorTheme" }],
-      group: "editorial",
+      group: GROUP.CONTENT,
     }),
-    defineField({
-      name: "body",
-      type: "portableText",
-      group: "editorial",
-    }),
+    customRichText(
+      [
+        "block",
+        "image",
+        "accordion",
+        "callout",
+        "grid",
+        "images",
+        "imageWithProductHotspots",
+        "instagram",
+        "products",
+      ],
+      {
+        name: "body",
+        title: "Body",
+        description: "Editorial content for this product",
+        group: GROUP.CONTENT,
+      }
+    ),
     defineField({
       name: "store",
       type: "shopifyProduct",
       description: "Product data from Shopify (read-only)",
-      group: "shopifySync",
+      group: GROUP.COMMERCE,
     }),
     defineField({
       name: "seo",
       title: "SEO",
       type: "seo",
-      group: "seo",
+      group: GROUP.SEO,
     }),
   ],
   orderings: [

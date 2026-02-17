@@ -2,7 +2,7 @@ import { TrendingUpDown } from "lucide-react";
 import type { SanityClient, SlugValue } from "sanity";
 import { defineField, defineType, getDraftId, getPublishedId } from "sanity";
 
-import { API_VERSION } from "@/utils/constant";
+import { API_VERSION } from "@/utils/constants";
 
 type Redirect = {
   source: SlugValue;

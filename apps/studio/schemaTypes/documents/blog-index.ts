@@ -1,7 +1,7 @@
 import { defineField, defineType } from "sanity";
 
 import { documentSlugField, pageBuilderField } from "@/schemaTypes/common";
-import { GROUP, GROUPS } from "@/utils/constant";
+import { GROUP, GROUPS } from "@/utils/constants";
 import { ogFields } from "@/utils/og-fields";
 import { seoFields } from "@/utils/seo-fields";
 
@@ -18,17 +18,17 @@ export const blogIndex = defineType({
       type: "string",
       description:
         "The main heading that will appear at the top of your blog listing page",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     defineField({
       name: "description",
       type: "text",
       description:
         "A short summary of what visitors can find on your blog. This helps people understand what your blog is about.",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     documentSlugField("blogIndex", {
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     defineField({
       name: "displayFeaturedBlogs",
@@ -44,7 +44,7 @@ export const blogIndex = defineType({
         layout: "radio",
       },
       initialValue: "yes",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     defineField({
       name: "featuredBlogsCount",
@@ -62,7 +62,7 @@ export const blogIndex = defineType({
       },
       initialValue: "1",
       hidden: ({ parent }) => parent?.displayFeaturedBlogs !== "yes",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     pageBuilderField,
     ...seoFields.filter(

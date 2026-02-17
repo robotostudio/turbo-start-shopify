@@ -30,6 +30,7 @@ export const subscribeNewsletter = defineType({
     prepare: ({ title }) => ({
       title: title ?? "Untitled",
       subtitle: "Subscribe Newsletter",
+      media: Mail,
     }),
   },
 });

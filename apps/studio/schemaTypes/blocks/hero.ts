@@ -31,10 +31,12 @@ export const hero = defineType({
   preview: {
     select: {
       title: "title",
+      media: "image",
     },
-    prepare: ({ title }) => ({
-      title,
-      subtitle: "Hero Block",
+    prepare: ({ title, media }) => ({
+      title: title || "Untitled",
+      subtitle: "Hero",
+      media: media ?? Star,
     }),
   },
 });

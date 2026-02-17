@@ -59,8 +59,9 @@ export const featureCardsIcon = defineType({
       title: "title",
     },
     prepare: ({ title }) => ({
-      title,
+      title: title || "Untitled",
       subtitle: "Feature Cards with Icon",
+      media: LayoutGrid,
     }),
   },
 });

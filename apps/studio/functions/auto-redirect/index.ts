@@ -2,7 +2,7 @@ import { createClient } from "@sanity/client";
 import { documentEventHandler } from "@sanity/functions";
 import { Logger } from "@workspace/logger";
 
-import { API_VERSION } from "@/utils/constant";
+import { API_VERSION } from "@/utils/constants";
 
 const logger = new Logger("AutoRedirect");
 

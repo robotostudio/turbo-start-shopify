@@ -1,5 +1,5 @@
-import {WarningOutlineIcon} from '@sanity/icons'
-import {Box, Card, Flex, Stack, Text} from '@sanity/ui'
+import { WarningOutlineIcon } from "@sanity/icons";
+import { Box, Card, Flex, Stack, Text } from "@sanity/ui";
 
 export default function ProductVariantHiddenInput() {
   return (
@@ -20,5 +20,5 @@ export default function ProductVariantHiddenInput() {
         </Box>
       </Flex>
     </Card>
-  )
+  );
 }

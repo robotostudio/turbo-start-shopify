@@ -2,7 +2,7 @@ import { HomeIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
 import { documentSlugField, pageBuilderField } from "@/schemaTypes/common";
-import { GROUP, GROUPS } from "@/utils/constant";
+import { GROUP, GROUPS } from "@/utils/constants";
 import { ogFields } from "@/utils/og-fields";
 import { seoFields } from "@/utils/seo-fields";
 
@@ -20,7 +20,7 @@ export const homePage = defineType({
       type: "string",
       description:
         "The main heading that will appear at the top of your home page",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     defineField({
       name: "description",
@@ -29,7 +29,7 @@ export const homePage = defineType({
       description:
         "A short summary that tells visitors what your website is about. This text also helps your page show up in Google searches.",
       rows: 3,
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
       validation: (rule) => [
         rule
           .min(140)
@@ -44,7 +44,7 @@ export const homePage = defineType({
       ],
     }),
     documentSlugField("homePage", {
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     pageBuilderField,
     ...seoFields.filter(

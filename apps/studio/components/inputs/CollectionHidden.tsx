@@ -1,7 +1,6 @@
-
-import {WarningOutlineIcon} from '@sanity/icons'
-import {StringFieldProps} from 'sanity'
-import {Box, Card, Flex, Stack, Text} from '@sanity/ui'
+import { WarningOutlineIcon } from "@sanity/icons";
+import { StringFieldProps } from "sanity";
+import { Box, Card, Flex, Stack, Text } from "@sanity/ui";
 
 export default function CollectionHiddenInput(props: StringFieldProps) {
   return (
@@ -20,5 +19,5 @@ export default function CollectionHiddenInput(props: StringFieldProps) {
         </Box>
       </Flex>
     </Card>
-  )
+  );
 }

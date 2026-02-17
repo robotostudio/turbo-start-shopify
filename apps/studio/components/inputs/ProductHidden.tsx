@@ -13,7 +13,7 @@ type Store = {
 export default function ProductHiddenInput(props: StringFieldProps) {
   const store: Store = useFormValue(["store"]) as Store;
 
-  let message  = <></>;
+  let message = <></>;
   if (!store) {
     return <></>;
   } else {
@@ -29,11 +29,7 @@ export default function ProductHiddenInput(props: StringFieldProps) {
       );
     }
     if (isDeleted) {
-      message = (
-        <>
-          It has been deleted from Shopify.
-        </>
-      );
+      message = <>It has been deleted from Shopify.</>;
     }
 
     return (

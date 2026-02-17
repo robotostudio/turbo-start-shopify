@@ -8,7 +8,7 @@ import {
 } from "sanity";
 import slugify from "slugify";
 
-import { API_VERSION } from "@/utils/constant";
+import { API_VERSION } from "@/utils/constants";
 import type { PathnameParams } from "@/utils/types";
 
 export function defineSlug(

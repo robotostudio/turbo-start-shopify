@@ -6,7 +6,7 @@ import { FileTextIcon } from "lucide-react";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
 import { documentSlugField, imageWithAltField } from "@/schemaTypes/common";
-import { GROUP, GROUPS } from "@/utils/constant";
+import { GROUP, GROUPS } from "@/utils/constants";
 import { ogFields } from "@/utils/og-fields";
 import { seoFields } from "@/utils/seo-fields";
 
@@ -26,7 +26,7 @@ export const blog = defineType({
       type: "string",
       title: "Title",
       description: "The headline of your blog post that readers will see first",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
       validation: (Rule) => Rule.required().error("A blog title is required"),
     }),
     defineField({
@@ -36,7 +36,7 @@ export const blog = defineType({
       rows: 3,
       description:
         "A short summary of what your blog post is about (appears in search results)",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
       validation: (rule) => [
         rule
           .min(140)
@@ -51,7 +51,7 @@ export const blog = defineType({
       ],
     }),
     documentSlugField("blog", {
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     defineField({
       name: "authors",
@@ -80,7 +80,7 @@ export const blog = defineType({
         Rule.min(1),
         Rule.unique(),
       ],
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     defineField({
       name: "publishedAt",
@@ -89,13 +89,13 @@ export const blog = defineType({
       title: "Published At",
       description:
         "The date when your blog post will appear to have been published",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     imageWithAltField({
       title: "Image",
       description:
         "The main picture that will appear at the top of your blog post and in previews",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -103,7 +103,7 @@ export const blog = defineType({
       type: "richText",
       description:
         "The main content of your blog post with text, images, and formatting",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     ...seoFields,
     ...ogFields,
@@ -127,24 +127,22 @@ export const blog = defineType({
       slug,
       publishDate,
     }) => {
-      // Status indicators
-      let visibility = "🌎 Public";
+      let visibility = "Public";
       if (isPrivate) {
-        visibility = "🔒 Private";
+        visibility = "Private";
       } else if (isHidden) {
-        visibility = "🙈 Hidden";
+        visibility = "Hidden";
       }
 
-      // Author and date
-      const authorInfo = author ? `✍️ ${author}` : "👻 No author";
+      const authorInfo = author ?? "No author";
       const dateInfo = publishDate
-        ? `📅 ${new Date(publishDate).toLocaleDateString()}`
-        : "⏳ Draft";
+        ? new Date(publishDate).toLocaleDateString()
+        : "Draft";
 
       return {
         title: title || "Untitled Blog",
         media,
-        subtitle: `🔗 ${slug} | ${visibility} | ${authorInfo} | ${dateInfo}`,
+        subtitle: `${slug} · ${visibility} · ${authorInfo} · ${dateInfo}`,
       };
     },
   },

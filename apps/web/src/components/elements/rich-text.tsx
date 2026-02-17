@@ -81,6 +81,43 @@ const components: Partial<PortableTextReactComponents> = {
         </Link>
       );
     },
+    linkInternal: ({ children, value }) => {
+      if (!value?.href) return <span>{children}</span>;
+      return (
+        <Link
+          className="underline decoration-dotted underline-offset-2"
+          href={value.href}
+          prefetch={false}
+        >
+          {children}
+        </Link>
+      );
+    },
+    linkExternal: ({ children, value }) => {
+      if (!value?.href) return <span>{children}</span>;
+      return (
+        <Link
+          className="underline decoration-dotted underline-offset-2"
+          href={value.href}
+          prefetch={false}
+          target={value.openInNewTab ? "_blank" : "_self"}
+          rel={value.openInNewTab ? "noopener noreferrer" : undefined}
+        >
+          {children}
+        </Link>
+      );
+    },
+    linkEmail: ({ children, value }) => {
+      if (!value?.href) return <span>{children}</span>;
+      return (
+        <a
+          className="underline decoration-dotted underline-offset-2"
+          href={value.href}
+        >
+          {children}
+        </a>
+      );
+    },
   },
   types: {
     image: ({ value }) => {

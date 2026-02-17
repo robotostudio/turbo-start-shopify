@@ -1,11 +1,11 @@
-import {Box, Button, Card, Flex} from '@sanity/ui'
-import type {NavbarProps} from 'sanity'
+import { Box, Button, Card, Flex } from "@sanity/ui";
+import type { NavbarProps } from "sanity";
 
-import {SHOPIFY_STORE_ID} from '../../constants'
-import ShopifyIcon from '../icons/Shopify'
+import { SHOPIFY_STORE_ID } from "@/utils/constants";
+import ShopifyIcon from "../icons/Shopify";
 
 export default function Navbar(props: NavbarProps) {
-  if (!SHOPIFY_STORE_ID) return props.renderDefault(props)
+  if (!SHOPIFY_STORE_ID) return props.renderDefault(props);
 
   return (
     <Card>
@@ -25,5 +25,5 @@ export default function Navbar(props: NavbarProps) {
         </Card>
       </Flex>
     </Card>
-  )
+  );
 }

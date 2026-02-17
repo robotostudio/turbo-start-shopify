@@ -74,6 +74,7 @@ export const faqAccordion = defineType({
     prepare: ({ title }) => ({
       title: title ?? "Untitled",
       subtitle: "FAQ Accordion",
+      media: MessageCircle,
     }),
   },
 });

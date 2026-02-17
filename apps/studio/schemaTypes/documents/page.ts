@@ -6,7 +6,7 @@ import {
   imageWithAltField,
   pageBuilderField,
 } from "@/schemaTypes/common";
-import { GROUP, GROUPS } from "@/utils/constant";
+import { GROUP, GROUPS } from "@/utils/constants";
 import { ogFields } from "@/utils/og-fields";
 import { seoFields } from "@/utils/seo-fields";
 
@@ -25,7 +25,7 @@ export const page = defineType({
       title: "Title",
       description:
         "The main heading that appears at the top of your page and in browser tabs",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
       validation: (Rule) => Rule.required().error("A page title is required"),
     }),
     defineField({
@@ -35,7 +35,7 @@ export const page = defineType({
       description:
         "A brief summary of what this page is about. This text helps search engines understand your page and may appear in search results.",
       rows: 3,
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
       validation: (rule) => [
         rule
           .min(140)
@@ -50,13 +50,13 @@ export const page = defineType({
       ],
     }),
     documentSlugField("page", {
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     imageWithAltField({
       title: "Image",
       description:
         "A main picture for this page that can be used when sharing on social media or in search results",
-      group: GROUP.MAIN_CONTENT,
+      group: GROUP.CONTENT,
     }),
     pageBuilderField,
     ...seoFields.filter((field) => field.name !== "seoHideFromLists"),

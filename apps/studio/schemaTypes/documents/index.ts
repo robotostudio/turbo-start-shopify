@@ -8,10 +8,10 @@ import { navbar } from "@/schemaTypes/documents/navbar";
 import { page } from "@/schemaTypes/documents/page";
 import { redirect } from "@/schemaTypes/documents/redirect";
 import { settings } from "@/schemaTypes/documents/settings";
-import { collectionType } from "./collection";
-import { colorThemeType } from "./colorTheme";
-import { productType } from "./product";
-import { productVariantType } from "./productVariant";
+import { collection } from "./collection";
+import { colorTheme } from "./color-theme";
+import { product } from "./product";
+import { productVariant } from "./product-variant";
 
 export const singletons = [homePage, blogIndex, settings, footer, navbar];
 
@@ -20,10 +20,10 @@ export const documents = [
   page,
   faq,
   author,
-  productType,
-  collectionType,
-  colorThemeType,
-  productVariantType,
+  product,
+  collection,
+  colorTheme,
+  productVariant,
   ...singletons,
   redirect,
 ];

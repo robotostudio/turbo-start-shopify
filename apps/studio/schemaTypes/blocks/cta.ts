@@ -30,8 +30,9 @@ export const cta = defineType({
       title: "title",
     },
     prepare: ({ title }) => ({
-      title,
-      subtitle: "CTA Block",
+      title: title || "Untitled",
+      subtitle: "Call to Action",
+      media: PhoneIcon,
     }),
   },
 });
