@@ -170,7 +170,7 @@ export function Navbar({
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <div className="flex h-10 w-40 items-center">
+          <div className="flex size-10 items-center">
             {logo && (
               <Logo
                 alt={siteTitle || ""}
