@@ -22,10 +22,7 @@ async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
 
 function ProductCard({ product }: { product: FeaturedProduct }) {
   return (
-    <Link
-      className="group block"
-      href={`/products/${product.handle}`}
-    >
+    <Link className="group block" href={`/products/${product.handle}`}>
       <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-neutral-100">
         {product.featuredImage ? (
           <Image
@@ -42,9 +39,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
         )}
       </div>
       <div className="mt-4 space-y-1">
-        <h3 className="font-normal text-sm tracking-wide">
-          {product.title}
-        </h3>
+        <h3 className="font-normal text-sm tracking-wide">{product.title}</h3>
         {product.vendor && (
           <p className="text-neutral-500 text-xs tracking-wider uppercase">
             {product.vendor}

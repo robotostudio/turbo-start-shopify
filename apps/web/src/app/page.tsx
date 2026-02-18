@@ -58,9 +58,7 @@ export default async function Page() {
   const blocks = pageBuilder ?? [];
 
   const heroBlock = blocks.filter((b) => (b._type as string) === "hero");
-  const remainingBlocks = blocks.filter(
-    (b) => (b._type as string) !== "hero"
-  );
+  const remainingBlocks = blocks.filter((b) => (b._type as string) !== "hero");
 
   const bannerProduct = showcaseProducts[0] ?? null;
 
@@ -83,11 +81,7 @@ export default async function Page() {
       </div>
 
       {remainingBlocks.length > 0 && (
-        <PageBuilder
-          id={_id}
-          pageBuilder={remainingBlocks}
-          type={_type}
-        />
+        <PageBuilder id={_id} pageBuilder={remainingBlocks} type={_type} />
       )}
     </main>
   );

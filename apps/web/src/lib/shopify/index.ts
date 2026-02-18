@@ -1,10 +1,5 @@
 export { storefrontQuery } from "./client";
 export { formatMoney } from "./money";
-export {
-  buildVariantUrl,
-  findVariantByOptions,
-  getOptionAvailability,
-} from "./variant-utils";
 export type {
   Cart,
   CartLine,
@@ -24,3 +19,8 @@ export type {
   ShopifyProductOption,
   ShopifyVariant,
 } from "./types";
+export {
+  buildVariantUrl,
+  findVariantByOptions,
+  getOptionAvailability,
+} from "./variant-utils";

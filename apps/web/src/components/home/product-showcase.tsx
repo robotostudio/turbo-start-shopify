@@ -20,17 +20,17 @@ function ShowcaseCard({
       className="group relative block overflow-hidden rounded-sm bg-neutral-100"
       href={`/products/${product.handle}`}
     >
-      <div
-        className={
-          large ? "aspect-[3/4] md:aspect-[2/3]" : "aspect-[4/3]"
-        }
-      >
+      <div className={large ? "aspect-[3/4] md:aspect-[2/3]" : "aspect-[4/3]"}>
         {product.featuredImage ? (
           <Image
             alt={product.featuredImage.altText ?? product.title}
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             fill
-            sizes={large ? "(min-width: 768px) 60vw, 100vw" : "(min-width: 768px) 35vw, 100vw"}
+            sizes={
+              large
+                ? "(min-width: 768px) 60vw, 100vw"
+                : "(min-width: 768px) 35vw, 100vw"
+            }
             src={product.featuredImage.url}
           />
         ) : (

@@ -29,8 +29,8 @@ export function CollectionBanner({ product }: CollectionBannerProps) {
             Curated for Modern Living
           </h2>
           <p className="mt-4 max-w-md text-white/70 text-sm leading-relaxed md:text-base">
-            Thoughtfully designed pieces that bring warmth and character to every
-            room.
+            Thoughtfully designed pieces that bring warmth and character to
+            every room.
           </p>
           <Link
             className="mt-10 border border-white px-8 py-3 text-sm tracking-wider uppercase transition-colors hover:bg-white hover:text-neutral-900"
