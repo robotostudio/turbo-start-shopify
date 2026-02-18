@@ -392,6 +392,25 @@ export const queryNavbarData = defineQuery(`
           url.type == "product" => "/products/" + url.product->store.slug.current,
           url.href
         )
+      },
+      _type == "collectionGroup" => {
+        "type": "collectionGroup",
+        title,
+        "collectionLinks": collectionLinks[]->{
+          _id,
+          "slug": store.slug.current,
+          store{
+            title,
+            imageUrl
+          }
+        },
+        "collectionProducts": collectionProducts->{
+          _id,
+          "slug": store.slug.current,
+          store{
+            title
+          }
+        }
       }
     },
     ${buttonsFragment},
@@ -441,8 +460,185 @@ export const querySettingsData = defineQuery(`
 
 export const queryRedirects = defineQuery(`
   *[_type == "redirect" && status == "active" && defined(source.current) && defined(destination.current)]{
-    "source":source.current, 
-    "destination":destination.current, 
+    "source":source.current,
+    "destination":destination.current,
     "permanent" : permanent == "true"
   }
+`);
+
+// ── Product fragments ──
+
+const productWithVariantFragment = /* groq */ `
+  productWithVariant{
+    product->{
+      _id,
+      "slug": store.slug.current,
+      store{
+        title,
+        priceRange,
+        previewImageUrl,
+        gid
+      }
+    },
+    variant->{
+      _id,
+      store{
+        title,
+        price,
+        previewImageUrl,
+        gid
+      }
+    }
+  }
+`;
+
+const productHotspotsFragment = /* groq */ `
+  productHotspots[]{
+    _key,
+    x,
+    y,
+    ${productWithVariantFragment}
+  }
+`;
+
+const productBodyFragment = /* groq */ `
+  body[]{
+    ...,
+    _type == "block" => {
+      ...,
+      ${markDefsFragment}
+    },
+    _type == "image" => {
+      ${imageFields}
+    },
+    _type == "imageWithProductHotspots" => {
+      _type,
+      _key,
+      image{${imageFields}},
+      showHotspots,
+      ${productHotspotsFragment}
+    },
+    _type == "accordion" => {
+      _type,
+      _key,
+      groups[]{
+        _key,
+        title,
+        body[]{
+          ...,
+          _type == "block" => {
+            ...,
+            ${markDefsFragment}
+          }
+        }
+      }
+    },
+    _type == "callout" => {
+      _type,
+      _key,
+      text
+    }
+  }
+`;
+
+export const queryProductByHandle = defineQuery(`
+  *[_type == "product" && store.slug.current == $handle && store.status == "active"][0]{
+    _id,
+    _type,
+    "slug": store.slug.current,
+    colorTheme->{
+      _id,
+      title,
+      background,
+      text
+    },
+    ${productBodyFragment},
+    store{
+      id,
+      gid,
+      title,
+      descriptionHtml,
+      slug,
+      status,
+      isDeleted,
+      previewImageUrl,
+      priceRange,
+      productType,
+      vendor,
+      tags,
+      options[]{name, values}
+    },
+    seo
+  }
+`);
+
+export const queryProductPaths = defineQuery(`
+  *[_type == "product" && defined(store.slug.current) && store.status == "active"].store.slug.current
+`);
+
+export const queryRelatedProducts = defineQuery(`
+  *[_type == "product" && store.productType == $productType && store.slug.current != $handle && store.status == "active"][0...4]{
+    _id,
+    "slug": store.slug.current,
+    store{
+      title,
+      priceRange,
+      previewImageUrl,
+      vendor
+    }
+  }
+`);
+
+// ── Collection fragments ──
+
+const collectionModulesFragment = /* groq */ `
+  modules[]{
+    ...,
+    _type,
+    _key,
+    _type == "callout" => { text },
+    _type == "callToAction" => {
+      ...,
+      ${richTextFragment},
+      ${buttonsFragment}
+    },
+    _type == "image" => {
+      ${imageFields},
+      ${productHotspotsFragment}
+    }
+  }
+`;
+
+export const queryCollectionByHandle = defineQuery(`
+  *[_type == "collection" && store.slug.current == $handle][0]{
+    _id,
+    _type,
+    showHero,
+    hero{
+      ...,
+      ${imageFragment},
+      ${buttonsFragment},
+      ${richTextFragment}
+    },
+    ${collectionModulesFragment},
+    colorTheme->{
+      _id,
+      title,
+      background,
+      text
+    },
+    store{
+      id,
+      gid,
+      title,
+      descriptionHtml,
+      slug,
+      imageUrl
+    },
+    seo
+  }
+`);
+
+export const queryCollectionPaths = defineQuery(`
+  *[_type == "collection" && defined(store.slug.current)].store.slug.current
 `);

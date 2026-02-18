@@ -12,6 +12,9 @@ const env = createEnv({
   server: {
     SANITY_API_READ_TOKEN: z.string().min(1),
     SANITY_API_WRITE_TOKEN: z.string().min(1),
+    SHOPIFY_STORE_DOMAIN: z.string().min(1),
+    SHOPIFY_STOREFRONT_ACCESS_TOKEN: z.string().min(1),
+    SHOPIFY_API_VERSION: z.string().default("2025-01"),
   },
 
   experimental__runtimeEnv: {

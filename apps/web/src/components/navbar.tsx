@@ -7,11 +7,14 @@ import { useState } from "react";
 import useSWR from "swr";
 
 import type { ColumnLink, NavColumn, NavigationData } from "@/types";
+import { CartDrawer } from "./cart/cart-drawer";
+import { CartToggle } from "./cart/cart-toggle";
 import { MenuLink } from "./elements/menu-link";
 import { SanityButtons } from "./elements/sanity-buttons";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
 import { ModeToggle } from "./mode-toggle";
+import { CollectionGroupDropdown } from "./nav/collection-group-dropdown";
 
 // Fetcher function
 const fetcher = async (url: string): Promise<NavigationData> => {
@@ -190,6 +193,21 @@ export function Navbar({
               if (column.type === "link") {
                 return <DesktopColumnLink column={column} key={column._key} />;
               }
+              if (column.type === "collectionGroup") {
+                const cg = column as Extract<
+                  NavColumn,
+                  { type: "collectionGroup" }
+                >;
+                return (
+                  <CollectionGroupDropdown
+                    _key={cg._key}
+                    collectionLinks={cg.collectionLinks ?? null}
+                    collectionProducts={cg.collectionProducts ?? null}
+                    key={cg._key}
+                    title={cg.title ?? null}
+                  />
+                );
+              }
               return null;
             })}
           </nav>
@@ -197,6 +215,7 @@ export function Navbar({
           {/* Desktop Actions */}
           <div className="hidden items-center gap-4 md:flex">
             <ModeToggle />
+            <CartToggle />
             <SanityButtons
               buttonClassName="rounded-lg"
               buttons={buttons || []}
@@ -207,6 +226,7 @@ export function Navbar({
           {/* Mobile Actions */}
           <div className="flex items-center gap-2 md:hidden">
             <ModeToggle />
+            <CartToggle />
             <MobileMenu navbarData={navbarData} settingsData={settingsData} />
           </div>
         </div>
@@ -218,6 +238,8 @@ export function Navbar({
           Navigation data fetch error: {error.message}
         </div>
       )}
+
+      <CartDrawer />
     </header>
   );
 }

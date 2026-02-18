@@ -1,5 +1,9 @@
 import { client } from "@workspace/sanity/client";
-import { querySitemapData } from "@workspace/sanity/query";
+import {
+  queryCollectionPaths,
+  queryProductPaths,
+  querySitemapData,
+} from "@workspace/sanity/query";
 import type { QuerySitemapDataResult } from "@workspace/sanity/types";
 import type { MetadataRoute } from "next";
 
@@ -10,7 +14,13 @@ type Page = QuerySitemapDataResult["slugPages"][number];
 const baseUrl = getBaseUrl();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { slugPages, blogPages } = await client.fetch(querySitemapData);
+  const [{ slugPages, blogPages }, productPaths, collectionPaths] =
+    await Promise.all([
+      client.fetch(querySitemapData),
+      client.fetch(queryProductPaths),
+      client.fetch(queryCollectionPaths),
+    ]);
+
   return [
     {
       url: baseUrl,
@@ -30,5 +40,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.5,
     })),
+    ...(productPaths ?? [])
+      .filter((handle): handle is string => handle !== null)
+      .map((handle) => ({
+        url: `${baseUrl}/products/${handle}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      })),
+    ...(collectionPaths ?? [])
+      .filter((handle): handle is string => handle !== null)
+      .map((handle) => ({
+        url: `${baseUrl}/collections/${handle}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+      })),
   ];
 }

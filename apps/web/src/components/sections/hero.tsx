@@ -1,11 +1,23 @@
 import { Badge } from "@workspace/ui/components/badge";
 
-import type { PagebuilderType } from "@/types";
+import type {
+  SanityButtonProps,
+  SanityImageProps,
+  SanityRichTextProps,
+} from "@/types";
 import { RichText } from "../elements/rich-text";
 import { SanityButtons } from "../elements/sanity-buttons";
 import { SanityImage } from "../elements/sanity-image";
 
-type HeroBlockProps = PagebuilderType<"hero">;
+type HeroBlockProps = {
+  _key: string;
+  _type: "hero";
+  badge?: string | null;
+  title?: string | null;
+  richText?: SanityRichTextProps | null;
+  image?: SanityImageProps | null;
+  buttons?: SanityButtonProps[] | null;
+};
 
 export function HeroBlock({
   title,
@@ -31,7 +43,7 @@ export function HeroBlock({
             </div>
             <SanityButtons
               buttonClassName="w-full sm:w-auto"
-              buttons={buttons}
+              buttons={buttons ?? null}
               className="mb-8 grid w-full gap-2 sm:w-fit sm:grid-flow-col lg:justify-start"
             />
           </div>
