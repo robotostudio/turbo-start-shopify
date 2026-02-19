@@ -12,7 +12,9 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
-    "check-types": "turbo run check-types"
+    "check-types": "turbo run check-types",
+    "seed:shopify": "pnpm --filter studio seed:shopify",
+    "verify:shopify": "pnpm --filter studio verify:shopify"
   },
   "dependencies": {
     "@workspace/env": "workspace:*"
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.3.8",
     "@workspace/typescript-config": "workspace:*",
+    "tsx": "^4.19.3",
     "turbo": "^2.7.5",
     "typescript": "catalog:",
     "ultracite": "5.6.2"

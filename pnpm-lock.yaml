@@ -51,6 +51,9 @@ importers:
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:packages/typescript-config
+      tsx:
+        specifier: ^4.19.3
+        version: 4.21.0
       turbo:
         specifier: ^2.7.5
         version: 2.7.5
@@ -139,6 +142,9 @@ importers:
         specifier: ^6.3.8
         version: 6.3.8(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
     devDependencies:
+      '@faker-js/faker':
+        specifier: ^10.3.0
+        version: 10.3.0
       '@sanity/blueprints':
         specifier: 0.10.0
         version: 0.10.0
@@ -151,6 +157,9 @@ importers:
       '@types/styled-components':
         specifier: ^5.1.36
         version: 5.1.36
+      tsx:
+        specifier: ^4.19.3
+        version: 4.21.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.2
@@ -1429,6 +1438,10 @@ packages:
     peerDependenciesMeta:
       '@noble/hashes':
         optional: true
+
+  '@faker-js/faker@10.3.0':
+    resolution: {integrity: sha512-It0Sne6P3szg7JIi6CgKbvTZoMjxBZhcv91ZrqrNuaZQfB5WoqYYbzCUOq89YR+VY8juY9M1vDWmDDa2TzfXCw==}
+    engines: {node: ^20.19.0 || ^22.13.0 || ^23.5.0 || >=24.0.0, npm: '>=10'}
 
   '@fastify/busboy@2.1.1':
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
@@ -8224,6 +8237,8 @@ snapshots:
   '@exodus/bytes@1.9.0(@noble/hashes@2.0.1)':
     optionalDependencies:
       '@noble/hashes': 2.0.1
+
+  '@faker-js/faker@10.3.0': {}
 
   '@fastify/busboy@2.1.1': {}
 

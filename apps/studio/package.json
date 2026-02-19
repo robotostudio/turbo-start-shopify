@@ -16,6 +16,8 @@
     "extract": "sanity schema extract --enforce-required-fields",
     "check-types": "tsc --noEmit",
     "type": "sanity schema extract --enforce-required-fields && sanity typegen generate",
+    "seed:shopify": "tsx scripts/seed-shopify/index.ts",
+    "verify:shopify": "tsx scripts/verify-shopify.ts",
     "postinstall": "sanity exec scripts/cli-alert-for-data.ts"
   },
   "keywords": [
@@ -49,10 +51,12 @@
     "styled-components": "^6.3.8"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.3.0",
     "@sanity/blueprints": "0.10.0",
     "@types/lodash.get": "^4.4.7",
     "@types/react": "catalog:",
     "@types/styled-components": "^5.1.36",
+    "tsx": "^4.19.3",
     "typescript": "catalog:",
     "vite": "^7.3.1",
     "vite-plugin-tsconfig-paths": "^1.4.1"
