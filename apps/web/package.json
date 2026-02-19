@@ -30,6 +30,7 @@
     "next": "16.1.3",
     "next-sanity": "^12.0.12",
     "next-themes": "catalog:",
+    "node-fetch": "^3.3.2",
     "react": "catalog:",
     "react-dom": "catalog:",
     "sanity-image": "^1.0.0",

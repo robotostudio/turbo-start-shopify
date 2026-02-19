@@ -34,7 +34,7 @@ export function CollectionBanner({ product }: CollectionBannerProps) {
           </p>
           <Link
             className="mt-10 border border-white px-8 py-3 text-sm tracking-wider uppercase transition-colors hover:bg-white hover:text-neutral-900"
-            href="/collections/frontpage"
+            href="/collections"
           >
             Shop Collection
           </Link>

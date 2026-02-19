@@ -1,7 +1,7 @@
 "use client";
 
 import { env } from "@workspace/env/client";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
@@ -214,6 +214,13 @@ export function Navbar({
 
           {/* Desktop Actions */}
           <div className="hidden items-center gap-4 md:flex">
+            <Link
+              aria-label="Search"
+              className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
+              href="/search"
+            >
+              <Search className="size-4" />
+            </Link>
             <ModeToggle />
             <CartToggle />
             <SanityButtons
@@ -225,6 +232,13 @@ export function Navbar({
 
           {/* Mobile Actions */}
           <div className="flex items-center gap-2 md:hidden">
+            <Link
+              aria-label="Search"
+              className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
+              href="/search"
+            >
+              <Search className="size-4" />
+            </Link>
             <ModeToggle />
             <CartToggle />
             <MobileMenu navbarData={navbarData} settingsData={settingsData} />

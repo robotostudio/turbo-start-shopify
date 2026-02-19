@@ -642,3 +642,14 @@ export const queryCollectionByHandle = defineQuery(`
 export const queryCollectionPaths = defineQuery(`
   *[_type == "collection" && defined(store.slug.current)].store.slug.current
 `);
+
+export const queryAllCollections = defineQuery(`
+  *[_type == "collection" && defined(store.slug.current)]{
+    _id,
+    "title": store.title,
+    "slug": store.slug.current,
+    "imageUrl": store.imageUrl,
+    "description": store.descriptionHtml,
+    seo
+  }
+`);

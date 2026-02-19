@@ -82,7 +82,6 @@ export const PRODUCT_QUERY = /* graphql */ `
 `;
 
 export const COLLECTION_QUERY = /* graphql */ `
-  ${VARIANT_FRAGMENT}
   query Collection(
     $handle: String!
     $first: Int!
@@ -211,6 +210,104 @@ export const FEATURED_PRODUCTS_QUERY = /* graphql */ `
             }
           }
         }
+      }
+    }
+  }
+`;
+
+export const ALL_COLLECTIONS_QUERY = /* graphql */ `
+  query AllCollections($first: Int!) {
+    collections(first: $first) {
+      edges {
+        node {
+          id
+          handle
+          title
+          description
+          image {
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const SEARCH_PRODUCTS_QUERY = /* graphql */ `
+  query SearchProducts($query: String!, $first: Int!) {
+    search(query: $query, first: $first, types: PRODUCT) {
+      edges {
+        node {
+          ... on Product {
+            id
+            handle
+            title
+            vendor
+            productType
+            featuredImage {
+              url
+              altText
+              width
+              height
+            }
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+              maxVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  availableForSale
+                }
+              }
+            }
+          }
+        }
+      }
+      totalCount
+    }
+  }
+`;
+
+export const NODES_QUERY = /* graphql */ `
+  ${VARIANT_FRAGMENT}
+  ${PRODUCT_FIELDS_FRAGMENT}
+  query Nodes($ids: [ID!]!) {
+    nodes(ids: $ids) {
+      ... on Product {
+        ...ProductFields
+        variants(first: 250) {
+          edges {
+            node {
+              ...VariantFields
+            }
+          }
+        }
+      }
+      ... on Collection {
+        id
+        handle
+        title
+        description
+        image {
+          url
+          altText
+          width
+          height
+        }
+      }
+      ... on ProductVariant {
+        ...VariantFields
       }
     }
   }

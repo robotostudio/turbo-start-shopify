@@ -36,6 +36,13 @@ export async function storefrontQuery<T>(
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unknown error occurred";
+    // @shopify/storefront-api-client attaches graphQLErrors to thrown errors
+    const gqlErrors = (error as { graphQLErrors?: unknown[] }).graphQLErrors;
+    if (gqlErrors) {
+      logger.error(
+        `Storefront API GraphQL errors: ${JSON.stringify(gqlErrors)}`
+      );
+    }
     logger.error(`Storefront API request failed: ${message}`);
     return { ok: false, error: message };
   }

@@ -6,6 +6,7 @@ import { FeaturedProducts } from "@/components/home/featured-products";
 import { ProductShowcase } from "@/components/home/product-showcase";
 import { PageBuilder } from "@/components/pagebuilder";
 import { storefrontQuery } from "@/lib/shopify/client";
+import { resolveGids } from "@/lib/shopify/gid";
 import { FEATURED_PRODUCTS_QUERY } from "@/lib/shopify/queries";
 import type {
   FeaturedProduct,
@@ -53,6 +54,9 @@ export default async function Page() {
   if (!homePageData) {
     return <div>No home page data</div>;
   }
+
+  // Resolve Shopify GIDs from page builder modules (product refs, hotspots)
+  await resolveGids(homePageData);
 
   const { _id, _type, pageBuilder } = homePageData ?? {};
   const blocks = pageBuilder ?? [];

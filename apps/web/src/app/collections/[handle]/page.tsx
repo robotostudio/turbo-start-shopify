@@ -13,6 +13,7 @@ import { SortSelector } from "@/components/collection/sort-selector";
 import { parseSortParams } from "@/components/collection/sort-utils";
 import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
+import { resolveGids } from "@/lib/shopify/gid";
 import { COLLECTION_QUERY } from "@/lib/shopify/queries";
 import type { CollectionQueryResponse } from "@/lib/shopify/types";
 
@@ -64,22 +65,35 @@ export default async function CollectionPage({
     }),
   ]);
 
-  if (!sanityCollection || !shopifyResult.ok) {
+  if (!sanityCollection) {
     notFound();
   }
 
-  const shopifyCollection = shopifyResult.data.collection;
-  const products = shopifyCollection.products.edges.map((e) => e.node);
+  // Resolve Shopify GIDs from Sanity page modules (product hotspots, etc.)
+  await resolveGids(sanityCollection);
+
+  const shopifyCollection = shopifyResult.ok
+    ? shopifyResult.data.collection
+    : null;
+  const products =
+    shopifyCollection?.products.edges.map((e) => e.node) ?? [];
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="font-semibold text-3xl">
-          {sanityCollection.store?.title ?? shopifyCollection.title}
+          {sanityCollection.store?.title ??
+            shopifyCollection?.title ??
+            handle}
         </h1>
-        {shopifyCollection.description && (
+        {(shopifyCollection?.description ||
+          sanityCollection.store?.descriptionHtml) && (
           <p className="mt-2 text-muted-foreground">
-            {shopifyCollection.description}
+            {shopifyCollection?.description ??
+              sanityCollection.store?.descriptionHtml?.replace(
+                /<[^>]*>/g,
+                ""
+              )}
           </p>
         )}
       </div>
@@ -93,7 +107,11 @@ export default async function CollectionPage({
 
       <ProductGrid products={products} />
 
-      <CollectionPagination pageInfo={shopifyCollection.products.pageInfo} />
+      {shopifyCollection?.products.pageInfo && (
+        <CollectionPagination
+          pageInfo={shopifyCollection.products.pageInfo}
+        />
+      )}
 
       {sanityCollection.modules && sanityCollection.modules.length > 0 && (
         <div className="mt-12">

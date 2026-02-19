@@ -1,6 +1,7 @@
 const ShopifyIcon = () => {
   return (
     <svg
+      aria-label="Shopify"
       width="18"
       height="20"
       viewBox="0 0 18 20"

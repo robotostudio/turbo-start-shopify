@@ -71,7 +71,7 @@ export async function FeaturedProducts() {
         </div>
         <Link
           className="hidden border-b border-neutral-900 pb-0.5 text-sm transition-colors hover:border-neutral-400 hover:text-neutral-600 md:block"
-          href="/collections/frontpage"
+          href="/collections"
         >
           View All
         </Link>
@@ -86,7 +86,7 @@ export async function FeaturedProducts() {
       <div className="mt-10 text-center md:hidden">
         <Link
           className="border-b border-neutral-900 pb-0.5 text-sm"
-          href="/collections/frontpage"
+          href="/collections"
         >
           View All
         </Link>

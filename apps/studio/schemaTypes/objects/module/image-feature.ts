@@ -73,7 +73,7 @@ export const imageFeature = defineField({
       return {
         media: image,
         subtitle:
-          "Image" + (currentVariant ? ` [${currentVariant.title}]` : ""),
+          `Image${currentVariant ? ` [${currentVariant.title}]` : ""}`,
         title: fileName,
       };
     },

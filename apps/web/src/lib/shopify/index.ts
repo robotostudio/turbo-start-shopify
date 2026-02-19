@@ -1,4 +1,5 @@
 export { storefrontQuery } from "./client";
+export { extractGids, fetchGids, resolveGids } from "./gid";
 export { formatMoney } from "./money";
 export type {
   Cart,
@@ -17,6 +18,7 @@ export type {
   ShopifyImage,
   ShopifyProduct,
   ShopifyProductOption,
+  ShopifyNode,
   ShopifyVariant,
 } from "./types";
 export {

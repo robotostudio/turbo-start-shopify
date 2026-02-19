@@ -130,6 +130,34 @@ export type RecommendedProductsResponse = {
   productRecommendations: ShopifyProduct[];
 };
 
+export type ShopifyCollectionListItem = {
+  id: string;
+  handle: string;
+  title: string;
+  description: string;
+  image: ShopifyImage | null;
+};
+
+export type AllCollectionsResponse = {
+  collections: Connection<ShopifyCollectionListItem>;
+};
+
+export type SearchProductsResponse = {
+  search: {
+    edges: { node: ShopifyCollectionProduct }[];
+    totalCount: number;
+  };
+};
+
+export type ShopifyNode =
+  | (ShopifyProduct & { __typename?: "Product" })
+  | (ShopifyCollectionListItem & { __typename?: "Collection" })
+  | (ShopifyVariant & { __typename?: "ProductVariant" });
+
+export type NodesResponse = {
+  nodes: (ShopifyNode | null)[];
+};
+
 export type FeaturedProduct = {
   id: string;
   handle: string;
