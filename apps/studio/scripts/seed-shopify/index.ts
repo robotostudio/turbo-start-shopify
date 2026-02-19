@@ -20,6 +20,7 @@ import {
   cleanAllCollections,
   cleanAllDiscounts,
 } from "./cleanup.js";
+import { publishAll } from "./publish.js";
 import type { RunStats } from "./types.js";
 
 // ---------------------------------------------------------------------------
@@ -109,6 +110,7 @@ async function main(): Promise<void> {
       collectionIds,
       verbose
     );
+    await publishAll(productIds, collectionIds, verbose);
   } catch (err) {
     log.error(`Fatal: ${(err as Error).message}`);
     process.exit(1);
