@@ -10,6 +10,8 @@ export const customProductOptionSize = defineField({
   title: "Size",
   type: "object",
   icon: false,
+  description:
+    "Size options for a product — maps physical dimensions to Shopify product variants",
   fields: [
     defineField({
       name: "title",
@@ -20,6 +22,7 @@ export const customProductOptionSize = defineField({
     defineField({
       name: "sizes",
       type: "array",
+      description: "List of size options available for this product option",
       of: [{ type: "customProductOption.sizeObject" }],
       validation: (Rule) =>
         Rule.custom((options: SizeOption[] | undefined) => {

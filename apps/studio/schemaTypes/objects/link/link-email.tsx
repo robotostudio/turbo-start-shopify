@@ -25,6 +25,7 @@ export const linkEmail = defineField({
     defineField({
       name: "email",
       type: "email",
+      description: "The email address that opens when this link is clicked",
     }),
   ],
   preview: {

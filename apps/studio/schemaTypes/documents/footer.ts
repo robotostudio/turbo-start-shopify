@@ -15,6 +15,7 @@ const footerColumnLink = defineField({
     defineField({
       name: "url",
       type: "customUrl",
+      description: "Where this link takes visitors when clicked",
     }),
   ],
   preview: {
@@ -49,13 +50,14 @@ const footerColumn = defineField({
       name: "title",
       type: "string",
       title: "Title",
-      description: "Title for the column",
+      description:
+        "The heading text displayed above this group of footer links",
     }),
     defineField({
       name: "links",
       type: "array",
       title: "Links",
-      description: "Links for the column",
+      description: "The navigation links displayed in this footer column",
       of: [footerColumnLink],
     }),
   ],
@@ -98,7 +100,7 @@ export const footer = defineType({
       name: "columns",
       type: "array",
       title: "Columns",
-      description: "Columns for the footer",
+      description: "The link columns that organize your footer navigation",
       of: [footerColumn],
     }),
   ],

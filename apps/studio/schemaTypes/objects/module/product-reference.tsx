@@ -9,10 +9,13 @@ export const productReference = defineField({
   title: "Product",
   type: "object",
   icon: TagIcon,
+  description:
+    "A reference to a specific product and variant for use in editorial content",
   fields: [
     defineField({
       name: "productWithVariant",
       type: "productWithVariant",
+      description: "The product and variant to display",
       validation: (Rule) => Rule.required(),
     }),
   ],

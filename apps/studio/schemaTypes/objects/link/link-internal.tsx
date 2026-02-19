@@ -27,6 +27,7 @@ export const linkInternal = defineField({
     defineField({
       name: "reference",
       type: "reference",
+      description: "The page or document this link points to",
       weak: true,
       validation: (Rule) => Rule.required(),
       to: PAGE_REFERENCES,

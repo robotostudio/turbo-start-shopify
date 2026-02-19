@@ -8,10 +8,13 @@ export const accordionGroup = defineField({
   title: "Accordion Group",
   type: "object",
   icon: false,
+  description:
+    "A single expandable panel with a title and rich text body content",
   fields: [
     defineField({
       name: "title",
       type: "string",
+      description: "The heading text shown on this expandable panel",
       validation: (Rule) => Rule.required(),
     }),
     customRichText(["block"], { name: "body" }),

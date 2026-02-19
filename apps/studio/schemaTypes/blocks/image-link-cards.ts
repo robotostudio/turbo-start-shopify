@@ -8,6 +8,7 @@ const imageLinkCard = defineField({
   name: "imageLinkCard",
   type: "object",
   icon: ImageIcon,
+  description: "A single visual card with image, title, description, and link",
   fields: [
     defineField({
       name: "title",
@@ -29,6 +30,7 @@ const imageLinkCard = defineField({
       name: "url",
       title: "Link URL",
       type: "customUrl",
+      description: "Where this card takes visitors when clicked",
     }),
   ],
   preview: {
@@ -67,6 +69,8 @@ export const imageLinkCards = defineType({
   type: "object",
   icon: ImageIcon,
   title: "Image Link Cards",
+  description:
+    "Grid of visual cards, each with an image, title, description, and link to guide visitors to key pages",
   fields: [
     defineField({
       name: "eyebrow",

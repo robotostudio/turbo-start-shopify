@@ -7,10 +7,12 @@ export const accordion = defineField({
   title: "Accordion",
   type: "object",
   icon: StackCompactIcon,
+  description: "A set of expandable panels that reveal content when clicked",
   fields: [
     defineField({
       name: "groups",
       type: "array",
+      description: "The expandable panels that make up this accordion",
       of: [{ type: "accordionGroup" }],
     }),
   ],

@@ -7,15 +7,18 @@ export const option = defineField({
   type: "object",
   icon: SunIcon,
   readOnly: true,
+  description: "Product option from Shopify such as color, size, or material",
   fields: [
     defineField({
       name: "name",
       type: "string",
+      description: "The option name from Shopify, such as Color or Size",
     }),
     defineField({
       name: "values",
       type: "array",
       of: [{ type: "string" }],
+      description: "The available values for this option from Shopify",
     }),
   ],
   preview: {

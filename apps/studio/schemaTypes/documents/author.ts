@@ -8,6 +8,8 @@ export const author = defineType({
   title: "Author",
   type: "document",
   icon: UserIcon,
+  description:
+    "A content creator profile displayed alongside blog posts and articles",
   fields: [
     defineField({
       name: "name",

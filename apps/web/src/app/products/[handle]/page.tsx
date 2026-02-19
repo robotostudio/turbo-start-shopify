@@ -162,10 +162,7 @@ function ProductActions({
   );
 }
 
-export default async function ProductPage({
-  params,
-  searchParams,
-}: PageProps) {
+export default async function ProductPage({ params, searchParams }: PageProps) {
   const { handle } = await params;
   const sp = await searchParams;
 
@@ -185,11 +182,8 @@ export default async function ProductPage({
 
   await resolveGids(sanityProduct);
 
-  const shopifyProduct = shopifyResult.ok
-    ? shopifyResult.data.product
-    : null;
-  const variants =
-    shopifyProduct?.variants.edges.map((e) => e.node) ?? [];
+  const shopifyProduct = shopifyResult.ok ? shopifyResult.data.product : null;
+  const variants = shopifyProduct?.variants.edges.map((e) => e.node) ?? [];
   const images = shopifyProduct?.images.edges.map((e) => e.node) ?? [];
 
   const selectedVariant =
@@ -197,8 +191,7 @@ export default async function ProductPage({
       ? (findVariantByOptions(variants, sp) ?? variants[0])
       : null;
 
-  const title =
-    shopifyProduct?.title ?? sanityProduct.store?.title ?? handle;
+  const title = shopifyProduct?.title ?? sanityProduct.store?.title ?? handle;
   const vendor = shopifyProduct?.vendor ?? sanityProduct.store?.vendor;
 
   return (
@@ -218,15 +211,11 @@ export default async function ProductPage({
           <div className="flex flex-col gap-6">
             <div>
               <h1 className="font-semibold text-3xl">{title}</h1>
-              {vendor && (
-                <p className="mt-1 text-muted-foreground">{vendor}</p>
-              )}
+              {vendor && <p className="mt-1 text-muted-foreground">{vendor}</p>}
             </div>
 
             <ProductPrice
-              fallbackPrice={
-                sanityProduct.store?.priceRange?.minVariantPrice
-              }
+              fallbackPrice={sanityProduct.store?.priceRange?.minVariantPrice}
               selectedVariant={selectedVariant}
             />
 

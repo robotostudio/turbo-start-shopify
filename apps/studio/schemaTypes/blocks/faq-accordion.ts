@@ -5,6 +5,8 @@ export const faqAccordion = defineType({
   name: "faqAccordion",
   type: "object",
   icon: MessageCircle,
+  description:
+    "Expandable question-and-answer section that lets visitors find answers without scrolling through walls of text",
   fields: [
     defineField({
       name: "eyebrow",

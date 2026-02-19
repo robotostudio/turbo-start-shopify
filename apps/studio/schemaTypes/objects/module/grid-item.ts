@@ -7,15 +7,18 @@ export const gridItem = defineField({
   name: "gridItem",
   title: "Grid Item",
   type: "object",
+  description: "A single grid cell with title, image, and rich text content",
   fields: [
     defineField({
       name: "title",
       type: "string",
+      description: "The heading for this grid card",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "image",
       type: "image",
+      description: "The image displayed in this grid card",
       options: { hotspot: true },
       validation: (Rule) => Rule.required(),
     }),

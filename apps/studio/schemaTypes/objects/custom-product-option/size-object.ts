@@ -4,6 +4,8 @@ export const customProductOptionSizeObject = defineField({
   name: "customProductOption.sizeObject",
   title: "Size",
   type: "object",
+  description:
+    "A single size option with dimensions in millimeters, matched to a Shopify product option",
   fields: [
     defineField({
       name: "title",

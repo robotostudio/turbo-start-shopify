@@ -25,11 +25,14 @@ export const linkProduct = defineField({
     defineField({
       name: "productWithVariant",
       type: "productWithVariant",
+      description: "The product and variant this link connects to",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "linkAction",
       type: "string",
+      description:
+        "What happens when a visitor clicks — navigate to product page, add to cart, or buy now",
       initialValue: "link",
       options: {
         layout: "radio",
@@ -53,6 +56,7 @@ export const linkProduct = defineField({
     defineField({
       name: "quantity",
       type: "number",
+      description: "Number of items to add when the link is clicked",
       initialValue: 1,
       hidden: ({ parent }) => parent.linkAction === "link",
       validation: (Rule) => Rule.required().min(1).max(10),

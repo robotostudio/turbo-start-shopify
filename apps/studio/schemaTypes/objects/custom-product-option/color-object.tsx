@@ -18,6 +18,8 @@ export const customProductOptionColorObject = defineField({
   name: "customProductOption.colorObject",
   title: "Color",
   type: "object",
+  description:
+    "A single color swatch with name and color value, matched to a Shopify product option",
   fields: [
     defineField({
       name: "title",
@@ -28,6 +30,7 @@ export const customProductOptionColorObject = defineField({
     defineField({
       name: "color",
       type: "color",
+      description: "The exact color value shown as a swatch to shoppers",
       options: { disableAlpha: true },
       validation: (Rule) => Rule.required(),
     }),

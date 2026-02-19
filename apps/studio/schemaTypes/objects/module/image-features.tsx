@@ -7,11 +7,14 @@ export const imageFeatures = defineField({
   title: "Images",
   type: "object",
   icon: ImageIcon,
+  description:
+    "One or two side-by-side images with layout and alignment options",
   fields: [
     defineField({
       name: "imageFeatures",
       title: "Images",
       type: "array",
+      description: "The images to display in this section",
       of: [{ type: "imageFeature" }],
       validation: (Rule) => Rule.required().max(2),
     }),
@@ -26,6 +29,7 @@ export const imageFeatures = defineField({
       name: "verticalAlign",
       title: "Vertical alignment",
       type: "string",
+      description: "How images align vertically when displayed side by side",
       initialValue: "top",
       options: {
         direction: "horizontal",

@@ -6,11 +6,13 @@ export const instagram = defineField({
   title: "Instagram",
   type: "object",
   icon: UserIcon,
+  description: "An embedded Instagram post displayed in editorial content",
   fields: [
     defineField({
       name: "url",
       title: "URL",
       type: "string",
+      description: "The full URL of the Instagram post to embed",
       validation: (Rule) =>
         Rule.custom((url) => {
           const pattern =

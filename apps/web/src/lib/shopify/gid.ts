@@ -26,7 +26,10 @@ export function extractGids(data: unknown): string[] {
     }
 
     const record = value as Record<string, unknown>;
-    if (typeof record.gid === "string" && record.gid.startsWith("gid://shopify/")) {
+    if (
+      typeof record.gid === "string" &&
+      record.gid.startsWith("gid://shopify/")
+    ) {
       gids.add(record.gid);
     }
 

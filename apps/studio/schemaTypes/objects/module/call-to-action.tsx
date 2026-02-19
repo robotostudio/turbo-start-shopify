@@ -6,6 +6,8 @@ export const callToAction = defineField({
   title: "Call to action",
   type: "object",
   icon: BlockElementIcon,
+  description:
+    "Side-by-side layout pairing product or image content with a headline, text, and link",
   fieldsets: [
     {
       name: "copy",
@@ -16,6 +18,7 @@ export const callToAction = defineField({
     defineField({
       name: "layout",
       type: "string",
+      description: "Choose whether the image appears on the left or right side",
       initialValue: "left",
       options: {
         direction: "horizontal",
@@ -36,18 +39,21 @@ export const callToAction = defineField({
     defineField({
       name: "title",
       type: "string",
+      description: "The headline text for this call to action",
       validation: (Rule) => Rule.required(),
       fieldset: "copy",
     }),
     defineField({
       name: "portableText",
       type: "text",
+      description: "Supporting text displayed below the headline",
       rows: 2,
       fieldset: "copy",
     }),
     defineField({
       name: "link",
       type: "array",
+      description: "Optional link to a page or external URL",
       of: [{ type: "linkInternal" }, { type: "linkExternal" }],
       validation: (Rule) => Rule.max(1),
       fieldset: "copy",
@@ -55,6 +61,8 @@ export const callToAction = defineField({
     defineField({
       name: "content",
       type: "array",
+      description:
+        "The visual content — an image or product — displayed alongside the copy",
       validation: (Rule) => Rule.required().max(1),
       of: [
         defineArrayMember({

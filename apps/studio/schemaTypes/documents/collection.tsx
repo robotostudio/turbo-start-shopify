@@ -1,10 +1,11 @@
-import { defineArrayMember, defineField, defineType } from "sanity";
-import { PackageIcon } from "@sanity/icons";
 import { getExtension } from "@sanity/asset-utils";
+import { PackageIcon } from "@sanity/icons";
 import pluralize from "pluralize-esm";
+import { defineArrayMember, defineField, defineType } from "sanity";
+
+import { GROUP, GROUPS } from "@/utils/constants";
 import CollectionHiddenInput from "../../components/inputs/collection-hidden";
 import ShopifyDocumentStatus from "../../components/media/shopify-document-status";
-import { GROUP, GROUPS } from "@/utils/constants";
 
 export const collection = defineType({
   name: "collection",
@@ -29,17 +30,20 @@ export const collection = defineType({
       name: "titleProxy",
       title: "Title",
       type: "proxyString",
+      description: "The collection title synced from Shopify",
       options: { field: "store.title" },
     }),
     defineField({
       name: "slugProxy",
       title: "Slug",
       type: "proxyString",
+      description: "The URL slug synced from Shopify",
       options: { field: "store.slug.current" },
     }),
     defineField({
       name: "colorTheme",
       type: "reference",
+      description: "Choose a color theme to style this collection page",
       to: [{ type: "colorTheme" }],
       group: GROUP.THEME,
     }),
@@ -75,6 +79,8 @@ export const collection = defineType({
     defineField({
       name: "hero",
       type: "hero",
+      description:
+        "Hero banner content displayed at the top of the collection page",
       hidden: ({ document }) => !document?.showHero,
       group: GROUP.CONTENT,
     }),
@@ -101,6 +107,7 @@ export const collection = defineType({
       name: "seo",
       title: "SEO",
       type: "seo",
+      description: "Search engine optimization settings for this collection",
       group: GROUP.SEO,
     }),
   ],

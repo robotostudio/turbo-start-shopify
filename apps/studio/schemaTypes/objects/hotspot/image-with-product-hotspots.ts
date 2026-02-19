@@ -7,9 +7,12 @@ export const imageWithProductHotspots = defineField({
   name: "imageWithProductHotspots",
   title: "Image",
   type: "object",
+  description:
+    "An image with optional interactive product hotspots that reveal product details on hover",
   fields: [
     defineField({
       name: "image",
+      description: "The base image where product hotspots will be placed",
       options: { hotspot: true },
       type: "image",
       validation: (Rule) => Rule.required(),
@@ -19,11 +22,14 @@ export const imageWithProductHotspots = defineField({
     defineField({
       name: "showHotspots",
       type: "boolean",
+      description:
+        "Toggle to enable interactive product hotspots on this image",
       initialValue: false,
     }),
     defineField({
       name: "productHotspots",
       type: "productHotspots",
+      description: "The clickable product hotspots placed on this image",
       hidden: ({ parent }) => !parent.showHotspots,
     }),
   ],

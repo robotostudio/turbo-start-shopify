@@ -7,16 +7,20 @@ export const productFeatures = defineField({
   title: "Products",
   type: "object",
   icon: TagIcon,
+  description:
+    "A showcase of up to two products displayed as large cards or compact pills",
   fields: [
     defineField({
       name: "products",
       type: "array",
+      description: "The products to showcase in this section",
       of: [{ type: "productReference" }],
       validation: (Rule) => Rule.required().max(2),
     }),
     defineField({
       name: "layout",
       type: "string",
+      description: "Choose between large product cards or compact pills",
       initialValue: "card",
       options: {
         direction: "horizontal",

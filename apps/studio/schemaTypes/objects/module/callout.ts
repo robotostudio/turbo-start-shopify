@@ -6,10 +6,13 @@ export const callout = defineField({
   title: "Callout",
   type: "object",
   icon: BulbOutlineIcon,
+  description:
+    "A short highlighted message with an optional link to draw attention to key information",
   fields: [
     defineField({
       name: "text",
       type: "text",
+      description: "The short attention-grabbing message to display",
       rows: 2,
       validation: (Rule) => [
         Rule.required(),
@@ -21,6 +24,7 @@ export const callout = defineField({
     defineField({
       name: "link",
       type: "array",
+      description: "Optional link for visitors who want to learn more",
       of: [{ type: "linkInternal" }, { type: "linkExternal" }],
       validation: (Rule) => Rule.max(1),
     }),

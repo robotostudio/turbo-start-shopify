@@ -8,6 +8,7 @@ import { customRichText } from "@/schemaTypes/definitions/rich-text";
 const featureCardIcon = defineField({
   name: "featureCardIcon",
   type: "object",
+  description: "A single feature card with an icon, title, and description",
   fields: [
     iconField,
     defineField({

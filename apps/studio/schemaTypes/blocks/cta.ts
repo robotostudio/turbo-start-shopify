@@ -8,6 +8,8 @@ export const cta = defineType({
   name: "cta",
   type: "object",
   icon: PhoneIcon,
+  description:
+    "Focused section that drives visitors toward a specific action with a headline, description, and buttons",
   fields: [
     defineField({
       name: "eyebrow",

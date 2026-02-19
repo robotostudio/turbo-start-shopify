@@ -10,6 +10,8 @@ export const button = defineType({
   title: "Button",
   type: "object",
   icon: Command,
+  description:
+    "A clickable button with customizable style and link destination",
   fields: [
     defineField({
       name: "variant",

@@ -6,15 +6,19 @@ export const spot = defineField({
   name: "spot",
   title: "Spot",
   type: "object",
+  description:
+    "A single product hotspot positioned at specific coordinates on an image",
   fieldsets: [{ name: "position", options: { columns: 2 } }],
   fields: [
     defineField({
       name: "productWithVariant",
       type: "productWithVariant",
+      description: "The product and variant shown when this hotspot is clicked",
     }),
     defineField({
       name: "x",
       type: "number",
+      description: "Horizontal position of the hotspot on the image (0-100%)",
       readOnly: true,
       fieldset: "position",
       initialValue: 50,
@@ -23,6 +27,7 @@ export const spot = defineField({
     defineField({
       name: "y",
       type: "number",
+      description: "Vertical position of the hotspot on the image (0-100%)",
       readOnly: true,
       fieldset: "position",
       initialValue: 50,

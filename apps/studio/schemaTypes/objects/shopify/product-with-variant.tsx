@@ -11,12 +11,15 @@ export const productWithVariant = defineField({
   title: "Product with variant",
   type: "object",
   icon: TagIcon,
+  description:
+    "A product picker that lets you select a specific product and variant combination",
   fields: [
     defineField({
       name: "product",
       type: "reference",
       to: [{ type: "product" }],
       weak: true,
+      description: "The product to reference",
     }),
     defineField({
       name: "variant",

@@ -10,6 +10,8 @@ export const customProductOptionColor = defineField({
   title: "Color",
   type: "object",
   icon: false,
+  description:
+    "Color options for a product — maps visual color swatches to Shopify product variants",
   fields: [
     defineField({
       name: "title",
@@ -20,6 +22,7 @@ export const customProductOptionColor = defineField({
     defineField({
       name: "colors",
       type: "array",
+      description: "List of color swatches available for this product option",
       of: [{ type: "customProductOption.colorObject" }],
       validation: (Rule) =>
         Rule.custom((options: ColorOption[] | undefined) => {

@@ -9,6 +9,8 @@ export const hero = defineType({
   title: "Hero",
   icon: Star,
   type: "object",
+  description:
+    "Eye-catching banner at the top of a page with a headline, description, image, and call-to-action buttons",
   fields: [
     defineField({
       name: "badge",

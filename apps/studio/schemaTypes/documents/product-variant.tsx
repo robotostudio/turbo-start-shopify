@@ -30,6 +30,7 @@ export const productVariant = defineType({
       title: "Title",
       name: "titleProxy",
       type: "proxyString",
+      description: "The variant title synced from Shopify",
       options: { field: "store.title" },
     }),
     defineField({

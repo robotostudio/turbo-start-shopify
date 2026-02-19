@@ -91,6 +91,8 @@ export const richText = defineType({
   name: "richText",
   title: "Rich Text",
   type: "array",
+  description:
+    "Full-featured text editor with formatting, images, embeds, and interactive modules",
   of: Object.values(allMembers),
 });
 

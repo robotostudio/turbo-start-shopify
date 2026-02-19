@@ -9,5 +9,7 @@ export const pagebuilderBlockTypes = pageBuilderBlocks.map(({ name }) => ({
 export const pageBuilder = defineType({
   name: "pageBuilder",
   type: "array",
+  description:
+    "Drag-and-drop page sections that let you assemble pages from reusable content blocks",
   of: pagebuilderBlockTypes.map((block) => defineArrayMember(block)),
 });

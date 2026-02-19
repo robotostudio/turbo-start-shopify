@@ -75,25 +75,19 @@ export default async function CollectionPage({
   const shopifyCollection = shopifyResult.ok
     ? shopifyResult.data.collection
     : null;
-  const products =
-    shopifyCollection?.products.edges.map((e) => e.node) ?? [];
+  const products = shopifyCollection?.products.edges.map((e) => e.node) ?? [];
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="font-semibold text-3xl">
-          {sanityCollection.store?.title ??
-            shopifyCollection?.title ??
-            handle}
+          {sanityCollection.store?.title ?? shopifyCollection?.title ?? handle}
         </h1>
         {(shopifyCollection?.description ||
           sanityCollection.store?.descriptionHtml) && (
           <p className="mt-2 text-muted-foreground">
             {shopifyCollection?.description ??
-              sanityCollection.store?.descriptionHtml?.replace(
-                /<[^>]*>/g,
-                ""
-              )}
+              sanityCollection.store?.descriptionHtml?.replace(/<[^>]*>/g, "")}
           </p>
         )}
       </div>
@@ -108,9 +102,7 @@ export default async function CollectionPage({
       <ProductGrid products={products} />
 
       {shopifyCollection?.products.pageInfo && (
-        <CollectionPagination
-          pageInfo={shopifyCollection.products.pageInfo}
-        />
+        <CollectionPagination pageInfo={shopifyCollection.products.pageInfo} />
       )}
 
       {sanityCollection.modules && sanityCollection.modules.length > 0 && (

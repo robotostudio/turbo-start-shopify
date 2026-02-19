@@ -14,17 +14,21 @@ export const colorTheme = defineType({
     defineField({
       name: "title",
       type: "string",
+      description:
+        "A name to identify this color theme, like 'Ocean Blue' or 'Sunset Orange'",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "text",
       type: "color",
+      description: "The text color used with this theme",
       options: { disableAlpha: true },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "background",
       type: "color",
+      description: "The background color used with this theme",
       options: { disableAlpha: true },
       validation: (Rule) => Rule.required(),
     }),

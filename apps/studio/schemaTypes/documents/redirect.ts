@@ -34,7 +34,8 @@ export const redirect = defineType({
   name: "redirect",
   title: "Redirect",
   type: "document",
-  description: "Redirect for next.config.js",
+  description:
+    "Automatically send visitors from one URL to another when pages move or URLs change",
   fields: [
     defineField({
       name: "status",

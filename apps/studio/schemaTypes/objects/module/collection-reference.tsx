@@ -8,10 +8,13 @@ export const collectionReference = defineField({
   title: "Collection",
   type: "object",
   icon: PackageIcon,
+  description:
+    "A reference to a Shopify collection with optional background image display",
   fields: [
     defineField({
       name: "collection",
       type: "reference",
+      description: "The Shopify collection to display",
       weak: true,
       to: [{ type: "collection" }],
       validation: (Rule) => Rule.required(),

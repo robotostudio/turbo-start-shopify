@@ -8,11 +8,14 @@ export const subscribeNewsletter = defineType({
   title: "Subscribe Newsletter",
   type: "object",
   icon: Mail,
+  description:
+    "Email signup section that encourages visitors to subscribe to your newsletter",
   fields: [
     defineField({
       name: "title",
       title: "Title",
       type: "string",
+      description: "The headline text encouraging visitors to subscribe",
     }),
     customRichText(["block"], {
       name: "subTitle",

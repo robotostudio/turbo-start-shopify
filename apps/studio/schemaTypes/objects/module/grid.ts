@@ -7,10 +7,12 @@ export const grid = defineField({
   title: "Grid",
   type: "object",
   icon: ThLargeIcon,
+  description: "A multi-column layout of content cards with images and text",
   fields: [
     defineField({
       name: "items",
       type: "array",
+      description: "The content cards displayed in this grid layout",
       of: [defineArrayMember({ type: "gridItem" })],
     }),
   ],
