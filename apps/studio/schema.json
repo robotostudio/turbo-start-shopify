@@ -126,6 +126,22 @@
   },
   {
     "type": "type",
+    "name": "shop1",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "domain": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "type": "type",
     "name": "imageLinkCard.image",
     "value": {
       "type": "object",
@@ -3046,6 +3062,14 @@
           "type": "objectAttribute",
           "value": {
             "type": "boolean"
+          },
+          "optional": true
+        },
+        "shop": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "shop1"
           },
           "optional": true
         },

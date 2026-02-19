@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { client } from "@workspace/sanity/client";
@@ -16,7 +15,6 @@ import { ProductJsonLd } from "@/components/product/product-json-ld";
 import { RelatedProducts } from "@/components/product/related-products";
 import { VariantSelector } from "@/components/product/variant-selector";
 import { storefrontQuery } from "@/lib/shopify/client";
-import { resolveGids } from "@/lib/shopify/gid";
 import { PRODUCT_QUERY } from "@/lib/shopify/queries";
 import type {
   ProductQueryResponse,
@@ -49,7 +47,7 @@ export async function generateMetadata({ params }: PageProps) {
   if (!product) return {};
 
   return getSEOMetadata({
-    title: product.seo?.title ?? product.store?.title ?? "",
+    title: product.seo?.title ?? "",
     description: product.seo?.description ?? "",
     slug: `/products/${handle}`,
     contentId: product._id,
@@ -60,13 +58,9 @@ export async function generateMetadata({ params }: PageProps) {
 function ProductImage({
   images,
   selectedVariantImageUrl,
-  fallbackUrl,
-  fallbackAlt,
 }: {
   images: ShopifyImage[];
   selectedVariantImageUrl: string | undefined;
-  fallbackUrl: string | null | undefined;
-  fallbackAlt: string;
 }) {
   if (images.length > 0) {
     return (
@@ -74,19 +68,6 @@ function ProductImage({
         images={images}
         selectedVariantImageUrl={selectedVariantImageUrl}
       />
-    );
-  }
-
-  if (fallbackUrl) {
-    return (
-      <div className="relative aspect-square overflow-hidden rounded-xl border bg-muted">
-        <Image
-          alt={fallbackAlt}
-          className="size-full object-cover"
-          fill
-          src={fallbackUrl}
-        />
-      </div>
     );
   }
 
@@ -99,32 +80,15 @@ function ProductImage({
 
 function ProductPrice({
   selectedVariant,
-  fallbackPrice,
 }: {
-  selectedVariant: ShopifyVariant | null | undefined;
-  fallbackPrice: number | null | undefined;
+  selectedVariant: ShopifyVariant;
 }) {
-  if (selectedVariant) {
-    return (
-      <PriceDisplay
-        compareAtPrice={selectedVariant.compareAtPrice}
-        price={selectedVariant.price}
-      />
-    );
-  }
-
-  if (fallbackPrice != null) {
-    return (
-      <p className="font-medium text-lg">
-        {new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(fallbackPrice)}
-      </p>
-    );
-  }
-
-  return null;
+  return (
+    <PriceDisplay
+      compareAtPrice={selectedVariant.compareAtPrice}
+      price={selectedVariant.price}
+    />
+  );
 }
 
 function ProductActions({
@@ -133,14 +97,14 @@ function ProductActions({
   handle,
   variants,
 }: {
-  selectedVariant: ShopifyVariant | null | undefined;
-  shopifyProduct: ShopifyProduct | null;
+  selectedVariant: ShopifyVariant;
+  shopifyProduct: ShopifyProduct;
   handle: string;
   variants: ShopifyVariant[];
 }) {
   return (
     <>
-      {shopifyProduct && variants.length > 0 && (
+      {variants.length > 0 && (
         <VariantSelector
           handle={handle}
           options={shopifyProduct.options}
@@ -148,16 +112,10 @@ function ProductActions({
         />
       )}
 
-      {selectedVariant ? (
-        <AddToCart
-          availableForSale={selectedVariant.availableForSale}
-          variantId={selectedVariant.id}
-        />
-      ) : (
-        <p className="text-muted-foreground text-sm">
-          This product is currently unavailable.
-        </p>
-      )}
+      <AddToCart
+        availableForSale={selectedVariant.availableForSale}
+        variantId={selectedVariant.id}
+      />
     </>
   );
 }
@@ -176,34 +134,27 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
     }),
   ]);
 
-  if (!sanityProduct) {
+  if (!sanityProduct || !shopifyResult.ok || !shopifyResult.data.product) {
     notFound();
   }
 
-  await resolveGids(sanityProduct);
+  const shopifyProduct = shopifyResult.data.product;
+  const variants = shopifyProduct.variants.edges.map((e) => e.node);
+  const images = shopifyProduct.images.edges.map((e) => e.node);
+  const selectedVariant = findVariantByOptions(variants, sp) ?? variants[0];
+  if (!selectedVariant) {
+    notFound();
+  }
 
-  const shopifyProduct = shopifyResult.ok ? shopifyResult.data.product : null;
-  const variants = shopifyProduct?.variants.edges.map((e) => e.node) ?? [];
-  const images = shopifyProduct?.images.edges.map((e) => e.node) ?? [];
-
-  const selectedVariant =
-    variants.length > 0
-      ? (findVariantByOptions(variants, sp) ?? variants[0])
-      : null;
-
-  const title = shopifyProduct?.title ?? sanityProduct.store?.title ?? handle;
-  const vendor = shopifyProduct?.vendor ?? sanityProduct.store?.vendor;
+  const title = shopifyProduct.title;
+  const vendor = shopifyProduct.vendor;
 
   return (
     <>
-      {shopifyProduct && (
-        <ProductJsonLd handle={handle} product={shopifyProduct} />
-      )}
+      <ProductJsonLd handle={handle} product={shopifyProduct} />
       <div className="container mx-auto px-4 py-8">
         <div className="grid gap-8 lg:grid-cols-2">
           <ProductImage
-            fallbackAlt={sanityProduct.store?.title ?? handle}
-            fallbackUrl={sanityProduct.store?.previewImageUrl}
             images={images}
             selectedVariantImageUrl={selectedVariant?.image?.url}
           />
@@ -214,10 +165,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
               {vendor && <p className="mt-1 text-muted-foreground">{vendor}</p>}
             </div>
 
-            <ProductPrice
-              fallbackPrice={sanityProduct.store?.priceRange?.minVariantPrice}
-              selectedVariant={selectedVariant}
-            />
+            <ProductPrice selectedVariant={selectedVariant} />
 
             <ProductActions
               handle={handle}
@@ -232,7 +180,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
 
         <RelatedProducts
           handle={handle}
-          productType={sanityProduct.store?.productType ?? null}
+          productType={shopifyProduct.productType ?? null}
         />
       </div>
     </>

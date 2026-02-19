@@ -13,7 +13,6 @@ import { SortSelector } from "@/components/collection/sort-selector";
 import { parseSortParams } from "@/components/collection/sort-utils";
 import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
-import { resolveGids } from "@/lib/shopify/gid";
 import { COLLECTION_QUERY } from "@/lib/shopify/queries";
 import type { CollectionQueryResponse } from "@/lib/shopify/types";
 
@@ -39,7 +38,7 @@ export async function generateMetadata({ params }: PageProps) {
   if (!collection) return {};
 
   return getSEOMetadata({
-    title: collection.seo?.title ?? collection.store?.title ?? "",
+    title: collection.seo?.title ?? "",
     description: collection.seo?.description ?? "",
     slug: `/collections/${handle}`,
     contentId: collection._id,
@@ -65,29 +64,27 @@ export default async function CollectionPage({
     }),
   ]);
 
-  if (!sanityCollection) {
+  if (
+    !sanityCollection ||
+    !shopifyResult.ok ||
+    !shopifyResult.data.collection
+  ) {
     notFound();
   }
 
-  // Resolve Shopify GIDs from Sanity page modules (product hotspots, etc.)
-  await resolveGids(sanityCollection);
-
-  const shopifyCollection = shopifyResult.ok
-    ? shopifyResult.data.collection
-    : null;
-  const products = shopifyCollection?.products.edges.map((e) => e.node) ?? [];
+  const shopifyCollection = shopifyResult.data.collection;
+  const products = shopifyCollection.products.edges.map((e) => e.node);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="font-semibold text-3xl">
-          {sanityCollection.store?.title ?? shopifyCollection?.title ?? handle}
+          {shopifyCollection.title}
         </h1>
-        {(shopifyCollection?.description ||
-          sanityCollection.store?.descriptionHtml) && (
+
+        {shopifyCollection.description && (
           <p className="mt-2 text-muted-foreground">
-            {shopifyCollection?.description ??
-              sanityCollection.store?.descriptionHtml?.replace(/<[^>]*>/g, "")}
+            {shopifyCollection.description}
           </p>
         )}
       </div>
@@ -101,7 +98,7 @@ export default async function CollectionPage({
 
       <ProductGrid products={products} />
 
-      {shopifyCollection?.products.pageInfo && (
+      {shopifyCollection.products.pageInfo && (
         <CollectionPagination pageInfo={shopifyCollection.products.pageInfo} />
       )}
 

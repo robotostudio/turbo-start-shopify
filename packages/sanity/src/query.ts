@@ -553,21 +553,6 @@ export const queryProductByHandle = defineQuery(`
       text
     },
     ${productBodyFragment},
-    store{
-      id,
-      gid,
-      title,
-      descriptionHtml,
-      slug,
-      status,
-      isDeleted,
-      previewImageUrl,
-      priceRange,
-      productType,
-      vendor,
-      tags,
-      options[]{name, values}
-    },
     seo
   }
 `);
@@ -626,14 +611,6 @@ export const queryCollectionByHandle = defineQuery(`
       title,
       background,
       text
-    },
-    store{
-      id,
-      gid,
-      title,
-      descriptionHtml,
-      slug,
-      imageUrl
     },
     seo
   }
