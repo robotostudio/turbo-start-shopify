@@ -12,4 +12,15 @@ export const pageBuilder = defineType({
   description:
     "Drag-and-drop page sections that let you assemble pages from reusable content blocks",
   of: pagebuilderBlockTypes.map((block) => defineArrayMember(block)),
+  options: {
+    insertMenu: {
+      views: [
+        {
+          name: "grid",
+          previewImageUrl: (schemaTypeName) =>
+            `/static/thumbnails/${schemaTypeName}.webp`,
+        },
+      ],
+    },
+  },
 });
