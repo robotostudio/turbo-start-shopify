@@ -1,3 +1,4 @@
+import { SANITY_BASE_URL } from "@workspace/sanity/image";
 import { sanityFetch } from "@workspace/sanity/live";
 import {
   queryFooterData,
@@ -10,6 +11,7 @@ import type {
 import Link from "next/link";
 
 import { Logo } from "./logo";
+import { ModeToggle } from "./mode-toggle";
 import {
   FacebookIcon,
   InstagramIcon,
@@ -51,22 +53,23 @@ function SocialLinks({ data }: SocialLinksProps) {
   const { facebook, twitter, instagram, youtube, linkedin } = data;
 
   const socialLinks = [
-    {
-      url: instagram,
-      Icon: InstagramIcon,
-      label: "Follow us on Instagram",
-    },
+    { url: twitter, Icon: XIcon, label: "Follow us on Twitter" },
     {
       url: facebook,
       Icon: FacebookIcon,
       label: "Follow us on Facebook",
     },
-    { url: twitter, Icon: XIcon, label: "Follow us on Twitter" },
     {
       url: linkedin,
       Icon: LinkedinIcon,
       label: "Follow us on LinkedIn",
     },
+    {
+      url: instagram,
+      Icon: InstagramIcon,
+      label: "Follow us on Instagram",
+    },
+
     {
       url: youtube,
       Icon: YoutubeIcon,
@@ -88,7 +91,7 @@ function SocialLinks({ data }: SocialLinksProps) {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <Icon className="fill-muted-foreground hover:fill-primary/80 dark:fill-zinc-400 dark:hover:fill-primary" />
+            <Icon className="size-4 fill-muted-foreground hover:fill-primary/80 dark:fill-zinc-400 dark:hover:fill-primary" />
             <span className="sr-only">{label}</span>
           </Link>
         </li>
@@ -99,14 +102,14 @@ function SocialLinks({ data }: SocialLinksProps) {
 
 export function FooterSkeleton() {
   return (
-    <footer className="mt-16 pb-8">
+    <footer className="mt-16 py-8">
       <section className="container mx-auto px-4 md:px-6">
-        <div className="h-[500px] lg:h-auto">
+        <div className="h-125 lg:h-auto">
           <div className="flex flex-col items-center justify-between gap-10 text-center lg:flex-row lg:text-left">
             <div className="flex w-full max-w-96 shrink flex-col items-center justify-between gap-6 lg:items-start">
               <div>
                 <span className="flex items-center justify-center gap-4 lg:justify-start">
-                  <div className="h-[40px] w-[80px] animate-pulse rounded bg-muted" />
+                  <div className="h-10 w-20 animate-pulse rounded bg-muted" />
                 </span>
                 <div className="mt-6 h-16 w-full animate-pulse rounded bg-muted" />
               </div>
@@ -149,35 +152,51 @@ export function FooterSkeleton() {
 }
 
 function Footer({ data, settingsData }: FooterProps) {
-  const { subtitle, columns } = data;
+  const { subtitle, columns, backgroundImage } = data;
   const { siteTitle, logo, socialLinks } = settingsData;
   const year = new Date().getFullYear();
 
+  const bgImageUrl = backgroundImage?.id
+    ? `${SANITY_BASE_URL}${backgroundImage.id.replace("image-", "").replace(/-([^-]+)$/, ".$1")}?w=640&q=75&auto=format`
+    : null;
+
   return (
-    <footer className="mt-20 pb-8">
-      <section className="container mx-auto">
-        <div className="h-[500px] lg:h-auto">
+    <footer className="relative mt-20 overflow-hidden bg-zinc-100 py-8 dark:bg-zinc-900">
+      {bgImageUrl && (
+        <div
+          className="pointer-events-none absolute -bottom-1 inset-x-0 mx-auto h-80 w-80 bg-contain bg-bottom bg-no-repeat invert dark:invert-0 dark:mix-blend-screen"
+          style={{ backgroundImage: `url(${bgImageUrl})` }}
+        />
+      )}
+      <section className="container relative mx-auto">
+        <div className="h-125 lg:h-auto">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-10 px-4 text-center md:px-6 lg:flex-row lg:text-left">
             <div className="flex w-full max-w-96 shrink flex-col items-center justify-between gap-6 md:gap-8 lg:items-start">
-              <div>
-                <span className="flex items-center justify-center gap-4 lg:justify-start size-10">
-                  <Logo alt={siteTitle} image={logo} priority />
+
+                <span className="flex items-center justify-center gap-4 lg:justify-start">
+                  <Logo
+                    alt={siteTitle}
+                    image={logo}
+                    priority
+                    text={siteTitle}
+                  />
                 </span>
                 {subtitle && (
-                  <p className="mt-6 text-muted-foreground text-sm dark:text-zinc-400">
+                  <p className=" font-(family-name:--font-geist-pixel-square) text-muted-foreground text-md dark:text-zinc-400">
                     {subtitle}
                   </p>
                 )}
-              </div>
-              {socialLinks && <SocialLinks data={socialLinks} />}
+
             </div>
             {Array.isArray(columns) && columns?.length > 0 && (
-              <div className="grid grid-cols-3 gap-6 lg:mr-20 lg:gap-28">
+              <div className="grid grid-cols-3 gap-6  lg:gap-20">
                 {columns.map((column, index) => (
                   <div key={`column-${column?._key}-${index}`}>
-                    <h3 className="mb-6 font-semibold">{column?.title}</h3>
+                    <h3 className="mb-4 text-muted-foreground tracking-wide uppercase text-md dark:text-zinc-400 font-(family-name:--font-geist-pixel-square) ">
+                      {column?.title}
+                    </h3>
                     {column?.links && column?.links?.length > 0 && (
-                      <ul className="space-y-4 text-muted-foreground text-sm dark:text-zinc-400">
+                      <ul className="space-y-4  text-md">
                         {column?.links?.map((link, columnIndex) => (
                           <li
                             className="font-medium hover:text-primary"
@@ -203,19 +222,25 @@ function Footer({ data, settingsData }: FooterProps) {
               </div>
             )}
           </div>
-          <div className="mt-20 border-t pt-8">
+          <div className="mt-20 md:mt-30 pt-8">
             <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-4 text-center font-normal text-muted-foreground text-sm md:px-6 lg:flex-row lg:items-center lg:text-left">
-              <p>
+              <p className="text-sm">
                 © {year} {siteTitle}. All rights reserved.
               </p>
-              <ul className="flex justify-center gap-4 lg:justify-start">
+              <div className="flex flex-row gap-3 items-center justify-center md:gap-6">
+                {socialLinks && <SocialLinks data={socialLinks} />}
+
+                <ModeToggle />
+              </div>
+
+              {/* <ul className="flex justify-center gap-4 lg:justify-start">
                 <li className="hover:text-primary">
                   <Link href="/terms">Terms and Conditions</Link>
                 </li>
                 <li className="hover:text-primary">
                   <Link href="/privacy">Privacy Policy</Link>
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
         </div>

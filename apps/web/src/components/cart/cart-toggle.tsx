@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { ShoppingBag } from "lucide-react";
+import { Handbag } from "lucide-react";
 
 import { useCart } from "./cart-context";
 
@@ -17,7 +17,7 @@ export function CartToggle() {
       size="icon"
       variant="ghost"
     >
-      <ShoppingBag className="size-5" />
+      <Handbag className="size-5" />
       {quantity > 0 && (
         <span className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-medium">
           {quantity > 99 ? "99+" : quantity}

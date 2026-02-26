@@ -97,6 +97,16 @@ export const footer = defineType({
       description: "Subtitle that sits beneath the logo in the footer",
     }),
     defineField({
+      name: "backgroundImage",
+      type: "image",
+      title: "Background Image",
+      description:
+        "Optional background image displayed in the footer (works best with a subtle, faded image)",
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
       name: "columns",
       type: "array",
       title: "Columns",

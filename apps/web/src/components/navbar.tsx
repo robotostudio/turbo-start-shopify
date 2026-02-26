@@ -45,7 +45,7 @@ function DesktopColumnDropdown({
       <button
         aria-expanded={isOpen}
         aria-haspopup="menu"
-        className="flex items-center gap-1 px-3 py-2 font-medium text-muted-foreground text-sm transition-colors hover:text-foreground"
+        className="flex items-center gap-1 px-3 py-2 font-medium text-sm transition-colors hover:text-foreground"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         type="button"
@@ -55,7 +55,7 @@ function DesktopColumnDropdown({
       </button>
       {isOpen ? (
         <div
-          className="fade-in-0 zoom-in-95 absolute top-full left-0 z-50 min-w-[280px] animate-in rounded-lg border bg-popover p-2 shadow-lg"
+          className="fade-in-0 zoom-in-95 absolute top-full left-0 z-50 min-w-70 animate-in rounded-lg border bg-popover p-2 shadow-lg"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           role="menu"
@@ -86,7 +86,7 @@ function DesktopColumnLink({
 
   return (
     <Link
-      className="px-3 py-2 font-medium text-muted-foreground text-sm transition-colors hover:text-foreground"
+      className="px-3 py-2 font-medium text-sm transition-colors hover:text-foreground"
       href={column.href}
     >
       {column.name}
@@ -96,7 +96,7 @@ function DesktopColumnLink({
 
 function NavbarSkeleton() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full  bg-background/80 backdrop-blur-sm">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo skeleton - matches Logo component dimensions: width={120} height={40} */}
@@ -166,24 +166,11 @@ export function Navbar({
   }
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-sm">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <div className="flex size-10 items-center">
-            {logo && (
-              <Logo
-                alt={siteTitle || ""}
-                height={40}
-                image={logo}
-                priority
-                width={120}
-              />
-            )}
-          </div>
-
           {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden flex-1 items-center gap-1 md:flex">
             {columns?.map((column) => {
               if (column.type === "column") {
                 return (
@@ -212,29 +199,42 @@ export function Navbar({
             })}
           </nav>
 
+          {/* Logo */}
+          <div className="flex h-10 items-center">
+            <Logo
+              alt={siteTitle || ""}
+              height={40}
+              image={logo}
+              priority
+              text={siteTitle}
+              width={120}
+            />
+          </div>
+
           {/* Desktop Actions */}
-          <div className="hidden items-center gap-4 md:flex">
+          <div className="hidden flex-1 items-center justify-end gap-4 md:flex">
             <Link
               aria-label="Search"
-              className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex size-9 items-center justify-center rounded-md transition-colors hover:text-foreground"
               href="/search"
             >
               <Search className="size-4" />
             </Link>
-            <ModeToggle />
+            {/* <ModeToggle /> */}
+            {/* we will replace it with a faviorite */}
             <CartToggle />
-            <SanityButtons
+            {/* <SanityButtons
               buttonClassName="rounded-lg"
               buttons={buttons || []}
               className="flex items-center gap-2"
-            />
+            /> */}
           </div>
 
           {/* Mobile Actions */}
           <div className="flex items-center gap-2 md:hidden">
             <Link
               aria-label="Search"
-              className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex size-9 items-center justify-center rounded-md transition-colors hover:text-foreground"
               href="/search"
             >
               <Search className="size-4" />
