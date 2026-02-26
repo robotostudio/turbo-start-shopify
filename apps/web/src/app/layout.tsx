@@ -13,6 +13,7 @@ import { FooterServer, FooterSkeleton } from "@/components/footer";
 import { CombinedJsonLd } from "@/components/json-ld";
 import { Navbar } from "@/components/navbar";
 import { PreviewBar } from "@/components/preview-bar";
+import { PromoBanner } from "@/components/promo-banner";
 import { Providers } from "@/components/providers";
 import { getNavigationData } from "@/lib/navigation";
 
@@ -35,6 +36,7 @@ export default async function RootLayout({
       >
         <Providers>
           <div className="flex min-h-screen flex-col">
+            <PromoBanner data={nav.promoBannerData} />
             <Navbar navbarData={nav.navbarData} settingsData={nav.settingsData} />
             <div className="flex-1">{children}</div>
             <Suspense fallback={<FooterSkeleton />}>
