@@ -1,9 +1,9 @@
 import "@workspace/ui/globals.css";
 
 import { SanityLive } from "@workspace/sanity/live";
-import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { GeistPixelSquare } from "geist/font/pixel";
+import { GeistSans } from "geist/font/sans";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { Suspense } from "react";

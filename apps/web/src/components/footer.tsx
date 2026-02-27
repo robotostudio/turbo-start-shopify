@@ -172,21 +172,14 @@ function Footer({ data, settingsData }: FooterProps) {
         <div className="h-125 lg:h-auto">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-10 px-4 text-center md:px-6 lg:flex-row lg:text-left">
             <div className="flex w-full max-w-96 shrink flex-col items-center justify-between gap-6 md:gap-8 lg:items-start">
-
-                <span className="flex items-center justify-center gap-4 lg:justify-start">
-                  <Logo
-                    alt={siteTitle}
-                    image={logo}
-                    priority
-                    text={siteTitle}
-                  />
-                </span>
-                {subtitle && (
-                  <p className=" font-(family-name:--font-geist-pixel-square) text-muted-foreground text-md dark:text-zinc-400">
-                    {subtitle}
-                  </p>
-                )}
-
+              <span className="flex items-center justify-center gap-4 lg:justify-start">
+                <Logo alt={siteTitle} image={logo} priority text={siteTitle} />
+              </span>
+              {subtitle && (
+                <p className=" font-(family-name:--font-geist-pixel-square) text-muted-foreground text-md dark:text-zinc-400">
+                  {subtitle}
+                </p>
+              )}
             </div>
             {Array.isArray(columns) && columns?.length > 0 && (
               <div className="grid grid-cols-3 gap-6  lg:gap-20">

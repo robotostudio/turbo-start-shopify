@@ -279,40 +279,6 @@ export const SEARCH_PRODUCTS_QUERY = /* graphql */ `
   }
 `;
 
-export const NODES_QUERY = /* graphql */ `
-  ${VARIANT_FRAGMENT}
-  ${PRODUCT_FIELDS_FRAGMENT}
-  query Nodes($ids: [ID!]!) {
-    nodes(ids: $ids) {
-      ... on Product {
-        ...ProductFields
-        variants(first: 250) {
-          edges {
-            node {
-              ...VariantFields
-            }
-          }
-        }
-      }
-      ... on Collection {
-        id
-        handle
-        title
-        description
-        image {
-          url
-          altText
-          width
-          height
-        }
-      }
-      ... on ProductVariant {
-        ...VariantFields
-      }
-    }
-  }
-`;
-
 export const PRODUCT_BY_ID_QUERY = /* graphql */ `
   query ProductById($id: ID!) {
     product(id: $id) {

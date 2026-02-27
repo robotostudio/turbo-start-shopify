@@ -149,15 +149,6 @@ export type SearchProductsResponse = {
   };
 };
 
-export type ShopifyNode =
-  | (ShopifyProduct & { __typename?: "Product" })
-  | (ShopifyCollectionListItem & { __typename?: "Collection" })
-  | (ShopifyVariant & { __typename?: "ProductVariant" });
-
-export type NodesResponse = {
-  nodes: (ShopifyNode | null)[];
-};
-
 export type FeaturedProduct = {
   id: string;
   handle: string;
