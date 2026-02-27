@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { Loader2, ShoppingBag } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 import { useCart } from "@/components/cart/cart-context";
@@ -17,7 +17,12 @@ export function AddToCart({ variantId, availableForSale }: AddToCartProps) {
 
   if (!availableForSale) {
     return (
-      <Button className="w-full" disabled size="lg">
+      <Button
+        className="w-full rounded-none uppercase py-6 px-8"
+        disabled
+        size="lg"
+        variant="outline"
+      >
         Sold Out
       </Button>
     );
@@ -25,7 +30,7 @@ export function AddToCart({ variantId, availableForSale }: AddToCartProps) {
 
   return (
     <Button
-      className="w-full"
+      className="w-full rounded-none border-none uppercase py-6 px-8 bg-zinc-900 text-zinc-100 hover:bg-zinc-800 hover:text-white dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 dark:hover:text-zinc-900 tracking-wide transition-colors"
       disabled={isPending}
       onClick={async () => {
         setIsPending(true);
@@ -35,12 +40,9 @@ export function AddToCart({ variantId, availableForSale }: AddToCartProps) {
       }}
       size="lg"
     >
-      {isPending ? (
-        <Loader2 className="mr-2 size-4 animate-spin" />
-      ) : (
-        <ShoppingBag className="mr-2 size-4" />
-      )}
+      {isPending ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
       Add to Cart
+      {!isPending && <ArrowRight className="ml-2 size-4" />}
     </Button>
   );
 }

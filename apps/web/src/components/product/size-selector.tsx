@@ -24,10 +24,10 @@ export function SizeSelector({
         return (
           <button
             className={cn(
-              "min-w-12 rounded-lg border px-3 py-2 text-center text-sm font-medium transition-colors",
+              "min-w-14 border px-4 py-2.5 text-center text-sm font-medium transition-colors",
               isSelected
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border hover:border-primary",
+                ? "border-foreground bg-foreground text-background"
+                : "border-border text-foreground hover:border-foreground/50",
               !isAvailable && "opacity-40 line-through"
             )}
             key={value}
