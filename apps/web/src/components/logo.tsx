@@ -28,7 +28,6 @@ export function Logo({
 }: LogoProps) {
   return (
     <Link className="flex gap-2 items-center" href="/">
-
       {/* removed it for now since the ui design didn't use it */}
       {/* <div className="relative h-5 w-5 shrink-0">
         {image ? (

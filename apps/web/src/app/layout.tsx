@@ -1,9 +1,9 @@
 import "@workspace/ui/globals.css";
 
 import { SanityLive } from "@workspace/sanity/live";
-import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { GeistPixelSquare } from "geist/font/pixel";
+import { GeistSans } from "geist/font/sans";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { Suspense } from "react";
@@ -35,7 +35,10 @@ export default async function RootLayout({
       >
         <Providers>
           <div className="flex min-h-screen flex-col">
-            <Navbar navbarData={nav.navbarData} settingsData={nav.settingsData} />
+            <Navbar
+              navbarData={nav.navbarData}
+              settingsData={nav.settingsData}
+            />
             <div className="flex-1">{children}</div>
             <Suspense fallback={<FooterSkeleton />}>
               <FooterServer />
