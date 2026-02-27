@@ -78,9 +78,7 @@ export default async function CollectionPage({
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="font-semibold text-3xl">
-          {shopifyCollection.title}
-        </h1>
+        <h1 className="font-semibold text-3xl">{shopifyCollection.title}</h1>
 
         {shopifyCollection.description && (
           <p className="mt-2 text-muted-foreground">

@@ -1,7 +1,9 @@
 import "@workspace/ui/globals.css";
 
 import { SanityLive } from "@workspace/sanity/live";
-import { Geist, Geist_Mono } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
+import { GeistPixelSquare } from "geist/font/pixel";
+import { GeistSans } from "geist/font/sans";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { Suspense } from "react";
@@ -14,15 +16,9 @@ import { PreviewBar } from "@/components/preview-bar";
 import { Providers } from "@/components/providers";
 import { getNavigationData } from "@/lib/navigation";
 
-const fontSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
+const fontSans = GeistSans;
+const fontMono = GeistMono;
+const fontPixel = GeistPixelSquare;
 
 export default async function RootLayout({
   children,
@@ -35,14 +31,19 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}
+        className={`${fontSans.variable} ${fontMono.variable} ${fontPixel.variable} font-sans antialiased`}
       >
         <Providers>
-          <Navbar navbarData={nav.navbarData} settingsData={nav.settingsData} />
-          {children}
-          <Suspense fallback={<FooterSkeleton />}>
-            <FooterServer />
-          </Suspense>
+          <div className="flex min-h-screen flex-col">
+            <Navbar
+              navbarData={nav.navbarData}
+              settingsData={nav.settingsData}
+            />
+            <div className="flex-1">{children}</div>
+            <Suspense fallback={<FooterSkeleton />}>
+              <FooterServer />
+            </Suspense>
+          </div>
           <SanityLive />
           <CombinedJsonLd includeOrganization includeWebsite />
           {(await draftMode()).isEnabled && (

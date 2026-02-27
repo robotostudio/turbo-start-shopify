@@ -338,6 +338,9 @@ export const queryFooterData = defineQuery(`
   *[_type == "footer" && _id == "footer"][0]{
     _id,
     subtitle,
+    backgroundImage {
+      ${imageFields}
+    },
     columns[]{
       _key,
       title,
