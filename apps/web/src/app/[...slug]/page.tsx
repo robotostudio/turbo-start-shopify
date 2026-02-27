@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 
 import { PageBuilder } from "@/components/pagebuilder";
 import { getSEOMetadata } from "@/lib/seo";
-import { resolveGids } from "@/lib/shopify/gid";
 
 const logger = new Logger("PageSlug");
 
@@ -84,9 +83,6 @@ export default async function SlugPage({
   if (!pageData) {
     return notFound();
   }
-
-  // Resolve Shopify GIDs from page builder content (product refs, hotspots)
-  await resolveGids(pageData);
 
   const { title, pageBuilder, _id, _type } = pageData ?? {};
 
