@@ -334,6 +334,22 @@ export const queryGenericPageOGData = defineQuery(`
   }
 `);
 
+export const queryPromoBannerData = defineQuery(`
+  *[_type == "promoBanner" && _id == "promoBanner"][0]{
+    _id,
+    enabled,
+    text,
+    "openInNewTab": link.openInNewTab,
+    "href": select(
+      link.type == "internal" => link.internal->slug.current,
+      link.type == "external" => link.external,
+      link.type == "email" => "mailto:" + link.email,
+      link.type == "product" => "/products/" + link.product->store.slug.current,
+      link.href
+    ),
+  }
+`);
+
 export const queryFooterData = defineQuery(`
   *[_type == "footer" && _id == "footer"][0]{
     _id,

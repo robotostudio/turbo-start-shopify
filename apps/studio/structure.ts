@@ -5,6 +5,7 @@ import {
   FileText,
   HomeIcon,
   type LucideIcon,
+  Megaphone,
   MessageCircle,
   PanelBottom,
   PanelTop,
@@ -99,6 +100,7 @@ export const structure = (
           S.list()
             .title("Site Configuration")
             .items([
+              singleton(S, "promoBanner", "Promo Banner", Megaphone),
               singleton(S, "navbar", "Navigation", PanelTop),
               singleton(S, "footer", "Footer", PanelBottom),
               singleton(S, "settings", "Global Settings", CogIcon),
