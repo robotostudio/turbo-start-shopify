@@ -37,7 +37,10 @@ export default async function RootLayout({
         <Providers>
           <div className="flex min-h-screen flex-col">
             <PromoBanner data={nav.promoBannerData} />
-            <Navbar navbarData={nav.navbarData} settingsData={nav.settingsData} />
+            <Navbar
+              navbarData={nav.navbarData}
+              settingsData={nav.settingsData}
+            />
             <div className="flex-1">{children}</div>
             <Suspense fallback={<FooterSkeleton />}>
               <FooterServer />

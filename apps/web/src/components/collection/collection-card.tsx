@@ -22,7 +22,7 @@ export function CollectionCard({
   const plainDescription = description ? stripHtml(description) : null;
   return (
     <Link
-      className="group block overflow-hidden rounded-xl border bg-card"
+      className="group block overflow-hidden bg-card"
       href={`/collections/${handle}`}
     >
       <div className="relative aspect-square overflow-hidden bg-muted">
@@ -40,10 +40,10 @@ export function CollectionCard({
           </div>
         )}
       </div>
-      <div className="p-4">
-        <h2 className="font-medium text-sm group-hover:underline">{title}</h2>
+      <div className="py-4 flex flex-col gap-2">
+        <h2 className="font-medium text-sm md:text-xl group-hover:underline">{title}</h2>
         {plainDescription ? (
-          <p className="mt-1 line-clamp-2 text-muted-foreground text-xs">
+          <p className=" line-clamp-2 text-muted-foreground text-xs">
             {plainDescription}
           </p>
         ) : null}

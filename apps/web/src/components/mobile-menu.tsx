@@ -51,9 +51,12 @@ export function MobileMenu({ navbarData, settingsData }: NavigationData) {
       >
         <SheetHeader className="flex-row items-center px-6 justify-between pb-4 border-b">
           {logo ? (
-            <div className="[&_img]:w-auto [&_img]:h-6 [&_img]:rounded-none">
-              <Logo alt={siteTitle || ""} image={logo} />
-            </div>
+            <>
+              <SheetTitle className="sr-only">{siteTitle || "Menu"}</SheetTitle>
+              <div className="[&_img]:w-auto [&_img]:h-6 [&_img]:rounded-none">
+                <Logo alt={siteTitle || ""} image={logo} />
+              </div>
+            </>
           ) : (
             <SheetTitle>{siteTitle || "Menu"}</SheetTitle>
           )}

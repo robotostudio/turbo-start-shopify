@@ -85,7 +85,22 @@ export const structure = (
             .title("Commerce")
             .items([
               list(S, "product", "Products", ShoppingBag),
-              list(S, "collection", "Collections", BookMarked),
+              S.listItem()
+                .title("Collections")
+                .icon(BookMarked)
+                .child(
+                  S.list()
+                    .title("Collections")
+                    .items([
+                      singleton(
+                        S,
+                        "collectionsIndex",
+                        "Collections Settings",
+                        BookMarked
+                      ),
+                      list(S, "collection", "All Collections", BookMarked),
+                    ])
+                ),
               list(S, "productVariant", "Product Variants", FileText),
               list(S, "colorTheme", "Color Themes", Settings2),
             ])

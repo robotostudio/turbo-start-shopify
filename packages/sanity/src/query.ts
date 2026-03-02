@@ -101,7 +101,10 @@ const buttonsFragment = /* groq */ `
     _type,
     "openInNewTab": url.openInNewTab,
     "href": select(
-      url.type == "internal" => url.internal->slug.current,
+      url.type == "internal" => coalesce(
+        url.internal->slug.current,
+        "/collections/" + url.internal->store.slug.current
+      ),
       url.type == "external" => url.external,
       url.type == "email" => "mailto:" + url.email,
       url.type == "product" => "/products/" + url.product->store.slug.current,
@@ -639,9 +642,26 @@ export const queryCollectionPaths = defineQuery(`
   *[_type == "collection" && defined(store.slug.current)].store.slug.current
 `);
 
+export const queryCollectionsIndexPageData = defineQuery(`
+  *[_type == "collectionsIndex"][0]{
+    ...,
+    _id,
+    _type,
+    title,
+    subtitle,
+    heroTitle,
+    heroImage {
+      ${imageFields}
+    },
+    ${buttonsFragment},
+    "slug": slug.current
+  }
+`);
+
 export const queryAllCollections = defineQuery(`
   *[_type == "collection" && defined(store.slug.current)]{
     _id,
+    _createdAt,
     "title": store.title,
     "slug": store.slug.current,
     "imageUrl": store.imageUrl,

@@ -132,6 +132,21 @@ const DOCUMENT_TYPE_CONFIGS: Record<string, SlugValidationOptions> = {
       },
     ],
   },
+  collectionsIndex: {
+    documentType: "Collections index",
+    requiredPrefix: "/collections",
+    requireSlash: true,
+    segmentCount: 1,
+    sanityDocumentType: "collectionsIndex",
+    customValidators: [
+      (slug: string) => {
+        if (slug !== "/collections") {
+          return ["Collections index must be exactly '/collections'"];
+        }
+        return [];
+      },
+    ],
+  },
   homePage: {
     documentType: "Home page",
     sanityDocumentType: "homePage",
@@ -529,6 +544,9 @@ export function generateSlugFromTitle(
 
     case "blogIndex":
       return "/blog";
+
+    case "collectionsIndex":
+      return "/collections";
 
     case "author":
       return `/author/${cleanTitle}`;

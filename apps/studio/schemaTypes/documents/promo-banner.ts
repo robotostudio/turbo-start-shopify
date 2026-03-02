@@ -5,7 +5,8 @@ export const promoBanner = defineType({
   name: "promoBanner",
   type: "document",
   title: "Promo Banner",
-  description: "Promotional announcement banner displayed at the top of the site",
+  description:
+    "Promotional announcement banner displayed at the top of the site",
   icon: Megaphone,
   fields: [
     defineField({

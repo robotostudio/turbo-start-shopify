@@ -170,7 +170,7 @@ function Footer({ data, settingsData }: FooterProps) {
       )}
       <section className="container relative mx-auto">
         <div className="h-125 lg:h-auto">
-          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-10 px-4 text-center md:px-6 lg:flex-row lg:text-left">
+          <div className="mx-auto flex  flex-col items-center justify-between gap-10 px-4 text-center md:px-6 lg:flex-row lg:text-left">
             <div className="flex w-full max-w-96 shrink flex-col items-center justify-between gap-6 md:gap-8 lg:items-start">
               <span className="flex items-center justify-center gap-4 lg:justify-start">
                 <Logo alt={siteTitle} image={logo} priority text={siteTitle} />
@@ -216,7 +216,7 @@ function Footer({ data, settingsData }: FooterProps) {
             )}
           </div>
           <div className="mt-20 md:mt-30 pt-8">
-            <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-4 text-center font-normal text-muted-foreground text-sm md:px-6 lg:flex-row lg:items-center lg:text-left">
+            <div className="mx-auto flex  flex-col justify-between gap-4 px-4 text-center font-normal text-muted-foreground text-sm md:px-6 lg:flex-row lg:items-center lg:text-left">
               <p className="text-sm">
                 © {year} {siteTitle}. All rights reserved.
               </p>

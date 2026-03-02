@@ -1008,6 +1008,36 @@ export type Settings = {
   };
 };
 
+export type CollectionsIndex = {
+  _id: string;
+  _type: "collectionsIndex";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  subtitle?: string;
+  heroTitle?: string;
+  heroImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  buttons?: Array<
+    {
+      _key: string;
+    } & Button
+  >;
+  slug: Slug;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SeoImage;
+  ogTitle?: string;
+  ogDescription?: string;
+};
+
 export type BlogIndex = {
   _id: string;
   _type: "blogIndex";
@@ -1631,6 +1661,7 @@ export type AllSanitySchemaTypes =
   | SanityImageCrop
   | SanityImageHotspot
   | Settings
+  | CollectionsIndex
   | BlogIndex
   | HomePage
   | ProductVariant
@@ -2963,6 +2994,17 @@ export type QueryGenericPageOGDataResult =
     }
   | {
       _id: string;
+      _type: "collectionsIndex";
+      title: string | null;
+      description: string | null;
+      image: null;
+      dominantColor: null;
+      seoImage: string | null;
+      logo: string | null;
+      date: string;
+    }
+  | {
+      _id: string;
       _type: "homePage";
       title: string | null;
       description: string | null;
@@ -2987,11 +3029,12 @@ export type QueryGenericPageOGDataResult =
 
 // Source: ../../packages/sanity/src/query.ts
 // Variable: queryPromoBannerData
-// Query: *[_type == "promoBanner" && _id == "promoBanner"][0]{    _id,    enabled,    text,    "href": select(      link.type == "internal" => "/" + link.internal->slug.current,      link.type == "external" => link.external,      link.type == "email" => "mailto:" + link.email,      link.type == "product" => "/products/" + link.product->store.slug.current,      link.href    ),  }
+// Query: *[_type == "promoBanner" && _id == "promoBanner"][0]{    _id,    enabled,    text,    "openInNewTab": link.openInNewTab,    "href": select(      link.type == "internal" => link.internal->slug.current,      link.type == "external" => link.external,      link.type == "email" => "mailto:" + link.email,      link.type == "product" => "/products/" + link.product->store.slug.current,      link.href    ),  }
 export type QueryPromoBannerDataResult = {
   _id: "promoBanner";
   enabled: boolean | null;
   text: string;
+  openInNewTab: boolean | null;
   href: string | null;
 } | null;
 
@@ -3489,10 +3532,54 @@ export type QueryCollectionByHandleResult = {
 export type QueryCollectionPathsResult = Array<string | null>;
 
 // Source: ../../packages/sanity/src/query.ts
+// Variable: queryCollectionsIndexPageData
+// Query: *[_type == "collectionsIndex"][0]{    ...,    _id,    _type,    title,    subtitle,    heroTitle,    heroImage {        "id": asset._ref,  "preview": asset->metadata.lqip,  "alt": coalesce(    alt,    asset->altText,    caption,    asset->originalFilename,    "untitled"  ),  hotspot {    x,    y  },  crop {    bottom,    left,    right,    top  }    },      buttons[]{    text,    variant,    _key,    _type,    "openInNewTab": url.openInNewTab,    "href": select(      url.type == "internal" => url.internal->slug.current,      url.type == "external" => url.external,      url.type == "email" => "mailto:" + url.email,      url.type == "product" => "/products/" + url.product->store.slug.current,      url.href    ),  },    "slug": slug.current  }
+export type QueryCollectionsIndexPageDataResult = {
+  _id: string;
+  _type: "collectionsIndex";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string | null;
+  subtitle: string | null;
+  heroTitle: string | null;
+  heroImage: {
+    id: string | null;
+    preview: string | null;
+    alt: string | "untitled";
+    hotspot: {
+      x: number;
+      y: number;
+    } | null;
+    crop: {
+      bottom: number;
+      left: number;
+      right: number;
+      top: number;
+    } | null;
+  } | null;
+  buttons: Array<{
+    text: string | null;
+    variant: "default" | "link" | "outline" | "secondary" | null;
+    _key: string;
+    _type: "button";
+    openInNewTab: boolean | null;
+    href: string | null;
+  }> | null;
+  slug: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SeoImage;
+  ogTitle?: string;
+  ogDescription?: string;
+} | null;
+
+// Source: ../../packages/sanity/src/query.ts
 // Variable: queryAllCollections
-// Query: *[_type == "collection" && defined(store.slug.current)]{    _id,    "title": store.title,    "slug": store.slug.current,    "imageUrl": store.imageUrl,    "description": store.descriptionHtml,    seo  }
+// Query: *[_type == "collection" && defined(store.slug.current)]{    _id,    _createdAt,    "title": store.title,    "slug": store.slug.current,    "imageUrl": store.imageUrl,    "description": store.descriptionHtml,    seo  }
 export type QueryAllCollectionsResult = Array<{
   _id: string;
+  _createdAt: string;
   title: string | null;
   slug: string | null;
   imageUrl: string | null;
@@ -3518,7 +3605,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "page" && _id == $id][0]{\n    \n  _id,\n  _type,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "settings"][0].logo.asset->url + "?w=80&h=40&dpr=3&fit=max&q=100",\n  "date": coalesce(date, _createdAt)\n\n  }\n': QuerySlugPageOGDataResult;
     '\n  *[_type == "blog" && _id == $id][0]{\n    \n  _id,\n  _type,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "settings"][0].logo.asset->url + "?w=80&h=40&dpr=3&fit=max&q=100",\n  "date": coalesce(date, _createdAt)\n\n  }\n': QueryBlogPageOGDataResult;
     '\n  *[ defined(slug.current) && _id == $id][0]{\n    \n  _id,\n  _type,\n  "title": select(\n    defined(ogTitle) => ogTitle,\n    defined(seoTitle) => seoTitle,\n    title\n  ),\n  "description": select(\n    defined(ogDescription) => ogDescription,\n    defined(seoDescription) => seoDescription,\n    description\n  ),\n  "image": image.asset->url + "?w=566&h=566&dpr=2&fit=max",\n  "dominantColor": image.asset->metadata.palette.dominant.background,\n  "seoImage": seoImage.asset->url + "?w=1200&h=630&dpr=2&fit=max", \n  "logo": *[_type == "settings"][0].logo.asset->url + "?w=80&h=40&dpr=3&fit=max&q=100",\n  "date": coalesce(date, _createdAt)\n\n  }\n': QueryGenericPageOGDataResult;
-    '\n  *[_type == "promoBanner" && _id == "promoBanner"][0]{\n    _id,\n    enabled,\n    text,\n    "href": select(\n      link.type == "internal" => "/" + link.internal->slug.current,\n      link.type == "external" => link.external,\n      link.type == "email" => "mailto:" + link.email,\n      link.type == "product" => "/products/" + link.product->store.slug.current,\n      link.href\n    ),\n  }\n': QueryPromoBannerDataResult;
+    '\n  *[_type == "promoBanner" && _id == "promoBanner"][0]{\n    _id,\n    enabled,\n    text,\n    "openInNewTab": link.openInNewTab,\n    "href": select(\n      link.type == "internal" => link.internal->slug.current,\n      link.type == "external" => link.external,\n      link.type == "email" => "mailto:" + link.email,\n      link.type == "product" => "/products/" + link.product->store.slug.current,\n      link.href\n    ),\n  }\n': QueryPromoBannerDataResult;
     '\n  *[_type == "footer" && _id == "footer"][0]{\n    _id,\n    subtitle,\n    backgroundImage {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n    },\n    columns[]{\n      _key,\n      title,\n      links[]{\n        _key,\n        name,\n        "openInNewTab": url.openInNewTab,\n        "href": select(\n          url.type == "internal" => url.internal->slug.current,\n          url.type == "external" => url.external,\n          url.type == "email" => "mailto:" + url.email,\n          url.type == "product" => "/products/" + url.product->store.slug.current,\n          url.href\n        ),\n      }\n    }\n  }\n': QueryFooterDataResult;
     '\n  *[_type == "navbar" && _id == "navbar"][0]{\n    _id,\n    columns[]{\n      _key,\n      _type == "navbarColumn" => {\n        "type": "column",\n        title,\n        links[]{\n          _key,\n          name,\n          icon,\n          description,\n          "openInNewTab": url.openInNewTab,\n          "href": select(\n            url.type == "internal" => url.internal->slug.current,\n            url.type == "external" => url.external,\n            url.type == "email" => "mailto:" + url.email,\n            url.type == "product" => "/products/" + url.product->store.slug.current,\n            url.href\n          )\n        }\n      },\n      _type == "navbarLink" => {\n        "type": "link",\n        name,\n        description,\n        "openInNewTab": url.openInNewTab,\n        "href": select(\n          url.type == "internal" => url.internal->slug.current,\n          url.type == "external" => url.external,\n          url.type == "email" => "mailto:" + url.email,\n          url.type == "product" => "/products/" + url.product->store.slug.current,\n          url.href\n        )\n      },\n      _type == "collectionGroup" => {\n        "type": "collectionGroup",\n        title,\n        "collectionLinks": collectionLinks[]->{\n          _id,\n          "slug": store.slug.current,\n          store{\n            title,\n            imageUrl\n          }\n        },\n        "collectionProducts": collectionProducts->{\n          _id,\n          "slug": store.slug.current,\n          store{\n            title\n          }\n        }\n      }\n    },\n    \n  buttons[]{\n    text,\n    variant,\n    _key,\n    _type,\n    "openInNewTab": url.openInNewTab,\n    "href": select(\n      url.type == "internal" => url.internal->slug.current,\n      url.type == "external" => url.external,\n      url.type == "email" => "mailto:" + url.email,\n      url.type == "product" => "/products/" + url.product->store.slug.current,\n      url.href\n    ),\n  }\n,\n  }\n': QueryNavbarDataResult;
     '{\n  "slugPages": *[_type == "page" && defined(slug.current)]{\n    "slug": slug.current,\n    "lastModified": _updatedAt\n  },\n  "blogPages": *[_type == "blog" && defined(slug.current)]{\n    "slug": slug.current,\n    "lastModified": _updatedAt\n  }\n}': QuerySitemapDataResult;
@@ -3530,6 +3617,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "product" && store.productType == $productType && store.slug.current != $handle && store.status == "active"][0...4]{\n    _id,\n    "slug": store.slug.current,\n    store{\n      title,\n      priceRange,\n      previewImageUrl,\n      vendor\n    }\n  }\n': QueryRelatedProductsResult;
     '\n  *[_type == "collection" && store.slug.current == $handle][0]{\n    _id,\n    _type,\n    showHero,\n    hero{\n      ...,\n      \n  image {\n    \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n  }\n,\n      \n  buttons[]{\n    text,\n    variant,\n    _key,\n    _type,\n    "openInNewTab": url.openInNewTab,\n    "href": select(\n      url.type == "internal" => url.internal->slug.current,\n      url.type == "external" => url.external,\n      url.type == "email" => "mailto:" + url.email,\n      url.type == "product" => "/products/" + url.product->store.slug.current,\n      url.href\n    ),\n  }\n,\n      \n  richText[]{\n    ...,\n    _type == "block" => {\n      ...,\n      \n  markDefs[]{\n    ...,\n    \n  ...customLink{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      type == "email" => "mailto:" + email,\n      type == "product" => "/products/" + product->store.slug.current,\n      "#"\n    ),\n  }\n,\n    _type == "linkInternal" => {\n      "href": reference->slug.current,\n    },\n    _type == "linkExternal" => {\n      "href": url,\n      "openInNewTab": newWindow,\n    },\n    _type == "linkEmail" => {\n      "href": "mailto:" + email,\n    },\n  }\n\n    },\n    _type == "image" => {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      "caption": caption\n    }\n  }\n\n    },\n    \n  modules[]{\n    ...,\n    _type,\n    _key,\n    _type == "callout" => { text },\n    _type == "callToAction" => {\n      ...,\n      \n  richText[]{\n    ...,\n    _type == "block" => {\n      ...,\n      \n  markDefs[]{\n    ...,\n    \n  ...customLink{\n    openInNewTab,\n    "href": select(\n      type == "internal" => internal->slug.current,\n      type == "external" => external,\n      type == "email" => "mailto:" + email,\n      type == "product" => "/products/" + product->store.slug.current,\n      "#"\n    ),\n  }\n,\n    _type == "linkInternal" => {\n      "href": reference->slug.current,\n    },\n    _type == "linkExternal" => {\n      "href": url,\n      "openInNewTab": newWindow,\n    },\n    _type == "linkEmail" => {\n      "href": "mailto:" + email,\n    },\n  }\n\n    },\n    _type == "image" => {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      "caption": caption\n    }\n  }\n,\n      \n  buttons[]{\n    text,\n    variant,\n    _key,\n    _type,\n    "openInNewTab": url.openInNewTab,\n    "href": select(\n      url.type == "internal" => url.internal->slug.current,\n      url.type == "external" => url.external,\n      url.type == "email" => "mailto:" + url.email,\n      url.type == "product" => "/products/" + url.product->store.slug.current,\n      url.href\n    ),\n  }\n\n    },\n    _type == "image" => {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n,\n      \n  productHotspots[]{\n    _key,\n    x,\n    y,\n    \n  productWithVariant{\n    product->{\n      _id,\n      "slug": store.slug.current,\n      store{\n        title,\n        priceRange,\n        previewImageUrl,\n        gid\n      }\n    },\n    variant->{\n      _id,\n      store{\n        title,\n        price,\n        previewImageUrl,\n        gid\n      }\n    }\n  }\n\n  }\n\n    }\n  }\n,\n    colorTheme->{\n      _id,\n      title,\n      background,\n      text\n    },\n    seo\n  }\n': QueryCollectionByHandleResult;
     '\n  *[_type == "collection" && defined(store.slug.current)].store.slug.current\n': QueryCollectionPathsResult;
-    '\n  *[_type == "collection" && defined(store.slug.current)]{\n    _id,\n    "title": store.title,\n    "slug": store.slug.current,\n    "imageUrl": store.imageUrl,\n    "description": store.descriptionHtml,\n    seo\n  }\n': QueryAllCollectionsResult;
+    '\n  *[_type == "collectionsIndex"][0]{\n    ...,\n    _id,\n    _type,\n    title,\n    subtitle,\n    heroTitle,\n    heroImage {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n    },\n    \n  buttons[]{\n    text,\n    variant,\n    _key,\n    _type,\n    "openInNewTab": url.openInNewTab,\n    "href": select(\n      url.type == "internal" => url.internal->slug.current,\n      url.type == "external" => url.external,\n      url.type == "email" => "mailto:" + url.email,\n      url.type == "product" => "/products/" + url.product->store.slug.current,\n      url.href\n    ),\n  }\n,\n    "slug": slug.current\n  }\n': QueryCollectionsIndexPageDataResult;
+    '\n  *[_type == "collection" && defined(store.slug.current)]{\n    _id,\n    _createdAt,\n    "title": store.title,\n    "slug": store.slug.current,\n    "imageUrl": store.imageUrl,\n    "description": store.descriptionHtml,\n    seo\n  }\n': QueryAllCollectionsResult;
   }
 }

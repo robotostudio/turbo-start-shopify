@@ -220,8 +220,6 @@ export function Navbar({
             >
               <Search className="size-4" />
             </Link>
-            {/* <ModeToggle /> */}
-            {/* we will replace it with a faviorite */}
             <CartToggle />
             {/* <SanityButtons
               buttonClassName="rounded-lg"
@@ -239,7 +237,6 @@ export function Navbar({
             >
               <Search className="size-4" />
             </Link>
-            <ModeToggle />
             <CartToggle />
             <MobileMenu navbarData={navbarData} settingsData={settingsData} />
           </div>

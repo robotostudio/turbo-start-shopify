@@ -1,6 +1,7 @@
 import { author } from "@/schemaTypes/documents/author";
 import { blog } from "@/schemaTypes/documents/blog";
 import { blogIndex } from "@/schemaTypes/documents/blog-index";
+import { collectionsIndex } from "@/schemaTypes/documents/collections-index";
 import { faq } from "@/schemaTypes/documents/faq";
 import { footer } from "@/schemaTypes/documents/footer";
 import { homePage } from "@/schemaTypes/documents/home-page";
@@ -14,7 +15,15 @@ import { colorTheme } from "./color-theme";
 import { product } from "./product";
 import { productVariant } from "./product-variant";
 
-export const singletons = [homePage, blogIndex, settings, footer, navbar, promoBanner];
+export const singletons = [
+  homePage,
+  blogIndex,
+  collectionsIndex,
+  settings,
+  footer,
+  navbar,
+  promoBanner,
+];
 
 export const documents = [
   blog,
