@@ -12,8 +12,8 @@ export const faqAccordion = defineType({
       name: "eyebrow",
       type: "string",
       title: "Eyebrow",
-      description:
-        "The smaller text that sits above the title to provide context",
+      description: "Deprecated — no longer displayed on the frontend",
+      hidden: true,
     }),
     defineField({
       name: "title",
@@ -26,7 +26,8 @@ export const faqAccordion = defineType({
       name: "subtitle",
       type: "string",
       title: "Subtitle",
-      description: "Additional context below the main title",
+      description: "Deprecated — no longer displayed on the frontend",
+      hidden: true,
     }),
     defineField({
       name: "link",

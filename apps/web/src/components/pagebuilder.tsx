@@ -6,7 +6,9 @@ import type { QueryHomePageDataResult } from "@workspace/sanity/types";
 import { createDataAttribute } from "next-sanity";
 import { useCallback, useMemo } from "react";
 
+import { CollectionBanner } from "./sections/collection-banner";
 import { CTABlock } from "./sections/cta";
+import { ExploreCategories } from "./sections/explore-categories";
 import { FaqAccordion } from "./sections/faq-accordion";
 import { FeatureCardsWithIcon } from "./sections/feature-cards-with-icon";
 import { HeroBlock } from "./sections/hero";
@@ -32,7 +34,9 @@ type SanityDataAttributeConfig = {
 
 // biome-ignore lint/suspicious/noExplicitAny: dynamic block component mapping requires any
 const BLOCK_COMPONENTS: Record<string, React.ComponentType<any>> = {
+  collectionBanner: CollectionBanner,
   cta: CTABlock,
+  exploreCategories: ExploreCategories,
   faqAccordion: FaqAccordion,
   hero: HeroBlock,
   featureCardsIcon: FeatureCardsWithIcon,
@@ -166,11 +170,11 @@ export function PageBuilder({
   }
 
   return (
-    <main
-      className="mx-auto my-16 flex max-w-7xl flex-col gap-16"
+    <div
+      className=" my-16 flex flex-col gap-16"
       data-sanity={containerDataAttribute}
     >
       {blocks.map(renderBlock)}
-    </main>
+    </div>
   );
 }
