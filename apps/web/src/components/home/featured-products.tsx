@@ -23,7 +23,7 @@ async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
 function ProductCard({ product }: { product: FeaturedProduct }) {
   return (
     <Link className="group block" href={`/products/${product.handle}`}>
-      <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-background">
+      <div className="relative aspect-[4/4] overflow-hidden  bg-background">
         {product.featuredImage ? (
           <Image
             alt={product.featuredImage.altText ?? product.title}
@@ -62,10 +62,7 @@ export async function FeaturedProducts() {
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
       <div className="mb-12 flex items-end justify-between md:mb-16">
         <div>
-          <p className="mb-2 text-neutral-500 text-xs tracking-widest uppercase">
-            The Collection
-          </p>
-          <h2 className="font-light text-3xl tracking-tight md:text-4xl">
+          <h2 className="font-light text-3xl font-(family-name:--font-geist-pixel-square) tracking-tight md:text-4xl">
             Featured Products
           </h2>
         </div>
@@ -85,7 +82,7 @@ export async function FeaturedProducts() {
 
       <div className="mt-10 text-center md:hidden">
         <Link
-          className="border-b border-neutral-900 pb-0.5 text-sm"
+          className="border border-neutral-900 pb-0.5 text-sm"
           href="/collections"
         >
           View All
