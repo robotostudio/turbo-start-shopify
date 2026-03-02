@@ -1,33 +1,37 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { Loader2 } from "lucide-react";
 
 type CollectionPaginationProps = {
-  pageInfo: {
-    hasNextPage: boolean;
-    endCursor: string | null;
-  };
+  hasNextPage: boolean;
+  isLoading: boolean;
+  onLoadMore: () => void;
 };
 
-export function CollectionPagination({ pageInfo }: CollectionPaginationProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const loadMore = useCallback(() => {
-    if (!pageInfo.endCursor) return;
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("after", pageInfo.endCursor);
-    router.push(`?${params.toString()}`);
-  }, [pageInfo.endCursor, router, searchParams]);
-
-  if (!pageInfo.hasNextPage) return null;
+export function CollectionPagination({
+  hasNextPage,
+  isLoading,
+  onLoadMore,
+}: CollectionPaginationProps) {
+  if (!hasNextPage) return null;
 
   return (
     <div className="mt-8 flex justify-center">
-      <Button onClick={loadMore} size="lg" variant="outline">
-        Load More
+      <Button
+        disabled={isLoading}
+        onClick={onLoadMore}
+        size="lg"
+        variant="outline"
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 size-4 animate-spin" />
+            Loading...
+          </>
+        ) : (
+          "Load More"
+        )}
       </Button>
     </div>
   );
