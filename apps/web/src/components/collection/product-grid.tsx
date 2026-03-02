@@ -25,11 +25,11 @@ export function ProductGrid({ products }: ProductGridProps) {
           href={`/products/${product.handle}`}
           key={product.id}
         >
-          <div className="relative aspect-square overflow-hidden rounded-xl border bg-muted">
+          <div className="relative aspect-3/4 overflow-hidden bg-muted">
             {product.featuredImage ? (
               <Image
                 alt={product.featuredImage.altText ?? product.title}
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 fill
                 sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
                 src={product.featuredImage.url}
@@ -41,13 +41,15 @@ export function ProductGrid({ products }: ProductGridProps) {
             )}
           </div>
           <div className="space-y-1">
-            <h3 className="font-medium text-sm leading-tight group-hover:underline">
+            <h3 className="font-normal text-sm leading-tight">
               {product.title}
             </h3>
             {product.vendor && (
-              <p className="text-muted-foreground text-xs">{product.vendor}</p>
+              <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                {product.vendor}
+              </p>
             )}
-            <p className="font-medium text-sm">
+            <p className="font-normal text-sm">
               {formatMoney(product.priceRange.minVariantPrice)}
             </p>
           </div>

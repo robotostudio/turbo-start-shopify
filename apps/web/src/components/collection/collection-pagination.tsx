@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@workspace/ui/components/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
@@ -26,9 +25,13 @@ export function CollectionPagination({ pageInfo }: CollectionPaginationProps) {
 
   return (
     <div className="mt-8 flex justify-center">
-      <Button onClick={loadMore} size="lg" variant="outline">
+      <button
+        className="rounded-none border border-foreground bg-transparent px-8 py-3 text-sm uppercase tracking-wider text-foreground transition-colors hover:bg-foreground hover:text-white dark:hover:text-black"
+        onClick={loadMore}
+        type="button"
+      >
         Load More
-      </Button>
+      </button>
     </div>
   );
 }
