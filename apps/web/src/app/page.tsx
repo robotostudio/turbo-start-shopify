@@ -57,8 +57,8 @@ export default async function Page() {
   const { _id, _type, pageBuilder } = homePageData ?? {};
   const blocks = pageBuilder ?? [];
 
-  const heroBlock = blocks.filter((b) => (b._type as string) === "hero");
-  const remainingBlocks = blocks.filter((b) => (b._type as string) !== "hero");
+  const heroBlock = blocks.filter((b: (typeof blocks)[number]) => (b._type as string) === "hero");
+  const remainingBlocks = blocks.filter((b: (typeof blocks)[number]) => (b._type as string) !== "hero");
 
   const bannerProduct = showcaseProducts[0] ?? null;
 
