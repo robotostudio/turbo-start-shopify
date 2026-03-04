@@ -23,7 +23,9 @@ export async function RelatedProducts({
 
   return (
     <section className="mt-16">
-      <h2 className="mb-6 font-semibold text-2xl">Related Products</h2>
+      <h2 className="mb-6 font-medium font-(family-name:--font-geist-pixel-square) text-3xl">
+        Related Products
+      </h2>
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
         {products.map((product) => (
           <ProductCard

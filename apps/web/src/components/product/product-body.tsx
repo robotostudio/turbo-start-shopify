@@ -68,7 +68,7 @@ const productBodyComponents: Partial<PortableTextReactComponents> = {
       return (
         <figure className="my-4">
           <SanityImage
-            className="h-auto w-full rounded-lg"
+            className="h-auto w-full"
             height={900}
             image={value}
             width={1600}
@@ -117,7 +117,7 @@ const productBodyComponents: Partial<PortableTextReactComponents> = {
     callout: ({ value }) => {
       if (!value?.text) return null;
       return (
-        <div className="my-4 rounded-lg border bg-muted/50 p-4">
+        <div className="my-4 border bg-muted/50 p-4">
           <p className="text-sm">{value.text}</p>
         </div>
       );

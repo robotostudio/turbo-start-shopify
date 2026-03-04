@@ -28,11 +28,11 @@ export function ProductCard({
   if (mini) {
     return (
       <Link
-        className="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-accent"
+        className="flex items-center gap-3 p-2 transition-colors hover:bg-accent"
         href={`/products/${slug}`}
       >
         {imageUrl ? (
-          <div className="relative size-12 shrink-0 overflow-hidden rounded-md border">
+          <div className="relative size-12 shrink-0 overflow-hidden  border">
             <Image
               alt={title}
               className="object-cover"
@@ -42,7 +42,7 @@ export function ProductCard({
             />
           </div>
         ) : (
-          <div className="size-12 shrink-0 rounded-md border bg-muted" />
+          <div className="size-12 shrink-0  border bg-muted" />
         )}
         <div className="min-w-0">
           <p className="truncate font-medium text-sm">{title}</p>
@@ -56,7 +56,7 @@ export function ProductCard({
 
   return (
     <Link className="group block space-y-3" href={`/products/${slug}`}>
-      <div className="relative aspect-square overflow-hidden rounded-xl border bg-muted">
+      <div className="relative aspect-square overflow-hidden  border bg-muted">
         {imageUrl ? (
           <Image
             alt={title}
