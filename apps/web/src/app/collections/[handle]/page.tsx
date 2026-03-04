@@ -15,6 +15,7 @@ import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
 import { COLLECTION_QUERY } from "@/lib/shopify/queries";
 import type { CollectionQueryResponse } from "@/lib/shopify/types";
+import type { QueryCollectionByHandleResult } from "@workspace/sanity/types";
 
 type PageProps = {
   params: Promise<{ handle: string }>;
@@ -102,7 +103,7 @@ export default async function CollectionPage({
 
       {sanityCollection.modules && sanityCollection.modules.length > 0 && (
         <div className="mt-12">
-          {sanityCollection.modules.map((module) => (
+          {sanityCollection.modules.map((module: NonNullable<NonNullable<QueryCollectionByHandleResult>["modules"]>[number]) => (
             <CollectionModuleRenderer key={module._key} module={module} />
           ))}
         </div>
