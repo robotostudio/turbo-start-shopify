@@ -52,7 +52,10 @@ export function SortSelector({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="outline">
+        <Button
+          size="sm"
+          className="flex items-center gap-2 rounded-none border border-foreground bg-transparent px-6 py-2.5 text-sm text-foreground tracking-wider transition-colors hover:bg-foreground hover:text-background focus-visible:ring-0"
+        >
           <ArrowUpDown className="mr-2 size-4" />
           {currentLabel}
         </Button>

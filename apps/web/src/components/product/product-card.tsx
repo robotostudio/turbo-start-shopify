@@ -32,7 +32,7 @@ export function ProductCard({
         href={`/products/${slug}`}
       >
         {imageUrl ? (
-          <div className="relative size-12 shrink-0 overflow-hidden  border">
+          <div className="relative size-12 shrink-0 overflow-hidden border">
             <Image
               alt={title}
               className="object-cover"
@@ -42,7 +42,7 @@ export function ProductCard({
             />
           </div>
         ) : (
-          <div className="size-12 shrink-0  border bg-muted" />
+          <div className="size-12 shrink-0 border bg-muted" />
         )}
         <div className="min-w-0">
           <p className="truncate font-medium text-sm">{title}</p>
@@ -56,11 +56,11 @@ export function ProductCard({
 
   return (
     <Link className="group block space-y-3" href={`/products/${slug}`}>
-      <div className="relative aspect-square overflow-hidden  border bg-muted">
+      <div className="relative aspect-3/4 overflow-hidden bg-muted">
         {imageUrl ? (
           <Image
             alt={title}
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
             src={imageUrl}
@@ -72,11 +72,15 @@ export function ProductCard({
         )}
       </div>
       <div className="space-y-1">
-        <h3 className="font-medium text-sm leading-tight group-hover:underline">
+        <h3 className="font-normal text-sm leading-tight">
           {title}
         </h3>
-        {vendor && <p className="text-muted-foreground text-xs">{vendor}</p>}
-        <p className="font-medium text-sm">
+        {vendor && (
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">
+            {vendor}
+          </p>
+        )}
+        <p className="font-normal text-sm">
           {showRange ? `From ${formattedPrice}` : formattedPrice}
         </p>
       </div>
