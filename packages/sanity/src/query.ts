@@ -114,6 +114,14 @@ const buttonsFragment = /* groq */ `
 `;
 
 // Page builder block fragments
+const collectionBannerBlock = /* groq */ `
+  _type == "collectionBanner" => {
+    ...,
+    ${imageFragment},
+    ${buttonsFragment}
+  }
+`;
+
 const ctaBlock = /* groq */ `
   _type == "cta" => {
     ...,
@@ -187,6 +195,20 @@ const subscribeNewsletterBlock = /* groq */ `
     "helperText": helperText[]{
       ...,
       ${markDefsFragment}
+    },
+    ${imageFragment}
+  }
+`;
+
+const exploreCategoriesBlock = /* groq */ `
+  _type == "exploreCategories" => {
+    ...,
+    ${buttonsFragment},
+    "collections": *[_type == "collection" && defined(store.slug.current)][0...4]{
+      _id,
+      "title": store.title,
+      "slug": store.slug.current,
+      "imageUrl": store.imageUrl,
     }
   }
 `;
@@ -206,7 +228,9 @@ const pageBuilderFragment = /* groq */ `
   pageBuilder[]{
     ...,
     _type,
+    ${collectionBannerBlock},
     ${ctaBlock},
+    ${exploreCategoriesBlock},
     ${heroBlock},
     ${faqAccordionBlock},
     ${featureCardsIconBlock},

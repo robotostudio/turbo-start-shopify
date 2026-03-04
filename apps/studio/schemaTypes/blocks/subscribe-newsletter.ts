@@ -1,6 +1,7 @@
 import { Mail } from "lucide-react";
 import { defineField, defineType } from "sanity";
 
+import { imageWithAltField } from "@/schemaTypes/common";
 import { customRichText } from "@/schemaTypes/definitions/rich-text";
 
 export const subscribeNewsletter = defineType({
@@ -24,6 +25,11 @@ export const subscribeNewsletter = defineType({
     customRichText(["block"], {
       name: "helperText",
       title: "Helper Text",
+    }),
+    imageWithAltField({
+      name: "image",
+      title: "Background Image",
+      description: "Image displayed on the right side of the newsletter section",
     }),
   ],
   preview: {
