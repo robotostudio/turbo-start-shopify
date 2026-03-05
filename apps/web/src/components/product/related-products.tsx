@@ -1,5 +1,6 @@
 import { sanityFetch } from "@workspace/sanity/live";
 import { queryRelatedProducts } from "@workspace/sanity/query";
+import type { QueryRelatedProductsResult } from "@workspace/sanity/types";
 
 import { ProductCard } from "./product-card";
 
@@ -27,9 +28,13 @@ export async function RelatedProducts({
         Related Products
       </h2>
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-        {products.map((product) => (
+        {(products as QueryRelatedProductsResult).map((product) => (
           <ProductCard
-            imageUrl={product.store?.previewImageUrl ?? null}
+            imageUrl={
+              product.store?.previewImageUrl ??
+              product.store?.variantPreviewImageUrl ??
+              null
+            }
             key={product._id}
             priceRange={{
               minVariantPrice: product.store?.priceRange?.minVariantPrice ?? 0,

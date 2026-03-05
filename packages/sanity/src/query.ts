@@ -615,7 +615,8 @@ export const queryRelatedProducts = defineQuery(`
       title,
       priceRange,
       previewImageUrl,
-      vendor
+      vendor,
+      "variantPreviewImageUrl": variants[0]->store.previewImageUrl
     }
   }
 `);
