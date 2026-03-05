@@ -28,6 +28,7 @@
     "./query": "./src/query.ts",
     "./live": "./src/live.ts",
     "./image": "./src/image.ts",
-    "./types": "./src/sanity.types.ts"
+    "./types": "./src/sanity.types.ts",
+    "./write-client": "./src/write-client.ts"
   }
 }

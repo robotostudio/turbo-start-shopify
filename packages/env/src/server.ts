@@ -15,6 +15,7 @@ const env = createEnv({
     SHOPIFY_STORE_DOMAIN: z.string().min(1),
     SHOPIFY_STOREFRONT_ACCESS_TOKEN: z.string().min(1),
     SHOPIFY_API_VERSION: z.string().default("2025-01"),
+    SHOPIFY_WEBHOOK_SECRET: z.string().min(1),
   },
 
   experimental__runtimeEnv: {
