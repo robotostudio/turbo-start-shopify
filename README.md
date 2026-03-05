@@ -137,3 +137,83 @@ You have the freedom to deploy your Next.js app to your hosting provider of choi
 Now that you've deployed your Next.js application and Sanity Studio, you can optionally invite a collaborator to your Studio. Open up [Manage](https://www.sanity.io/manage), select your project and click "Invite project members"
 
 They will be able to access the deployed Studio, where you can collaborate together on creating content.
+
+## Shopify Webhook Setup
+
+Shopify webhooks keep Sanity automatically in sync whenever products or collections change in your Shopify store. Once registered, any create, update, or delete event in Shopify will be reflected in Sanity without manual intervention.
+
+### Webhook endpoints
+
+| Topic | Endpoint |
+|---|---|
+| `products/create` | `POST /api/webhooks/shopify/products` |
+| `products/update` | `POST /api/webhooks/shopify/products` |
+| `products/delete` | `POST /api/webhooks/shopify/products` |
+| `collections/create` | `POST /api/webhooks/shopify/collections` |
+| `collections/update` | `POST /api/webhooks/shopify/collections` |
+| `collections/delete` | `POST /api/webhooks/shopify/collections` |
+| `inventory_levels/update` | `POST /api/webhooks/shopify/variants` |
+| `inventory_levels/connect` | `POST /api/webhooks/shopify/variants` |
+| `inventory_levels/disconnect` | `POST /api/webhooks/shopify/variants` |
+
+### 1. Add environment variables
+
+Add the following variable to `apps/web/.env`:
+
+```bash
+SHOPIFY_WEBHOOK_SECRET=your_webhook_secret_here
+```
+
+This secret is used to verify the HMAC-SHA256 signature that Shopify attaches to every webhook request.
+
+### 2. Register webhooks in Shopify
+
+From your Shopify Admin, go to **Settings → Notifications → Webhooks** (or use the Shopify CLI / Admin API) and create a webhook subscription for each topic in the table above, pointing at your deployed web app URL.
+
+Example using the Shopify Admin API:
+
+```bash
+curl -X POST \
+  "https://<store>.myshopify.com/admin/api/2025-01/webhooks.json" \
+  -H "X-Shopify-Access-Token: <admin_token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhook": {
+      "topic": "products/update",
+      "address": "https://<your-app>.vercel.app/api/webhooks/shopify/products",
+      "format": "json"
+    }
+  }'
+```
+
+Repeat for each topic listed in the table above.
+
+### 3. Retrieve the webhook secret
+
+After creating a webhook in Shopify Admin (**Settings → Notifications → Webhooks**), click the webhook row to reveal its shared secret. Copy this value into `SHOPIFY_WEBHOOK_SECRET`.
+
+### What gets synced
+
+**Products (`products/create`, `products/update`)**
+- Title, handle, description HTML, vendor, product type, tags, status
+- Price range (min/max across all variants)
+- Product options (color, size, etc.)
+- Featured image URL
+- All variants (see below)
+
+**Product variants (synced as part of `products/update`)**
+- Title, SKU, price, compare-at price
+- Option values (option1, option2, option3)
+- Inventory availability, management policy
+- Preview image URL
+
+**Collections (`collections/create`, `collections/update`)**
+- Title, handle, description HTML, sort order
+- Smart collection rules (column, relation, condition)
+- Collection image URL
+
+**Inventory levels (`inventory_levels/update`)**
+- Updates the `store.inventory.isAvailable` field on the matching `productVariant` document in real time when stock changes at any location.
+
+**Deletes**
+- Products and collections are **not** hard-deleted from Sanity on delete events. Instead, `store.isDeleted` is set to `true` so editors retain full control over cleanup and content editors are notified of the change.
