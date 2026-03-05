@@ -8,6 +8,21 @@ type RelatedProductsProps = {
   handle: string;
 };
 
+type RelatedProduct = {
+  _id: string;
+  slug: string | null;
+  store?: {
+    title?: string;
+    priceRange?: {
+      minVariantPrice?: number;
+      maxVariantPrice?: number;
+    };
+    previewImageUrl?: string;
+    variantPreviewImageUrl?: string;
+    vendor?: string;
+  };
+};
+
 export async function RelatedProducts({
   productType,
   handle,
@@ -27,9 +42,13 @@ export async function RelatedProducts({
         Related Products
       </h2>
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-        {products.map((product) => (
+        {(products as RelatedProduct[]).map((product) => (
           <ProductCard
-            imageUrl={product.store?.previewImageUrl ?? null}
+            imageUrl={
+              product.store?.previewImageUrl ??
+              product.store?.variantPreviewImageUrl ??
+              null
+            }
             key={product._id}
             priceRange={{
               minVariantPrice: product.store?.priceRange?.minVariantPrice ?? 0,
