@@ -205,10 +205,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
           </div>
         </div>
 
-        <RelatedProducts
-          handle={handle}
-          productType={shopifyProduct.productType ?? null}
-        />
+        <RelatedProducts productId={shopifyProduct.id} />
       </div>
     </>
   );
