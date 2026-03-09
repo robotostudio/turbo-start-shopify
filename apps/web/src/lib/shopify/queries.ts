@@ -134,6 +134,7 @@ export const COLLECTION_QUERY = /* graphql */ `
                 node {
                   id
                   availableForSale
+                  quantityAvailable
                 }
               }
             }
@@ -143,6 +144,18 @@ export const COLLECTION_QUERY = /* graphql */ `
           hasNextPage
           endCursor
         }
+      }
+    }
+  }
+`;
+
+export const VARIANT_INVENTORY_QUERY = /* graphql */ `
+  query VariantInventory($id: ID!) {
+    node(id: $id) {
+      ... on ProductVariant {
+        id
+        availableForSale
+        quantityAvailable
       }
     }
   }
@@ -268,6 +281,7 @@ export const SEARCH_PRODUCTS_QUERY = /* graphql */ `
                 node {
                   id
                   availableForSale
+                  quantityAvailable
                 }
               }
             }

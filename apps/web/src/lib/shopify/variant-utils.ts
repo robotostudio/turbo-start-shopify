@@ -30,7 +30,7 @@ export function getOptionAvailability(
   const availability: Record<string, boolean> = {};
 
   const otherSelections = Object.entries(currentSelections).filter(
-    ([name]) => name !== optionName
+    ([name, value]) => name !== optionName && value !== ""
   );
 
   for (const variant of variants) {

@@ -2,7 +2,25 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { formatMoney } from "@/lib/shopify/money";
-import type { ShopifyCollectionProduct } from "@/lib/shopify/types";
+import {
+  LOW_STOCK_THRESHOLD,
+  type ShopifyCollectionProduct,
+} from "@/lib/shopify/types";
+
+type StockStatus = "low" | "out" | null;
+
+function getStockStatus(product: ShopifyCollectionProduct): StockStatus {
+  const variant = product.variants.edges[0]?.node;
+  if (!variant?.availableForSale) return "out";
+  if (
+    variant.quantityAvailable !== null &&
+    variant.quantityAvailable > 0 &&
+    variant.quantityAvailable <= LOW_STOCK_THRESHOLD
+  ) {
+    return "low";
+  }
+  return null;
+}
 
 type ProductGridProps = {
   products: ShopifyCollectionProduct[];
@@ -19,42 +37,55 @@ export function ProductGrid({ products }: ProductGridProps) {
 
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-      {products.map((product) => (
-        <Link
-          className="group block space-y-3"
-          href={`/products/${product.handle}`}
-          key={product.id}
-        >
-          <div className="relative aspect-3/4 overflow-hidden bg-muted">
-            {product.featuredImage ? (
-              <Image
-                alt={product.featuredImage.altText ?? product.title}
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                fill
-                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-                src={product.featuredImage.url}
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
-                No image
-              </div>
-            )}
-          </div>
-          <div className="space-y-1">
-            <h3 className="font-normal text-sm leading-tight">
-              {product.title}
-            </h3>
-            {product.vendor && (
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                {product.vendor}
+      {products.map((product) => {
+        const stockStatus = getStockStatus(product);
+        return (
+          <Link
+            className="group block space-y-3"
+            href={`/products/${product.handle}`}
+            key={product.id}
+          >
+            <div className="relative aspect-3/4 overflow-hidden bg-muted">
+              {stockStatus === "low" && (
+                <span className="absolute bottom-2 left-2 z-10 bg-amber-600 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
+                  Low Stock
+                </span>
+              )}
+              {stockStatus === "out" && (
+                <span className="absolute bottom-2 left-2 z-10 bg-zinc-800 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
+                  Sold Out
+                </span>
+              )}
+              {product.featuredImage ? (
+                <Image
+                  alt={product.featuredImage.altText ?? product.title}
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                  src={product.featuredImage.url}
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
+                  No image
+                </div>
+              )}
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-normal text-sm leading-tight">
+                {product.title}
+              </h3>
+              {product.vendor && (
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                  {product.vendor}
+                </p>
+              )}
+              <p className="font-normal text-sm">
+                {formatMoney(product.priceRange.minVariantPrice)}
               </p>
-            )}
-            <p className="font-normal text-sm">
-              {formatMoney(product.priceRange.minVariantPrice)}
-            </p>
-          </div>
-        </Link>
-      ))}
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 }

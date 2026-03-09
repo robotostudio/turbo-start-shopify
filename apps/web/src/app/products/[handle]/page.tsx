@@ -16,11 +16,12 @@ import { VariantSelector } from "@/components/product/variant-selector";
 import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
 import { PRODUCT_QUERY } from "@/lib/shopify/queries";
-import type {
-  ProductQueryResponse,
-  ShopifyImage,
-  ShopifyProduct,
-  ShopifyVariant,
+import {
+  LOW_STOCK_THRESHOLD,
+  type ProductQueryResponse,
+  type ShopifyImage,
+  type ShopifyProduct,
+  type ShopifyVariant,
 } from "@/lib/shopify/types";
 import { findVariantByOptions } from "@/lib/shopify/variant-utils";
 
@@ -90,6 +91,27 @@ function ProductPrice({
   );
 }
 
+function StockIndicator({
+  quantityAvailable,
+  availableForSale,
+}: {
+  quantityAvailable: number | null;
+  availableForSale: boolean;
+}) {
+  if (!availableForSale || quantityAvailable === null || quantityAvailable <= 0)
+    return null;
+
+  if (quantityAvailable <= LOW_STOCK_THRESHOLD) {
+    return (
+      <p className="text-sm font-medium text-amber-600">
+        Only {quantityAvailable} left in stock
+      </p>
+    );
+  }
+
+  return <p className="text-sm text-muted-foreground">In stock</p>;
+}
+
 function ProductActions({
   shopifyProduct,
   handle,
@@ -131,6 +153,13 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   const shopifyProduct = shopifyResult.data.product;
   const variants = shopifyProduct.variants.edges.map((e) => e.node);
   const images = shopifyProduct.images.edges.map((e) => e.node);
+  const selectableOptions = shopifyProduct.options.filter(
+    (o) => o.values.length > 1,
+  );
+  const allOptionsSelected = selectableOptions.every((o) => {
+    const value = sp[o.name];
+    return value !== undefined && o.values.includes(value);
+  });
   const selectedVariant = findVariantByOptions(variants, sp) ?? variants[0];
   if (!selectedVariant) {
     notFound();
@@ -166,6 +195,11 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
             {/* Sale badge + Price */}
             <ProductPrice selectedVariant={selectedVariant} />
 
+            <StockIndicator
+              availableForSale={selectedVariant.availableForSale}
+              quantityAvailable={selectedVariant.quantityAvailable}
+            />
+
             <div className="border-t border-border" />
 
             {/* Variant selectors */}
@@ -178,6 +212,8 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
             {/* Add to Cart */}
             <AddToCart
               availableForSale={selectedVariant.availableForSale}
+              key={selectedVariant.id}
+              optionsSelected={allOptionsSelected}
               variantId={selectedVariant.id}
             />
 

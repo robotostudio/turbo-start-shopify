@@ -14,7 +14,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
   return (
     <div className="flex gap-4 py-4">
       {line.merchandise.image ? (
-        <div className="relative size-20 shrink-0 overflow-hidden rounded-lg border">
+        <div className="relative size-20 shrink-0 overflow-hidden border">
           <Image
             alt={line.merchandise.image.altText ?? line.merchandise.title}
             className="object-cover"
@@ -24,7 +24,7 @@ export function CartLineItem({ line }: { line: CartLine }) {
           />
         </div>
       ) : (
-        <div className="size-20 shrink-0 rounded-lg border bg-muted" />
+        <div className="size-20 shrink-0 border bg-muted" />
       )}
 
       <div className="flex flex-1 flex-col justify-between">

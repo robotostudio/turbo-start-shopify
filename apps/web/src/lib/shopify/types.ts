@@ -1,3 +1,5 @@
+export const LOW_STOCK_THRESHOLD = 5;
+
 export type MoneyV2 = {
   amount: string;
   currencyCode: string;
@@ -60,7 +62,9 @@ export type ShopifyCollectionProduct = {
     minVariantPrice: MoneyV2;
     maxVariantPrice: MoneyV2;
   };
-  variants: Connection<Pick<ShopifyVariant, "id" | "availableForSale">>;
+  variants: Connection<
+    Pick<ShopifyVariant, "id" | "availableForSale" | "quantityAvailable">
+  >;
 };
 
 export type ShopifyCollection = {
