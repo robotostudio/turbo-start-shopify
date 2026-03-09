@@ -324,3 +324,43 @@ export const PRODUCT_BY_ID_QUERY = /* graphql */ `
     }
   }
 `;
+
+export const PRODUCTS_BY_HANDLES_QUERY = /* graphql */ `
+  query ProductsByHandles($query: String!, $first: Int!) {
+    products(first: $first, query: $query) {
+      edges {
+        node {
+          id
+          handle
+          title
+          vendor
+          productType
+          featuredImage {
+            url
+            altText
+            width
+            height
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          variants(first: 1) {
+            edges {
+              node {
+                id
+                availableForSale
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
