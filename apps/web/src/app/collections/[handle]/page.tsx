@@ -86,10 +86,7 @@ export default async function CollectionPage({
         )}
       </div>
 
-      <div className="mb-6 flex items-center justify-between">
-        <p className="text-muted-foreground text-sm">
-          {products.length} product{products.length !== 1 ? "s" : ""}
-        </p>
+      <div className="mb-6 flex items-center justify-end">
         <SortSelector currentReverse={reverse} currentSort={sort} />
       </div>
 

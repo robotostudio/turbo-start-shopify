@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { CollectionPagination } from "@/components/collection/collection-pagination";
 import { ProductGrid } from "@/components/collection/product-grid";
@@ -9,6 +9,11 @@ import type { ShopifyCollectionProduct } from "@/lib/shopify/types";
 type PageInfo = {
   hasNextPage: boolean;
   endCursor: string | null;
+};
+
+type CollectionPage = {
+  products: ShopifyCollectionProduct[];
+  pageInfo: PageInfo;
 };
 
 type CollectionProductsProps = {
@@ -26,48 +31,46 @@ export function CollectionProducts({
   reverse,
   sort,
 }: CollectionProductsProps) {
-  const [products, setProducts] =
-    useState<ShopifyCollectionProduct[]>(initialProducts);
-  const [pageInfo, setPageInfo] = useState<PageInfo>(initialPageInfo);
-  const [isLoading, setIsLoading] = useState(false);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery<CollectionPage>({
+      queryKey: ["collection-products", handle, sort, reverse],
+      queryFn: async ({ pageParam }) => {
+        const params = new URLSearchParams({
+          sort,
+          reverse: String(reverse),
+        });
+        if (pageParam) params.set("after", pageParam as string);
 
-  const loadMore = useCallback(async () => {
-    if (!pageInfo.endCursor || isLoading) return;
-
-    setIsLoading(true);
-
-    const params = new URLSearchParams({
-      after: pageInfo.endCursor,
-      sort,
-      reverse: String(reverse),
+        const res = await fetch(
+          `/api/collections/${handle}/products?${params.toString()}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch products");
+        return res.json() as Promise<CollectionPage>;
+      },
+      initialPageParam: null as string | null,
+      getNextPageParam: (lastPage) =>
+        lastPage.pageInfo.hasNextPage
+          ? lastPage.pageInfo.endCursor
+          : undefined,
+      initialData: {
+        pages: [{ products: initialProducts, pageInfo: initialPageInfo }],
+        pageParams: [null],
+      },
     });
 
-    try {
-      const res = await fetch(
-        `/api/collections/${handle}/products?${params.toString()}`
-      );
-
-      if (!res.ok) return;
-
-      const data = (await res.json()) as {
-        products: ShopifyCollectionProduct[];
-        pageInfo: PageInfo;
-      };
-
-      setProducts((prev) => [...prev, ...data.products]);
-      setPageInfo(data.pageInfo);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [pageInfo.endCursor, isLoading, sort, reverse, handle]);
+  const allProducts = data?.pages.flatMap((page) => page.products) ?? [];
 
   return (
     <>
-      <ProductGrid products={products} />
+      <p className="mb-6 text-muted-foreground text-sm">
+        Showing {allProducts.length} product
+        {allProducts.length !== 1 ? "s" : ""}
+      </p>
+      <ProductGrid products={allProducts} />
       <CollectionPagination
-        hasNextPage={pageInfo.hasNextPage}
-        isLoading={isLoading}
-        onLoadMore={loadMore}
+        hasNextPage={hasNextPage}
+        isLoading={isFetchingNextPage}
+        onLoadMore={() => fetchNextPage()}
       />
     </>
   );
