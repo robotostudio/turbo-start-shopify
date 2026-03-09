@@ -7,6 +7,7 @@ import {
 import { notFound } from "next/navigation";
 
 import { AddToCart } from "@/components/product/add-to-cart";
+import { SavedItemButton } from "@/components/saved-items/saved-item-button";
 import { PriceDisplay } from "@/components/product/price-display";
 import { ProductBody } from "@/components/product/product-body";
 import { ProductGallery } from "@/components/product/product-gallery";
@@ -175,11 +176,19 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
               variants={variants}
             />
 
-            {/* Add to Cart */}
-            <AddToCart
-              availableForSale={selectedVariant.availableForSale}
-              variantId={selectedVariant.id}
-            />
+            {/* Add to Cart + Save */}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <AddToCart
+                  availableForSale={selectedVariant.availableForSale}
+                  variantId={selectedVariant.id}
+                />
+              </div>
+              <SavedItemButton
+                className="flex size-12 shrink-0 items-center justify-center rounded-none border border-border transition-colors hover:bg-accent"
+                handle={handle}
+              />
+            </div>
 
             <div className="border-t border-border" />
 

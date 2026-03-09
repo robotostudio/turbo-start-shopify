@@ -153,7 +153,7 @@ export function FooterSkeleton() {
 
 function Footer({ data, settingsData }: FooterProps) {
   const { subtitle, columns, backgroundImage } = data;
-  const { siteTitle, logo, socialLinks } = settingsData;
+  const { siteTitle, socialLinks } = settingsData;
   const year = new Date().getFullYear();
 
   const bgImageUrl = backgroundImage?.id
@@ -173,7 +173,7 @@ function Footer({ data, settingsData }: FooterProps) {
           <div className="mx-auto flex  flex-col items-center justify-between gap-10 px-4 text-center  md:px-6  xl:px-0 lg:flex-row lg:text-left">
             <div className="flex w-full max-w-96 shrink flex-col items-center justify-between gap-6 md:gap-8 lg:items-start">
               <span className="flex items-center justify-center gap-4 lg:justify-start">
-                <Logo alt={siteTitle} image={logo} priority text={siteTitle} />
+                <Logo text={siteTitle} />
               </span>
               {subtitle && (
                 <p className=" font-(family-name:--font-geist-pixel-square) text-muted-foreground text-md dark:text-zinc-400">

@@ -39,13 +39,16 @@ function ZoomLayer({
 
   // Scale zoom based on how much larger the source is than the container
   const ratio = containerWidth > 0 ? nativeWidth / containerWidth : 2;
-  const zoomPct = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Math.round(ratio * 100)));
+  const zoomPct = Math.min(
+    MAX_ZOOM,
+    Math.max(MIN_ZOOM, Math.round(ratio * 100))
+  );
 
   return (
     <div
       className={cn(
         "absolute inset-0 aspect-3/4 transition-opacity duration-200",
-        isZoomed ? "opacity-100" : "pointer-events-none opacity-0",
+        isZoomed ? "opacity-100" : "pointer-events-none opacity-0"
       )}
       style={{
         backgroundImage: `url(${image.url})`,
@@ -77,7 +80,7 @@ export function ProductGallery({
       setSelectedIndex(index);
       setIsZoomed(false);
     },
-    [emblaApi],
+    [emblaApi]
   );
 
   useEffect(() => {
@@ -109,7 +112,7 @@ export function ProductGallery({
     isUserClick.current = false;
 
     const matchIndex = images.findIndex(
-      (img) => img.url === selectedVariantImageUrl,
+      (img) => img.url === selectedVariantImageUrl
     );
     if (matchIndex !== -1 && matchIndex !== selectedIndex) {
       emblaApi.scrollTo(matchIndex);
@@ -140,7 +143,7 @@ export function ProductGallery({
         aria-label={isZoomed ? "Close zoom" : "Zoom into product image"}
         className={cn(
           "group relative block w-full overflow-hidden text-left",
-          isZoomed ? "cursor-crosshair" : "cursor-zoom-in",
+          isZoomed ? "cursor-crosshair" : "cursor-zoom-in"
         )}
         onClick={() => setIsZoomed((z) => !z)}
         onKeyDown={(e) => {
@@ -150,10 +153,12 @@ export function ProductGallery({
         onMouseMove={handleZoomMove}
       >
         {/* Zoom hint icon */}
-        <div className={cn(
-          "absolute top-3 right-3 z-10 bg-black/50 p-2 text-white transition-opacity duration-200",
-          isZoomed ? "opacity-0" : "opacity-0 group-hover:opacity-100",
-        )}>
+        <div
+          className={cn(
+            "absolute top-3 right-3 z-10 bg-black/50 p-2 text-white transition-opacity duration-200",
+            isZoomed ? "opacity-0" : "opacity-0 group-hover:opacity-100"
+          )}
+        >
           <ZoomIn className="size-4" />
         </div>
 
@@ -161,7 +166,7 @@ export function ProductGallery({
         <div
           className={cn(
             "transition-opacity duration-200",
-            isZoomed ? "opacity-0" : "opacity-100",
+            isZoomed ? "opacity-0" : "opacity-100"
           )}
           ref={emblaRef}
         >
@@ -203,7 +208,7 @@ export function ProductGallery({
                 "shrink-0 border-b pb-1 transition-colors",
                 index === selectedIndex
                   ? "border-foreground"
-                  : "border-transparent hover:border-muted-foreground/40",
+                  : "border-transparent hover:border-muted-foreground/40"
               )}
               key={image.url}
               onClick={() => scrollTo(index)}

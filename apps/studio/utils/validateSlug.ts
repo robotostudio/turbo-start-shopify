@@ -4,7 +4,7 @@ const MAX_LENGTH = 96;
 
 export const validateSlug = (Rule: SlugRule) => {
   return Rule.required().custom((value) => {
-    const currentSlug = value && value.current;
+    const currentSlug = value?.current;
     if (!currentSlug) {
       return true;
     }

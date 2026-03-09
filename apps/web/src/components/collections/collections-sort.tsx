@@ -45,8 +45,6 @@ export function sortCollections(
 export function CollectionsSortSelector() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const current = (searchParams.get("sort") as SortOption) || "a-z";
-
   function handleSort(option: SortOption) {
     const params = new URLSearchParams(searchParams.toString());
     params.set("sort", option);

@@ -29,7 +29,8 @@ export const subscribeNewsletter = defineType({
     imageWithAltField({
       name: "image",
       title: "Background Image",
-      description: "Image displayed on the right side of the newsletter section",
+      description:
+        "Image displayed on the right side of the newsletter section",
     }),
   ],
   preview: {

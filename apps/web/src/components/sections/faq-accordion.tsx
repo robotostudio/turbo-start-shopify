@@ -13,11 +13,7 @@ import { FaqJsonLd } from "../json-ld";
 
 type FaqAccordionProps = PagebuilderType<"faqAccordion">;
 
-export function FaqAccordion({
-  title,
-  faqs,
-  link,
-}: FaqAccordionProps) {
+export function FaqAccordion({ title, faqs, link }: FaqAccordionProps) {
   return (
     <section className="my-8" id="faq">
       <FaqJsonLd faqs={faqs} />

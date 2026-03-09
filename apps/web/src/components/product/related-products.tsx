@@ -51,7 +51,7 @@ type RelatedProductsProps = {
 export async function RelatedProducts({ productId }: RelatedProductsProps) {
   const result = await storefrontQuery<RelatedProductsResponse>(
     RELATED_PRODUCTS_QUERY,
-    { variables: { productId } },
+    { variables: { productId } }
   );
 
   if (!result.ok) return null;
@@ -71,8 +71,12 @@ export async function RelatedProducts({ productId }: RelatedProductsProps) {
             imageUrl={product.featuredImage?.url ?? null}
             key={product.id}
             priceRange={{
-              minVariantPrice: Number(product.priceRange.minVariantPrice.amount),
-              maxVariantPrice: Number(product.priceRange.maxVariantPrice.amount),
+              minVariantPrice: Number(
+                product.priceRange.minVariantPrice.amount
+              ),
+              maxVariantPrice: Number(
+                product.priceRange.maxVariantPrice.amount
+              ),
             }}
             slug={product.handle}
             title={product.title}

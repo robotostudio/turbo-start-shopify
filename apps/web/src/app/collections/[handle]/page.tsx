@@ -104,9 +104,15 @@ export default async function CollectionPage({
 
       {sanityCollection.modules && sanityCollection.modules.length > 0 && (
         <div className="mt-12">
-          {sanityCollection.modules.map((module: NonNullable<NonNullable<QueryCollectionByHandleResult>["modules"]>[number]) => (
-            <CollectionModuleRenderer key={module._key} module={module} />
-          ))}
+          {sanityCollection.modules.map(
+            (
+              module: NonNullable<
+                NonNullable<QueryCollectionByHandleResult>["modules"]
+              >[number]
+            ) => (
+              <CollectionModuleRenderer key={module._key} module={module} />
+            )
+          )}
         </div>
       )}
     </div>
