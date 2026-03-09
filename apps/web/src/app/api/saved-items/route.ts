@@ -12,7 +12,14 @@ export async function GET(request: Request) {
     return NextResponse.json({ products: [] });
   }
 
-  const handleList = handles.split(",").filter(Boolean);
+  const HANDLE_PATTERN = /^[a-z0-9-]+$/;
+  const MAX_HANDLES = 50;
+
+  const handleList = handles
+    .split(",")
+    .filter((h) => h && HANDLE_PATTERN.test(h))
+    .slice(0, MAX_HANDLES);
+
   if (handleList.length === 0) {
     return NextResponse.json({ products: [] });
   }

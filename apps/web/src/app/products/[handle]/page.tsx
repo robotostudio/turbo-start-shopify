@@ -185,7 +185,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
                 />
               </div>
               <SavedItemButton
-                className="flex size-12 shrink-0 items-center justify-center border border-border transition-colors hover:bg-accent"
+                className="flex size-12 shrink-0 items-center justify-center rounded-none border border-border transition-colors hover:bg-accent"
                 handle={handle}
               />
             </div>

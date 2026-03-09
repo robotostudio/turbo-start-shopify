@@ -87,7 +87,7 @@ export default function SavedPage() {
   const { items, count } = useSavedItems();
 
   const { data: products = [], isLoading } = useQuery({
-    queryKey: ["saved-items", items],
+    queryKey: ["saved-items", [...items].sort().join(",")],
     queryFn: () => fetchSavedProducts(items),
     enabled: items.length > 0,
   });
