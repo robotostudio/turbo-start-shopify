@@ -11,8 +11,9 @@ type ProductGridProps = {
 function getSalePercentage(product: ShopifyCollectionProduct): number | null {
   const compareAt = product.compareAtPriceRange?.minVariantPrice;
   if (!compareAt) return null;
-  const compareAtPrice = parseFloat(compareAt.amount);
-  const currentPrice = parseFloat(product.priceRange.minVariantPrice.amount);
+  const compareAtPrice = Number(compareAt.amount);
+  const currentPrice = Number(product.priceRange.minVariantPrice.amount);
+  if (Number.isNaN(compareAtPrice) || Number.isNaN(currentPrice)) return null;
   if (compareAtPrice <= currentPrice) return null;
   return Math.round(((compareAtPrice - currentPrice) / compareAtPrice) * 100);
 }
