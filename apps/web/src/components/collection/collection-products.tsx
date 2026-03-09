@@ -49,9 +49,7 @@ export function CollectionProducts({
       },
       initialPageParam: null as string | null,
       getNextPageParam: (lastPage) =>
-        lastPage.pageInfo.hasNextPage
-          ? lastPage.pageInfo.endCursor
-          : undefined,
+        lastPage.pageInfo.hasNextPage ? lastPage.pageInfo.endCursor : undefined,
       initialData: {
         pages: [{ products: initialProducts, pageInfo: initialPageInfo }],
         pageParams: [null],

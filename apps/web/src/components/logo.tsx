@@ -1,11 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import type { Maybe, SanityImageProps } from "@/types";
-import { SanityImage } from "./elements/sanity-image";
-
-const LOGO_URL =
-  "https://cdn.sanity.io/images/s6kuy1ts/production/68c438f68264717e93c7ba1e85f1d0c4b58b33c2-1200x621.svg";
 
 type LogoProps = {
   src?: Maybe<string>;
@@ -17,15 +12,7 @@ type LogoProps = {
   priority?: boolean;
 };
 
-export function Logo({
-  src,
-  alt = "logo",
-  image,
-  text,
-  width = 170,
-  height = 40,
-  priority = true,
-}: LogoProps) {
+export function Logo({ text }: LogoProps) {
   return (
     <Link className="flex gap-2 items-center" href="/">
       {/* removed it for now since the ui design didn't use it */}

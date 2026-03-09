@@ -91,20 +91,32 @@ export function ProductShowcase({ products }: ProductShowcaseProps) {
         {/* Row 2: 60/40 split */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-6">
           <div className="relative aspect-4/3 md:col-span-3 md:aspect-auto md:min-h-100">
-            <ShowcaseCard product={second} sizes="(min-width: 768px) 60vw, 100vw" />
+            <ShowcaseCard
+              product={second}
+              sizes="(min-width: 768px) 60vw, 100vw"
+            />
           </div>
           <div className="relative aspect-4/3 md:col-span-2 md:aspect-auto md:min-h-100">
-            <ShowcaseCard product={third} sizes="(min-width: 768px) 40vw, 100vw" />
+            <ShowcaseCard
+              product={third}
+              sizes="(min-width: 768px) 40vw, 100vw"
+            />
           </div>
         </div>
 
         {/* Row 3: 40/60 split (reversed) */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-6">
           <div className="relative aspect-4/3 md:col-span-2 md:aspect-auto md:min-h-100">
-            <ShowcaseCard product={fourth} sizes="(min-width: 768px) 40vw, 100vw" />
+            <ShowcaseCard
+              product={fourth}
+              sizes="(min-width: 768px) 40vw, 100vw"
+            />
           </div>
           <div className="relative aspect-4/3 md:col-span-3 md:aspect-auto md:min-h-100">
-            <ShowcaseCard product={fifth} sizes="(min-width: 768px) 60vw, 100vw" />
+            <ShowcaseCard
+              product={fifth}
+              sizes="(min-width: 768px) 60vw, 100vw"
+            />
           </div>
         </div>
       </div>

@@ -41,7 +41,9 @@ export function CollectionCard({
         )}
       </div>
       <div className="py-4 flex flex-col gap-2">
-        <h2 className="font-medium text-sm md:text-xl group-hover:underline">{title}</h2>
+        <h2 className="font-medium text-sm md:text-xl group-hover:underline">
+          {title}
+        </h2>
         {plainDescription ? (
           <p className=" line-clamp-2 text-muted-foreground text-xs">
             {plainDescription}

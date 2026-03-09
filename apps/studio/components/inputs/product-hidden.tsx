@@ -10,12 +10,12 @@ type Store = {
   isDeleted: boolean;
 };
 
-export default function ProductHiddenInput(props: StringFieldProps) {
+export default function ProductHiddenInput(_props: StringFieldProps) {
   const store: Store = useFormValue(["store"]) as Store;
 
   let message = <></>;
   if (!store) {
-    return <></>;
+    return null;
   } else {
     const shopifyProductUrl = productUrl(store?.id);
     const isActive = store?.status === "active";

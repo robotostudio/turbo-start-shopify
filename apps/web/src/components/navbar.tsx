@@ -10,10 +10,8 @@ import type { ColumnLink, NavColumn, NavigationData } from "@/types";
 import { CartDrawer } from "./cart/cart-drawer";
 import { CartToggle } from "./cart/cart-toggle";
 import { MenuLink } from "./elements/menu-link";
-import { SanityButtons } from "./elements/sanity-buttons";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
-import { ModeToggle } from "./mode-toggle";
 import { CollectionGroupDropdown } from "./nav/collection-group-dropdown";
 import { SavedItemsToggle } from "./saved-items/saved-items-toggle";
 
@@ -158,7 +156,7 @@ export function Navbar({
     settingsData: initialSettingsData,
   };
   const { navbarData, settingsData } = navigationData;
-  const { columns, buttons } = navbarData || {};
+  const { columns } = navbarData || {};
   const { logo, siteTitle } = settingsData || {};
 
   // Show skeleton only on initial mount when no fallback data is available
