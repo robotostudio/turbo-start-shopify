@@ -7,8 +7,7 @@ import {
 import { notFound } from "next/navigation";
 
 import { CollectionModuleRenderer } from "@/components/collection/collection-module";
-import { CollectionPagination } from "@/components/collection/collection-pagination";
-import { ProductGrid } from "@/components/collection/product-grid";
+import { CollectionProducts } from "@/components/collection/collection-products";
 import { SortSelector } from "@/components/collection/sort-selector";
 import { parseSortParams } from "@/components/collection/sort-utils";
 import { getSEOMetadata } from "@/lib/seo";
@@ -53,7 +52,7 @@ export default async function CollectionPage({
 }: PageProps) {
   const { handle } = await params;
   const sp = await searchParams;
-  const { sort, reverse, after } = parseSortParams(sp);
+  const { sort, reverse } = parseSortParams(sp);
 
   const [{ data: sanityCollection }, shopifyResult] = await Promise.all([
     sanityFetch({
@@ -61,7 +60,7 @@ export default async function CollectionPage({
       params: { handle },
     }),
     storefrontQuery<CollectionQueryResponse>(COLLECTION_QUERY, {
-      variables: { handle, first: 12, after, sortKey: sort, reverse },
+      variables: { handle, first: 12, after: null, sortKey: sort, reverse },
     }),
   ]);
 
@@ -90,18 +89,18 @@ export default async function CollectionPage({
         )}
       </div>
 
-      <div className="mb-6 flex items-center justify-between">
-        <p className="text-muted-foreground text-sm">
-          {products.length} product{products.length !== 1 ? "s" : ""}
-        </p>
+      <div className="mb-6 flex items-center justify-end">
         <SortSelector currentReverse={reverse} currentSort={sort} />
       </div>
 
-      <ProductGrid products={products} />
-
-      {shopifyCollection.products.pageInfo && (
-        <CollectionPagination pageInfo={shopifyCollection.products.pageInfo} />
-      )}
+      <CollectionProducts
+        handle={handle}
+        initialPageInfo={shopifyCollection.products.pageInfo}
+        initialProducts={products}
+        key={`${sort}-${reverse}`}
+        reverse={reverse}
+        sort={sort}
+      />
 
       {sanityCollection.modules && sanityCollection.modules.length > 0 && (
         <div className="mt-12">
