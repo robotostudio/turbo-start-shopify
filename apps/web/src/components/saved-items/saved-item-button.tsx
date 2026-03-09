@@ -18,6 +18,7 @@ export function SavedItemButton({ handle, className }: SavedItemButtonProps) {
   return (
     <button
       aria-label={isSaved ? "Remove from saved items" : "Save for later"}
+      aria-pressed={isSaved}
       className={cn(
         "group/heart flex size-9 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm transition-all hover:bg-background hover:scale-110 active:scale-95",
         className

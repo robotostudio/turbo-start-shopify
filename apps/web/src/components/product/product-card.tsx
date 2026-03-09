@@ -87,7 +87,7 @@ export function ProductCard({
         </div>
       </Link>
       <SavedItemButton
-        className="absolute top-2 right-2 z-10 md:opacity-0 md:group-hover:opacity-100 md:data-[saved=true]:opacity-100 transition-opacity"
+        className="absolute top-2 right-2 z-10 transition-opacity md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:focus-visible:pointer-events-auto md:focus-visible:opacity-100 md:data-[saved=true]:pointer-events-auto md:data-[saved=true]:opacity-100"
         handle={slug}
       />
     </div>

@@ -200,14 +200,7 @@ export function Navbar({
 
           {/* Logo */}
           <div className="flex h-10 items-center">
-            <Logo
-              alt={siteTitle || ""}
-              height={40}
-              image={logo}
-              priority
-              text={siteTitle}
-              width={120}
-            />
+            <Logo text={siteTitle} />
           </div>
 
           {/* Desktop Actions */}
