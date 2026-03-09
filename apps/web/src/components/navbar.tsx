@@ -15,6 +15,7 @@ import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
 import { ModeToggle } from "./mode-toggle";
 import { CollectionGroupDropdown } from "./nav/collection-group-dropdown";
+import { SavedItemsToggle } from "./saved-items/saved-items-toggle";
 
 // Fetcher function
 const fetcher = async (url: string): Promise<NavigationData> => {
@@ -220,6 +221,7 @@ export function Navbar({
             >
               <Search className="size-4" />
             </Link>
+            <SavedItemsToggle />
             <CartToggle />
             {/* <SanityButtons
               buttonClassName="rounded-lg"
@@ -237,6 +239,7 @@ export function Navbar({
             >
               <Search className="size-4" />
             </Link>
+            <SavedItemsToggle />
             <CartToggle />
             <MobileMenu navbarData={navbarData} settingsData={settingsData} />
           </div>
