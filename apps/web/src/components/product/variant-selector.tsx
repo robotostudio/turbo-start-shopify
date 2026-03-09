@@ -36,9 +36,14 @@ export function VariantSelector({
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const defaultVariant = variants[0];
   const currentSelections: Record<string, string> = {};
   for (const option of options) {
-    currentSelections[option.name] = searchParams.get(option.name) ?? "";
+    const fromUrl = searchParams.get(option.name);
+    const fallback =
+      defaultVariant?.selectedOptions.find((o) => o.name === option.name)
+        ?.value ?? "";
+    currentSelections[option.name] = fromUrl ?? fallback;
   }
 
   const handleSelect = useCallback(
