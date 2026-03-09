@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 
 import { storefrontQuery } from "@/lib/shopify/client";
-import { PRODUCTS_BY_HANDLES_QUERY } from "@/lib/shopify/queries";
-import type { ProductsByHandlesResponse } from "@/lib/shopify/types";
+import { PRODUCT_BY_HANDLE_QUERY } from "@/lib/shopify/queries";
+import type { ProductByHandleResponse } from "@/lib/shopify/types";
+
+const HANDLE_PATTERN = /^[a-z0-9-]+$/;
+const MAX_HANDLES = 50;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -11,9 +14,6 @@ export async function GET(request: Request) {
   if (!handles) {
     return NextResponse.json({ products: [] });
   }
-
-  const HANDLE_PATTERN = /^[a-z0-9-]+$/;
-  const MAX_HANDLES = 50;
 
   const handleList = handles
     .split(",")
@@ -24,17 +24,18 @@ export async function GET(request: Request) {
     return NextResponse.json({ products: [] });
   }
 
-  const query = handleList.map((h) => `handle:${h}`).join(" OR ");
-
-  const result = await storefrontQuery<ProductsByHandlesResponse>(
-    PRODUCTS_BY_HANDLES_QUERY,
-    { variables: { query, first: handleList.length } }
+  const results = await Promise.all(
+    handleList.map((handle) =>
+      storefrontQuery<ProductByHandleResponse>(PRODUCT_BY_HANDLE_QUERY, {
+        variables: { handle },
+      })
+    )
   );
 
-  if (!result.ok) {
-    return NextResponse.json({ products: [] }, { status: 500 });
-  }
+  const products = results
+    .filter((r) => r.ok && r.data.product)
+    .map((r) => (r as { ok: true; data: ProductByHandleResponse }).data.product)
+    .filter(Boolean);
 
-  const products = result.data.products.edges.map((e) => e.node);
   return NextResponse.json({ products });
 }

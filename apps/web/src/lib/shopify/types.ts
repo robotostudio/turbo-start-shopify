@@ -165,6 +165,6 @@ export type FeaturedProductsResponse = {
   products: Connection<FeaturedProduct>;
 };
 
-export type ProductsByHandlesResponse = {
-  products: Connection<ShopifyCollectionProduct>;
+export type ProductByHandleResponse = {
+  product: ShopifyCollectionProduct | null;
 };
