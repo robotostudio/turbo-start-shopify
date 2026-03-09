@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
@@ -33,6 +33,9 @@ export function SortSelector({
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const isDefault =
+    currentSort === "COLLECTION_DEFAULT" && currentReverse === false;
+
   const currentLabel =
     SORT_OPTIONS.find(
       (o) => o.sortKey === currentSort && o.reverse === currentReverse
@@ -49,28 +52,49 @@ export function SortSelector({
     [router, searchParams]
   );
 
+  const handleReset = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("sort");
+    params.delete("reverse");
+    params.delete("after");
+    const qs = params.toString();
+    router.push(qs ? `?${qs}` : window.location.pathname);
+  }, [router, searchParams]);
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <div className="flex items-center gap-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            size="sm"
+            className="flex items-center gap-2 rounded-none border border-foreground bg-transparent px-6 py-2.5 text-sm text-foreground tracking-wider transition-colors hover:bg-foreground hover:text-background focus-visible:ring-0"
+          >
+            <ArrowUpDown className="mr-2 size-4" />
+            {currentLabel}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {SORT_OPTIONS.map((option) => (
+            <DropdownMenuItem
+              key={`${option.sortKey}-${option.reverse}`}
+              onClick={() => handleSort(option.sortKey, option.reverse)}
+            >
+              {option.label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {!isDefault && (
         <Button
           size="sm"
-          className="flex items-center gap-2 rounded-none border border-foreground bg-transparent px-6 py-2.5 text-sm text-foreground tracking-wider transition-colors hover:bg-foreground hover:text-background focus-visible:ring-0"
+          onClick={handleReset}
+          className="size-8 rounded-none border border-foreground bg-transparent p-0 text-foreground transition-colors hover:bg-foreground hover:text-background focus-visible:ring-0"
         >
-          <ArrowUpDown className="mr-2 size-4" />
-          {currentLabel}
+          <X className="size-4" />
+          <span className="sr-only">Reset sort</span>
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {SORT_OPTIONS.map((option) => (
-          <DropdownMenuItem
-            key={`${option.sortKey}-${option.reverse}`}
-            onClick={() => handleSort(option.sortKey, option.reverse)}
-          >
-            {option.label}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      )}
+    </div>
   );
 }
 
