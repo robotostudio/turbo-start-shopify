@@ -129,6 +129,12 @@ export const COLLECTION_QUERY = /* graphql */ `
                 currencyCode
               }
             }
+            compareAtPriceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
             variants(first: 1) {
               edges {
                 node {
