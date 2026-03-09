@@ -59,17 +59,22 @@ export function AddToCart({
 
           const inventory = await checkVariantInventory(variantId);
 
-          if (inventory.ok) {
-            if (!inventory.availableForSale) {
-              setError("This item just sold out");
-              setIsPending(false);
-              return;
-            }
-            if (inventory.quantityAvailable === 0) {
-              setError("This item is no longer available");
-              setIsPending(false);
-              return;
-            }
+          if (!inventory.ok) {
+            setError("Unable to verify availability. Please try again.");
+            setIsPending(false);
+            return;
+          }
+
+          if (!inventory.availableForSale) {
+            setError("This item just sold out");
+            setIsPending(false);
+            return;
+          }
+
+          if (inventory.quantityAvailable === 0) {
+            setError("This item is no longer available");
+            setIsPending(false);
+            return;
           }
 
           await addLine(variantId, 1);
