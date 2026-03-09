@@ -1,139 +1,277 @@
-# Next.js Monorepo with Sanity CMS
+# Turbo Start Shopify
 
-A modern, full-stack monorepo template built with Next.js App Router, Sanity CMS, Shadcn UI, and TurboRepo.
+A production-ready headless commerce starter built with Shopify, Sanity, and Next.js — monorepo architecture with visual editing, type-safe data, and everything you need to ship fast.
 
-![Easiest way to build a webpage](https://raw.githubusercontent.com/robotostudio/turbo-start-sanity/main/turbo-start-sanity-og.png)
+![Turbo Start Shopify](https://raw.githubusercontent.com/robotostudio/turbo-start-shopify/main/turbo-start-sanity-og.png)
+
+[![Node.js](https://img.shields.io/badge/node-%3E%3D22-brightgreen)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-10.28-orange)](https://pnpm.io/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+[![Sanity](https://img.shields.io/badge/Sanity-v5-red)](https://www.sanity.io/)
+[![Shopify](https://img.shields.io/badge/Shopify-Storefront%20API-green)](https://shopify.dev/docs/api/storefront)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## Features
 
+- **Monorepo with Turborepo** — shared packages, fast builds, one `pnpm dev` to run everything
+- **Next.js 16 App Router** — React Server Components, React Compiler, Turbopack, dynamic OG images
+- **Sanity Studio v5** — visual editing, live preview, page builder, auto-redirects on slug change
+- **Shopify Storefront API** — products, collections, cart, checkout, search
+- **Type-safe end-to-end** — auto-generated Sanity types, Zod env validation, strict TypeScript
+- **Tailwind CSS v4** — CSS-first config, OKLCH color tokens, dark mode, Shadcn components
+- **SEO optimized** — dynamic metadata, OG images, sitemaps, JSON-LD structured data
+
+## Architecture
+
+### Data Flow
+
+```
+Shopify (products, collections, cart)
+    ↕ Storefront API
+Next.js 16 (App Router, RSC)
+    ↕ GROQ queries via sanityFetch()
+Sanity CMS (pages, blog, navigation, SEO)
+```
+
 ### Monorepo Structure
 
-- Apps: web (Next.js frontend) and studio (Sanity Studio)
-- Shared packages: UI components, TypeScript config, environment utilities, logger
-- Turborepo for build orchestration and caching
+```
+apps/
+  web/              → Next.js 16 frontend
+  studio/           → Sanity Studio v5
 
-### Frontend (Web)
+packages/
+  env/              → T3 env validation (Zod)
+  sanity/           → Client, GROQ queries, live preview, generated types
+  ui/               → Shadcn + Tailwind v4 primitives
+  logger/           → Structured logger
+  typescript-config/ → Shared TypeScript presets
+```
 
-- Next.js App Router with TypeScript
-- Shadcn UI components with Tailwind CSS
-- Server Components and Server Actions
-- SEO optimization with metadata
-- Blog system with rich text editor
-- Table of contents generation
-- Responsive layouts
+## Prerequisites
 
-### Content Management (Studio)
-
-- Sanity Studio v5
-- Custom document types (Blog, FAQ, Pages)
-- Visual editing integration
-- Structured content with schemas
-- Live preview capabilities
-- Asset management
+- [Node.js](https://nodejs.org/) >= 22
+- [pnpm](https://pnpm.io/) 10.28+
+- A [Shopify Partner](https://www.shopify.com/partners) account with a development store
+- A [Sanity](https://www.sanity.io/) account
 
 ## Getting Started
 
-### Installing the template
+### 1. Clone and install
 
-#### 1. Initialize template with Sanity CLI
-
-Run the command in your Terminal to initialize this template on your local computer.
-
-See the documentation if you are [having issues with the CLI](https://www.sanity.io/help/cli-errors).
-
-```shell
-npm create sanity@latest -- --template robotostudio/turbo-start-sanity
+```bash
+npx create-sanity@latest -- --template robotostudio/turbo-start-shopify
 ```
 
-#### 2. Run Studio and Next.js app locally
+Or clone manually:
 
-Navigate to the template directory using `cd <your app name>`, and start the development servers by running the following command
-
-```shell
-pnpm run dev
+```bash
+git clone https://github.com/robotostudio/turbo-start-shopify.git
+cd turbo-start-shopify
+pnpm install
 ```
 
-#### 3. Open the app and sign in to the Studio
+### 2. Set up Shopify
 
-Open the Next.js app running locally in your browser on [http://localhost:3000](http://localhost:3000).
+1. Create a [development store](https://help.shopify.com/en/partners/dashboard/managing-stores/development-stores) in your Shopify Partner dashboard
+2. In the store admin, go to **Settings > Apps and sales channels > Develop apps**
+3. Create a custom app with **Storefront API** access scopes
+4. Copy the **Storefront access token** and your **store domain** (e.g. `your-store.myshopify.com`)
+5. (Optional) Enable **Admin API** access if you plan to use the seed scripts
 
-Open the Studio running locally in your browser on [http://localhost:3333](http://localhost:3333). You should now see a screen prompting you to log in to the Studio. Use the same service (Google, GitHub, or email) that you used when you logged in to the CLI.
+### 3. Set up Sanity
 
-### Adding content with Sanity
+1. Create a project at [sanity.io/manage](https://www.sanity.io/manage)
+2. Note your **project ID** and **dataset** name (default: `production`)
+3. Under **API > Tokens**, create a read token and a write token
 
-#### 1. Publish your first document
+### 4. Configure environment variables
 
-The template comes pre-defined with a schema containing `Author`, `Blog`, `BlogIndex`, `FAQ`, `Footer`, `HomePage`, `Navbar`, `Page`, and `Settings` document types.
+Copy the example files and fill in your values:
 
-From the Studio, click "+ Create" and select the `Blog` document type. Go ahead and create and publish the document.
+```bash
+cp apps/web/.env.example apps/web/.env
+cp apps/studio/.env.example apps/studio/.env
+```
 
-Your content should now appear in your Next.js app ([http://localhost:3000](http://localhost:3000)) as well as in the Studio on the "Presentation" Tab
+See the [Environment Variables Reference](#environment-variables-reference) below for all required values.
 
-#### 2. Sample Content
+### 5. Seed content
 
-When you initialize the template using the Sanity CLI, sample content is not automatically imported into your project. However, you can import it after the init is done. This data includes example blog posts, authors, and other content types to help you get started quickly (see next step).
+Import the included Sanity seed data:
 
-#### 3. Seed data using script
-
-To add sample data programmatically, run the following command:
-
-```shell
+```bash
 cd apps/studio
 npx sanity dataset import ./seed-data.tar.gz production --replace
 ```
 
-This command imports seed content into your Sanity dataset.
+Optionally seed Shopify with test products (requires Admin API token):
 
-#### 4. Extending the Sanity schema
+```bash
+pnpm seed:shopify
+pnpm verify:shopify
+```
 
-The schemas for all document types are defined in the `studio/schemaTypes/documents` directory. You can [add more document types](https://www.sanity.io/docs/schema-types) to the schema to suit your needs.
+### 6. Start development
 
-### Deploying your application and inviting editors
+```bash
+pnpm dev
+```
 
-#### 1. Deploy Sanity Studio
+Open [http://localhost:3000](http://localhost:3000) for the Next.js app and [http://localhost:3333](http://localhost:3333) for Sanity Studio.
 
-Your Next.js frontend (`/web`) and Sanity Studio (`/studio`) are still only running on your local computer. It's time to deploy and get it into the hands of other content editors.
+## Environment Variables Reference
 
-> **⚠️ Important**: When initializing the template with the Sanity CLI, the `.github` folder may not be included or might be renamed to `github` (without the dot). If you don't see a `.github` folder in your project root, you'll need to manually create it and copy the GitHub Actions workflows from the [template repository](https://github.com/robotostudio/turbo-start-sanity/tree/main/.github) for the deployment automation to work.
+### Web App (`apps/web/.env`)
 
-The template includes a GitHub Actions workflow [`deploy-sanity.yml`](https://raw.githubusercontent.com/robotostudio/turbo-start-sanity/main/.github/workflows/deploy-sanity.yml) that automatically deploys your Sanity Studio whenever changes are pushed to the `studio` directory.
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Yes | Your Sanity project ID |
+| `NEXT_PUBLIC_SANITY_DATASET` | Yes | Sanity dataset name (e.g. `production`) |
+| `NEXT_PUBLIC_SANITY_API_VERSION` | Yes | API version date (default: `2025-08-29`) |
+| `NEXT_PUBLIC_SANITY_STUDIO_URL` | Yes | Studio URL (`http://localhost:3333` for dev) |
+| `SANITY_API_READ_TOKEN` | Yes | Sanity API token with read access |
+| `SANITY_API_WRITE_TOKEN` | Yes | Sanity API token with write access |
+| `SHOPIFY_STORE_DOMAIN` | Yes | Your Shopify store domain (e.g. `your-store.myshopify.com`) |
+| `SHOPIFY_STOREFRONT_ACCESS_TOKEN` | Yes | Shopify Storefront API public access token |
+| `SHOPIFY_API_VERSION` | No | Storefront API version (default: `2025-01`) |
 
-> **Note**: To use the GitHub Actions workflow, make sure to configure the following secrets in your repository settings:
->
-> - `SANITY_DEPLOY_TOKEN`
-> - `SANITY_STUDIO_PROJECT_ID`
-> - `SANITY_STUDIO_DATASET`
-> - `SANITY_STUDIO_TITLE`
-> - `SANITY_STUDIO_PRESENTATION_URL`
-> - `SANITY_STUDIO_PRODUCTION_HOSTNAME`
+### Sanity Studio (`apps/studio/.env`)
 
-Set `SANITY_STUDIO_PRODUCTION_HOSTNAME` to whatever you want your deployed Sanity Studio hostname to be. Eg. for `SANITY_STUDIO_PRODUCTION_HOSTNAME=my-cool-project` you'll get a studio URL of `https://my-cool-project.sanity.studio` (and `<my-branch-name>-my-cool-project.sanity.studio` for PR previews builds done automatically via the `deploy-sanity.yml` github CI workflow when you open a PR.)
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `SANITY_STUDIO_PROJECT_ID` | Yes | Same Sanity project ID as web |
+| `SANITY_STUDIO_DATASET` | Yes | Same dataset name as web |
+| `SANITY_STUDIO_TITLE` | Yes | Display title for the Studio |
+| `SANITY_STUDIO_PRESENTATION_URL` | Prod | Frontend URL for live preview (auto-detects `localhost:3000` in dev) |
+| `SANITY_STUDIO_PRODUCTION_HOSTNAME` | Deploy | Hostname for deployed Studio (e.g. `my-project` → `my-project.sanity.studio`) |
+| `SANITY_STUDIO_API_VERSION` | No | Sanity API version |
+| `SHOPIFY_STORE_DOMAIN` | Seeds | Your Shopify store domain (for seed scripts) |
+| `SHOPIFY_ADMIN_ACCESS_TOKEN` | Seeds | Shopify Admin API token (for seed scripts) |
 
-Set `SANITY_STUDIO_PRESENTATION_URL` to your web app front-end URL (from the Vercel deployment). This URL is required for production deployments and should be:
+## Available Commands
 
-- Set in your GitHub repository secrets for CI/CD deployments
-- Set in your local environment if deploying manually with `npx sanity deploy`
-- Not needed for local development, where preview will automatically use `http://localhost:3000`
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start all apps (web on :3000, studio on :3333) |
+| `pnpm dev:web` | Start Next.js only |
+| `pnpm dev:studio` | Start Sanity Studio only |
+| `pnpm build` | Build all apps |
+| `pnpm build:web` | Build Next.js only |
+| `pnpm build:studio` | Build Sanity Studio only |
+| `pnpm lint` | Lint with Biome |
+| `pnpm format` | Format with Biome |
+| `pnpm format:check` | Check formatting without writing |
+| `pnpm check-types` | TypeScript type checking across all packages |
+| `pnpm seed:shopify` | Seed Shopify with test products |
+| `pnpm verify:shopify` | Print Shopify store health report |
 
-You can then manually deploy from your Studio directory (`/studio`) using:
+## Deployment
 
-```shell
+### Deploy Next.js to Vercel
+
+1. Push your repo to GitHub
+2. Create a new [Vercel](https://vercel.com/) project and connect your repository
+3. Set the **Root Directory** to `apps/web`
+4. Add all required environment variables from the [web app table](#web-app-appsweb-env) above
+5. Deploy
+
+### Deploy Sanity Studio
+
+**Automatic (recommended):** The included GitHub Actions workflow (`.github/workflows/deploy-sanity.yml`) deploys your Studio automatically when changes are pushed to `apps/studio/`.
+
+Add these secrets to your GitHub repository settings:
+
+| Secret | Description |
+|--------|-------------|
+| `SANITY_DEPLOY_TOKEN` | Sanity deploy token |
+| `SANITY_STUDIO_PROJECT_ID` | Sanity project ID |
+| `SANITY_STUDIO_DATASET` | Dataset name |
+| `SANITY_STUDIO_TITLE` | Studio display title |
+| `SANITY_STUDIO_PRESENTATION_URL` | Your deployed frontend URL |
+| `SANITY_STUDIO_PRODUCTION_HOSTNAME` | Studio hostname (e.g. `my-project` → `my-project.sanity.studio`) |
+
+PR preview builds are created automatically — each PR gets its own Studio at `<branch-name>-<hostname>.sanity.studio`.
+
+> **Note:** When initializing with the Sanity CLI, the `.github` folder may not be included. If missing, copy the workflows from the [template repository](https://github.com/robotostudio/turbo-start-shopify/tree/main/.github).
+
+**Manual:**
+
+```bash
+cd apps/studio
 npx sanity deploy
 ```
 
-**Note**: To use the live preview feature, your browser needs to enable third party cookies.
+### Shopify Configuration
 
-#### 2. Deploy Next.js app to Vercel
+Ensure your Storefront API custom app has the necessary access scopes for products, collections, and cart operations.
 
-You have the freedom to deploy your Next.js app to your hosting provider of choice. With Vercel and GitHub being a popular choice, we'll cover the basics of that approach.
+## Customization
 
-1. Create a GitHub repository from this project. [Learn more](https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github).
-2. Create a new Vercel project and connect it to your Github repository.
-3. Set the `Root Directory` to your Next.js app (`/apps/web`).
-4. Configure your Environment Variables.
+### Adding a New Page Builder Block
 
-#### 3. Invite a collaborator
+1. Create a Sanity schema in `apps/studio/schemaTypes/blocks/`
+2. Register it in `apps/studio/schemaTypes/blocks/index.ts`
+3. Add a GROQ fragment in `packages/sanity/src/query.ts` and include it in `pageBuilderFragment`
+4. Regenerate types: `pnpm --filter studio type`
+5. Create a React component in `apps/web/src/components/sections/`
+6. Register it in `BLOCK_COMPONENTS` in `apps/web/src/components/pagebuilder.tsx`
+7. Add the type to `PageBuilderBlockTypes` in `apps/web/src/types.ts`
 
-Now that you've deployed your Next.js application and Sanity Studio, you can optionally invite a collaborator to your Studio. Open up [Manage](https://www.sanity.io/manage), select your project and click "Invite project members"
+### Extending Sanity Schemas
 
-They will be able to access the deployed Studio, where you can collaborate together on creating content.
+- **Document types:** `apps/studio/schemaTypes/documents/`
+- **Object types:** `apps/studio/schemaTypes/objects/`
+- Register new types in `apps/studio/schemaTypes/index.ts`
+- Always run `pnpm --filter studio type` after schema changes to regenerate types
+
+### Adding Shadcn Components
+
+Components live in `packages/ui/src/components/`. Follow the existing Radix + CVA pattern and import via `@workspace/ui/components/<component-name>`.
+
+### Shopify Seed Scripts
+
+```bash
+pnpm seed:shopify                  # Append 10 test products
+pnpm seed:shopify -- --batch=50    # Append 50 test products
+pnpm seed:shopify -- --clean       # Remove all test products
+pnpm verify:shopify                # Print store health report
+```
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| **"Module not found" errors** | Run `pnpm install` from the project root. Check path aliases in `tsconfig.json`. |
+| **Sanity types out of date** | Run `pnpm --filter studio type` to regenerate. |
+| **Visual editing not working** | Enable third-party cookies in your browser. Verify `SANITY_STUDIO_PRESENTATION_URL` is set. |
+| **Shopify products not loading** | Verify `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_STOREFRONT_ACCESS_TOKEN` are correct. |
+| **Seed script fails** | Check that `SHOPIFY_ADMIN_ACCESS_TOKEN` has the required Admin API scopes. |
+| **Build fails on Vercel** | Ensure all env vars are set and the root directory is `apps/web`. |
+| **Draft mode / live preview issues** | Confirm `SANITY_API_READ_TOKEN` is set with correct permissions. |
+| **Tailwind styles not applying** | Ensure `@import "tailwindcss"` is in your CSS entry point. Check `@workspace/ui` transpile config. |
+| **Redirects not working** | Redirects are fetched from Sanity at build time. Redeploy after creating new redirects. |
+
+## Tech Stack
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| [Next.js](https://nextjs.org/) | 16 | React framework (App Router, RSC, Turbopack) |
+| [React](https://react.dev/) | 19 | UI library |
+| [Sanity](https://www.sanity.io/) | 5 | Headless CMS with visual editing |
+| [Shopify Storefront API](https://shopify.dev/docs/api/storefront) | 2025-01 | Commerce engine |
+| [Turborepo](https://turbo.build/) | 2 | Monorepo build orchestration |
+| [Tailwind CSS](https://tailwindcss.com/) | 4 | Utility-first CSS framework |
+| [Shadcn UI](https://ui.shadcn.com/) | — | Accessible component primitives |
+| [Biome](https://biomejs.dev/) | 2 | Linter and formatter |
+| [TypeScript](https://www.typescriptlang.org/) | 5 | Type safety |
+| [Zod](https://zod.dev/) | 4 | Runtime env validation |
+| [pnpm](https://pnpm.io/) | 10 | Package manager |
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
+
+## License
+
+[MIT](LICENSE) &copy; [Roboto Studio](https://roboto.studio/)
