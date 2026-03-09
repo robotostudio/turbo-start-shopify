@@ -4,8 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@workspace/ui/components/accordion";
-import { Badge } from "@workspace/ui/components/badge";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Minus, Plus } from "lucide-react";
 import Link from "next/link";
 
 import type { PagebuilderType } from "@/types";
@@ -15,9 +14,7 @@ import { FaqJsonLd } from "../json-ld";
 type FaqAccordionProps = PagebuilderType<"faqAccordion">;
 
 export function FaqAccordion({
-  eyebrow,
   title,
-  subtitle,
   faqs,
   link,
 }: FaqAccordionProps) {
@@ -25,32 +22,33 @@ export function FaqAccordion({
     <section className="my-8" id="faq">
       <FaqJsonLd faqs={faqs} />
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex w-full flex-col items-center">
-          <div className="flex flex-col items-center space-y-4 text-center sm:space-y-6 md:text-center">
-            <Badge variant="secondary">{eyebrow}</Badge>
-            <h2 className="font-semibold text-3xl md:text-5xl">{title}</h2>
-            <h3 className="text-balance font-normal text-[#374151] text-lg dark:text-zinc-400">
-              {subtitle}
-            </h3>
-          </div>
+        <div className="flex flex-col items-center">
+          <h2 className="mb-10 font-normal font-(family-name:--font-geist-pixel-square) text-3xl md:text-4xl">
+            {title}
+          </h2>
         </div>
-        <div className="mx-auto my-16 max-w-xl">
+        <div className="mx-auto max-w-3xl">
           <Accordion
-            className="w-full"
+            className="flex w-full flex-col gap-3"
             collapsible
-            defaultValue="3"
             type="single"
           >
             {faqs?.map((faq, index) => (
               <AccordionItem
-                className="py-2"
+                className="border-none rounded-sm bg-zinc-100 dark:bg-zinc-900"
                 key={`AccordionItem-${faq?._id}-${index}`}
                 value={faq?._id}
               >
-                <AccordionTrigger className="group py-2 text-[15px] leading-6 hover:no-underline">
-                  {faq?.title}
+                <AccordionTrigger className="px-5 py-4 text-sm hover:no-underline [&>svg]:hidden">
+                  <span className="flex-1 text-left">{faq?.title}</span>
+                  <span className="text-foreground [[data-state=open]>&]:hidden">
+                    <Plus className="size-4" />
+                  </span>
+                  <span className="hidden text-foreground [[data-state=open]>&]:inline">
+                    <Minus className="size-4" />
+                  </span>
                 </AccordionTrigger>
-                <AccordionContent className="pb-2 text-muted-foreground">
+                <AccordionContent className="px-5 pb-4 text-muted-foreground">
                   <RichText
                     className="text-sm md:text-base"
                     richText={faq?.richText ?? []}
@@ -72,10 +70,7 @@ export function FaqAccordion({
                   {link?.description}
                 </p>
                 <span className="rounded-full border p-1">
-                  <ArrowUpRight
-                    className="text-[#374151] dark:text-neutral-300"
-                    size={16}
-                  />
+                  <ArrowUpRight className="text-muted-foreground" size={16} />
                 </span>
               </Link>
             </div>

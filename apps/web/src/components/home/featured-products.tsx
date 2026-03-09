@@ -1,3 +1,5 @@
+import { Button } from "@workspace/ui/components/button";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,7 +25,7 @@ async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
 function ProductCard({ product }: { product: FeaturedProduct }) {
   return (
     <Link className="group block" href={`/products/${product.handle}`}>
-      <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-background">
+      <div className="relative aspect-3/4 overflow-hidden  bg-background">
         {product.featuredImage ? (
           <Image
             alt={product.featuredImage.altText ?? product.title}
@@ -59,22 +61,23 @@ export async function FeaturedProducts() {
   if (products.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
+    <section className="container mx-auto px-4 py-20 md:px-6 md:py-28">
       <div className="mb-12 flex items-end justify-between md:mb-16">
         <div>
-          <p className="mb-2 text-neutral-500 text-xs tracking-widest uppercase">
-            The Collection
-          </p>
-          <h2 className="font-light text-3xl tracking-tight md:text-4xl">
+          <h2 className="font-light font-(family-name:--font-geist-pixel-square) text-3xl tracking-tight md:text-4xl">
             Featured Products
           </h2>
         </div>
-        <Link
-          className="hidden border-b border-neutral-900 pb-0.5 text-sm transition-colors hover:border-neutral-400 hover:text-neutral-600 md:block"
-          href="/collections"
+        <Button
+          asChild
+          className="rounded-none border border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-white dark:hover:text-black"
+          size="lg"
         >
-          View All
-        </Link>
+          <Link href="/collections/all-products">
+            See all
+            <ArrowRight className=" size-4" />
+          </Link>
+        </Button>
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
@@ -85,7 +88,7 @@ export async function FeaturedProducts() {
 
       <div className="mt-10 text-center md:hidden">
         <Link
-          className="border-b border-neutral-900 pb-0.5 text-sm"
+          className="border border-neutral-900 pb-0.5 text-sm"
           href="/collections"
         >
           View All

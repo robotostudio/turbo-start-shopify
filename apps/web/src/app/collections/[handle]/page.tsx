@@ -14,6 +14,7 @@ import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
 import { COLLECTION_QUERY } from "@/lib/shopify/queries";
 import type { CollectionQueryResponse } from "@/lib/shopify/types";
+import type { QueryCollectionByHandleResult } from "@workspace/sanity/types";
 
 type PageProps = {
   params: Promise<{ handle: string }>;
@@ -77,7 +78,9 @@ export default async function CollectionPage({
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="font-semibold text-3xl">{shopifyCollection.title}</h1>
+        <h1 className="font-normal font-(family-name:--font-geist-pixel-square) text-3xl md:text-4xl">
+          {shopifyCollection.title}
+        </h1>
 
         {shopifyCollection.description && (
           <p className="mt-2 text-muted-foreground">
@@ -101,7 +104,7 @@ export default async function CollectionPage({
 
       {sanityCollection.modules && sanityCollection.modules.length > 0 && (
         <div className="mt-12">
-          {sanityCollection.modules.map((module) => (
+          {sanityCollection.modules.map((module: NonNullable<NonNullable<QueryCollectionByHandleResult>["modules"]>[number]) => (
             <CollectionModuleRenderer key={module._key} module={module} />
           ))}
         </div>

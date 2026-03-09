@@ -6,7 +6,6 @@ import { useCallback } from "react";
 
 import type { ShopifyProductOption, ShopifyVariant } from "@/lib/shopify/types";
 import { getOptionAvailability } from "@/lib/shopify/variant-utils";
-
 import { ColorSwatch } from "./color-swatch";
 import { SizeSelector } from "./size-selector";
 
@@ -68,12 +67,12 @@ export function VariantSelector({
 
         return (
           <div key={option.id}>
-            <p className="mb-2 font-medium text-sm">
+            <p className="my-6 text-sm">
               {option.name}
               {selected && (
-                <span className="ml-2 font-normal text-muted-foreground">
-                  {selected}
-                </span>
+                <>
+                  : <span className="font-semibold">{selected}</span>
+                </>
               )}
             </p>
 
@@ -100,10 +99,10 @@ export function VariantSelector({
                   return (
                     <button
                       className={cn(
-                        "rounded-lg border px-4 py-2 text-sm transition-colors",
+                        "border px-4 py-2 text-sm transition-colors",
                         isSelected
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border hover:border-primary",
+                          ? "border-foreground text-foreground"
+                          : "border-border text-foreground hover:border-foreground/50",
                         !isAvailable && "opacity-40"
                       )}
                       key={value}

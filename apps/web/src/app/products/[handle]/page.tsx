@@ -1,11 +1,10 @@
-import { notFound } from "next/navigation";
-
 import { client } from "@workspace/sanity/client";
 import { sanityFetch } from "@workspace/sanity/live";
 import {
   queryProductByHandle,
   queryProductPaths,
 } from "@workspace/sanity/query";
+import { notFound } from "next/navigation";
 
 import { AddToCart } from "@/components/product/add-to-cart";
 import { PriceDisplay } from "@/components/product/price-display";
@@ -14,6 +13,7 @@ import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductJsonLd } from "@/components/product/product-json-ld";
 import { RelatedProducts } from "@/components/product/related-products";
 import { VariantSelector } from "@/components/product/variant-selector";
+import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
 import { PRODUCT_QUERY } from "@/lib/shopify/queries";
 import type {
@@ -23,7 +23,6 @@ import type {
   ShopifyVariant,
 } from "@/lib/shopify/types";
 import { findVariantByOptions } from "@/lib/shopify/variant-utils";
-import { getSEOMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ handle: string }>;
@@ -72,7 +71,7 @@ function ProductImage({
   }
 
   return (
-    <div className="flex aspect-square items-center justify-center rounded-xl border bg-muted text-muted-foreground">
+    <div className="flex aspect-3/4 items-center justify-center bg-muted text-muted-foreground">
       No image available
     </div>
   );
@@ -92,31 +91,22 @@ function ProductPrice({
 }
 
 function ProductActions({
-  selectedVariant,
   shopifyProduct,
   handle,
   variants,
 }: {
-  selectedVariant: ShopifyVariant;
   shopifyProduct: ShopifyProduct;
   handle: string;
   variants: ShopifyVariant[];
 }) {
-  return (
-    <>
-      {variants.length > 0 && (
-        <VariantSelector
-          handle={handle}
-          options={shopifyProduct.options}
-          variants={variants}
-        />
-      )}
+  if (variants.length === 0) return null;
 
-      <AddToCart
-        availableForSale={selectedVariant.availableForSale}
-        variantId={selectedVariant.id}
-      />
-    </>
+  return (
+    <VariantSelector
+      handle={handle}
+      options={shopifyProduct.options}
+      variants={variants}
+    />
   );
 }
 
@@ -148,40 +138,74 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
 
   const title = shopifyProduct.title;
   const vendor = shopifyProduct.vendor;
+  const descriptionHtml = shopifyProduct.descriptionHtml;
 
   return (
     <>
       <ProductJsonLd handle={handle} product={shopifyProduct} />
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid gap-8 lg:grid-cols-2">
+      <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
           <ProductImage
             images={images}
             selectedVariantImageUrl={selectedVariant?.image?.url}
           />
 
-          <div className="flex flex-col gap-6">
-            <div>
-              <h1 className="font-semibold text-3xl">{title}</h1>
-              {vendor && <p className="mt-1 text-muted-foreground">{vendor}</p>}
+          <div className="flex flex-col gap-6 md:gap-8">
+            {/* Vendor + Title */}
+            <div className="flex flex-col gap-6 md:gap-8">
+              {vendor && (
+                <p className="text-muted-foreground text-xs font-medium uppercase tracking-widest">
+                  {vendor}
+                </p>
+              )}
+              <h1 className="mt-2 text-4xl font-(family-name:--font-geist-pixel-square) font-light tracking-tight lg:text-5xl">
+                {title}
+              </h1>
             </div>
 
+            {/* Sale badge + Price */}
             <ProductPrice selectedVariant={selectedVariant} />
 
+            <div className="border-t border-border" />
+
+            {/* Variant selectors */}
             <ProductActions
               handle={handle}
-              selectedVariant={selectedVariant}
               shopifyProduct={shopifyProduct}
               variants={variants}
             />
 
-            {sanityProduct.body && <ProductBody body={sanityProduct.body} />}
+            {/* Add to Cart */}
+            <AddToCart
+              availableForSale={selectedVariant.availableForSale}
+              variantId={selectedVariant.id}
+            />
+
+            <div className="border-t border-border" />
+
+            {/* Description from Shopify */}
+            {descriptionHtml && (
+              <div className="space-y-2">
+                <div
+                  className="prose prose-sm dark:prose-invert text-muted-foreground leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+                />
+              </div>
+            )}
+
+            {/* Details from Sanity */}
+            {sanityProduct.body && (
+              <div className="space-y-2">
+                <h2 className="font-medium text-sm uppercase tracking-wide">
+                  Details
+                </h2>
+                <ProductBody body={sanityProduct.body} />
+              </div>
+            )}
           </div>
         </div>
 
-        <RelatedProducts
-          handle={handle}
-          productType={shopifyProduct.productType ?? null}
-        />
+        <RelatedProducts productId={shopifyProduct.id} />
       </div>
     </>
   );

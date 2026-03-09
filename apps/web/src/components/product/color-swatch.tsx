@@ -76,10 +76,10 @@ export function ColorSwatch({
           return (
             <button
               className={cn(
-                "rounded-lg border px-4 py-2 text-sm transition-colors",
+                "border px-4 py-2 text-sm transition-colors",
                 isSelected
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border hover:border-primary",
+                  ? "border-foreground text-foreground"
+                  : "border-border text-foreground hover:border-foreground/50",
                 !isAvailable && "opacity-40"
               )}
               key={value}
@@ -95,10 +95,10 @@ export function ColorSwatch({
         return (
           <button
             className={cn(
-              "relative size-10 rounded-full border-2 transition-all",
+              "relative size-10 rounded-full border transition-all",
               isSelected
-                ? "border-primary ring-2 ring-primary ring-offset-2"
-                : "border-border hover:border-primary",
+                ? "border-foreground ring-1 ring-foreground/80 ring-offset-2 ring-offset-background"
+                : "border-border hover:border-foreground/50",
               !isAvailable && "opacity-40"
             )}
             key={value}
