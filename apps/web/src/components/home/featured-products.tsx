@@ -43,9 +43,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
           )}
         </div>
         <div className="mt-4 space-y-1">
-          <h3 className="font-normal text-sm tracking-wide">
-            {product.title}
-          </h3>
+          <h3 className="font-normal text-sm tracking-wide">{product.title}</h3>
           {product.vendor && (
             <p className="text-neutral-500 text-xs tracking-wider uppercase">
               {product.vendor}

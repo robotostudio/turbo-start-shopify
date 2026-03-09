@@ -20,19 +20,13 @@ async function fetchSavedProducts(
   handles: string[]
 ): Promise<ShopifyCollectionProduct[]> {
   if (handles.length === 0) return [];
-  const response = await fetch(
-    `/api/saved-items?handles=${handles.join(",")}`
-  );
+  const response = await fetch(`/api/saved-items?handles=${handles.join(",")}`);
   if (!response.ok) return [];
   const data: SavedProductsResponse = await response.json();
   return data.products;
 }
 
-function SavedProductCard({
-  product,
-}: {
-  product: ShopifyCollectionProduct;
-}) {
+function SavedProductCard({ product }: { product: ShopifyCollectionProduct }) {
   const { addLine, openCart } = useCart();
   const firstVariant = product.variants.edges[0]?.node;
 
@@ -55,9 +49,7 @@ function SavedProductCard({
           )}
         </div>
         <div className="space-y-1">
-          <h3 className="font-normal text-sm leading-tight">
-            {product.title}
-          </h3>
+          <h3 className="font-normal text-sm leading-tight">{product.title}</h3>
           {product.vendor && (
             <p className="text-xs uppercase tracking-wider text-muted-foreground">
               {product.vendor}

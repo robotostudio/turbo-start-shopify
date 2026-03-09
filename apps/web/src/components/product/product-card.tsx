@@ -75,9 +75,7 @@ export function ProductCard({
           )}
         </div>
         <div className="space-y-1">
-          <h3 className="font-normal text-sm leading-tight">
-            {title}
-          </h3>
+          <h3 className="font-normal text-sm leading-tight">{title}</h3>
           {vendor && (
             <p className="text-xs uppercase tracking-wider text-muted-foreground">
               {vendor}
