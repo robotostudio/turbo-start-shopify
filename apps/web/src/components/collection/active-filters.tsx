@@ -37,14 +37,14 @@ export function ActiveFilters() {
       {active.map((filter) => (
         <Badge
           key={filter.key}
-          variant="outline"
+          variant={filter.invalid ? "destructive" : "outline"}
           className="flex items-center gap-1 rounded-none px-3 py-1 text-sm"
         >
           {filter.label}
           <button
             type="button"
             onClick={() => handleRemove(filter.paramKey, filter.paramValue)}
-            className="ml-1 hover:text-destructive"
+            className={`ml-1 ${filter.invalid ? "hover:text-white/70" : "hover:text-destructive"}`}
           >
             <X className="size-3" />
             <span className="sr-only">Remove {filter.label} filter</span>

@@ -44,10 +44,12 @@ export function parseFilterParams(
   // Price range
   const priceMin = get("filter.price.min");
   const priceMax = get("filter.price.max");
-  if (priceMin || priceMax) {
+  const parsedMin = priceMin ? Number(priceMin) : NaN;
+  const parsedMax = priceMax ? Number(priceMax) : NaN;
+  if (!Number.isNaN(parsedMin) || !Number.isNaN(parsedMax)) {
     const price: Record<string, number> = {};
-    if (priceMin) price.min = Number(priceMin);
-    if (priceMax) price.max = Number(priceMax);
+    if (!Number.isNaN(parsedMin)) price.min = parsedMin;
+    if (!Number.isNaN(parsedMax)) price.max = parsedMax;
     filters.push({ price });
   }
 
@@ -84,14 +86,25 @@ export type ActiveFilter = {
   label: string;
   paramKey: string;
   paramValue: string;
+  invalid?: boolean;
 };
 
 function buildFilterLabel(key: string, value: string): string {
   if (key === "filter.available")
     return value === "true" ? "In Stock" : "Out of Stock";
-  if (key === "filter.price.min") return `Min: ${value}`;
-  if (key === "filter.price.max") return `Max: ${value}`;
+  if (key === "filter.price.min" || key === "filter.price.max") {
+    const prefix = key === "filter.price.min" ? "Min" : "Max";
+    if (Number.isNaN(Number(value))) return `${prefix}: invalid`;
+    return `${prefix}: ${value}`;
+  }
   return value;
+}
+
+function isInvalidFilter(key: string, value: string): boolean {
+  if (key === "filter.price.min" || key === "filter.price.max") {
+    return Number.isNaN(Number(value));
+  }
+  return false;
 }
 
 function buildFilterKey(key: string, value: string): string {
@@ -110,6 +123,7 @@ export function getActiveFilters(sp: URLSearchParams): ActiveFilter[] {
       label: buildFilterLabel(key, value),
       paramKey: key,
       paramValue: value,
+      invalid: isInvalidFilter(key, value),
     });
   }
 

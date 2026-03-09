@@ -103,7 +103,7 @@ export default async function CollectionPage({
 
   const shopifyCollection = shopifyResult.data.collection;
   const products = shopifyCollection.products.edges.map((e) => e.node);
-  const availableFilters = shopifyCollection.products.filters;
+  const availableFilters = shopifyCollection.products.filters ?? [];
 
   // Build a stable key that includes filters so components re-mount on filter change
   const filterKey = JSON.stringify(filters);
