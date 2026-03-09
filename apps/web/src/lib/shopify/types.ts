@@ -62,6 +62,9 @@ export type ShopifyCollectionProduct = {
     minVariantPrice: MoneyV2;
     maxVariantPrice: MoneyV2;
   };
+  compareAtPriceRange?: {
+    minVariantPrice: MoneyV2;
+  };
   variants: Connection<
     Pick<ShopifyVariant, "id" | "availableForSale" | "quantityAvailable">
   >;
