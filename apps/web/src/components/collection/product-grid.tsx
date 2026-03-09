@@ -63,12 +63,12 @@ export function ProductGrid({ products }: ProductGridProps) {
                 </span>
               )}
               {stockStatus === "low" && (
-                <span className="absolute bottom-2 left-2 z-10 bg-amber-600 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
+                <span className="absolute bottom-2 right-2 z-10 bg-amber-600 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
                   Low Stock
                 </span>
               )}
               {stockStatus === "out" && (
-                <span className="absolute bottom-2 left-2 z-10 bg-zinc-800 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
+                <span className="absolute bottom-2 right-2 z-10 bg-zinc-800 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
                   Sold Out
                 </span>
               )}
