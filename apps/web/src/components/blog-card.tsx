@@ -82,9 +82,9 @@ export function FeaturedBlogCard({ blog }: BlogCardProps) {
 export function BlogCard({ blog }: BlogCardProps) {
   if (!blog) {
     return (
-      <div className="grid w-full grid-cols-1 gap-4">
-        <div className="h-48 animate-pulse  bg-muted" />
-        <div className="space-y-2">
+      <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="aspect-video animate-pulse bg-muted" />
+        <div className="flex flex-col justify-center space-y-3">
           <div className="h-4 w-24 animate-pulse rounded bg-muted" />
           <div className="h-6 w-full animate-pulse rounded bg-muted" />
           <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
@@ -97,7 +97,7 @@ export function BlogCard({ blog }: BlogCardProps) {
 
   return (
     <Link
-      className="group grid w-full grid-cols-2 gap-4"
+      className="group grid w-full grid-cols-1 gap-8 lg:grid-cols-2"
       href={slug ?? "#"}
     >
       {image?.id && (
@@ -118,7 +118,7 @@ export function BlogCard({ blog }: BlogCardProps) {
             {formatDate(publishedAt)}
           </time>
         )}
-        <h3 className="font-semibold text-lg leading-6 ">
+        <h3 className="font-semibold text-lg leading-6">
           {title}
         </h3>
         <p className="line-clamp-2 text-muted-foreground text-sm leading-6">

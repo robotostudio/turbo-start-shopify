@@ -97,11 +97,11 @@ function LoadingState() {
         <div className="mb-2 h-6 w-48 animate-pulse rounded bg-muted" />
         <div className="h-4 w-32 animate-pulse rounded bg-muted" />
       </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8">
         {LOADING_SKELETONS.map((id) => (
-          <div className="space-y-4" key={id}>
-            <div className="aspect-video animate-pulse rounded-2xl bg-muted" />
-            <div className="space-y-2">
+          <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2" key={id}>
+            <div className="aspect-video animate-pulse bg-muted" />
+            <div className="flex flex-col justify-center space-y-3">
               <div className="h-4 w-24 animate-pulse rounded bg-muted" />
               <div className="h-6 w-full animate-pulse rounded bg-muted" />
               <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />

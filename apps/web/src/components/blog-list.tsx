@@ -9,19 +9,19 @@ export type BlogListProps = {
 export function BlogList({ blogs, isLoading = false }: BlogListProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 gap-8">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <article
-            className="grid w-full grid-cols-1 gap-4"
+      <div className="grid grid-cols-1 gap-8">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div
+            className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2"
             key={`skeleton-${index.toString()}`}
           >
-            <div className="h-48 animate-pulse bg-muted" />
-            <div className="space-y-2">
+            <div className="aspect-video animate-pulse bg-muted" />
+            <div className="flex flex-col justify-center space-y-3">
               <div className="h-4 w-24 animate-pulse rounded bg-muted" />
               <div className="h-6 w-full animate-pulse rounded bg-muted" />
               <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
             </div>
-          </article>
+          </div>
         ))}
       </div>
     );

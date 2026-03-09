@@ -15,7 +15,7 @@ const components: Partial<PortableTextReactComponents> = {
       const slug = parseChildrenToSlug(value.children);
       return (
         <h2
-          className="scroll-m-24 mt-12 mb-4 border-b border-border pb-2 font-semibold text-2xl tracking-tight first:mt-0"
+          className="scroll-m-20 border-b pb-2 font-semibold text-3xl first:mt-0"
           id={slug}
         >
           {children}
@@ -25,10 +25,7 @@ const components: Partial<PortableTextReactComponents> = {
     h3: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
-        <h3
-          className="scroll-m-24 mt-8 mb-3 font-semibold text-xl tracking-tight"
-          id={slug}
-        >
+        <h3 className="scroll-m-20 font-semibold text-2xl" id={slug}>
           {children}
         </h3>
       );
@@ -36,10 +33,7 @@ const components: Partial<PortableTextReactComponents> = {
     h4: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
-        <h4
-          className="scroll-m-24 mt-6 mb-2 font-semibold text-lg tracking-tight"
-          id={slug}
-        >
+        <h4 className="scroll-m-20 font-semibold text-xl" id={slug}>
           {children}
         </h4>
       );
@@ -47,7 +41,7 @@ const components: Partial<PortableTextReactComponents> = {
     h5: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
-        <h5 className="scroll-m-24 mt-4 mb-2 font-semibold text-base" id={slug}>
+        <h5 className="scroll-m-20 font-semibold text-lg" id={slug}>
           {children}
         </h5>
       );
@@ -55,57 +49,22 @@ const components: Partial<PortableTextReactComponents> = {
     h6: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
-        <h6
-          className="scroll-m-24 mt-4 mb-2 font-semibold text-sm uppercase tracking-wide text-muted-foreground"
-          id={slug}
-        >
+        <h6 className="scroll-m-20 font-semibold text-base" id={slug}>
           {children}
         </h6>
       );
     },
-    blockquote: ({ children }) => (
-      <blockquote className="my-6 border-l-4 border-primary/40 pl-5 italic text-muted-foreground leading-relaxed">
-        {children}
-      </blockquote>
-    ),
-    normal: ({ children }) => (
-      <p className="leading-7 text-foreground/90 [&:not(:first-child)]:mt-5">
-        {children}
-      </p>
-    ),
-  },
-  list: {
-    bullet: ({ children }) => (
-      <ul className="my-5 ml-6 list-disc space-y-2 text-foreground/90 marker:text-muted-foreground">
-        {children}
-      </ul>
-    ),
-    number: ({ children }) => (
-      <ol className="my-5 ml-6 list-decimal space-y-2 text-foreground/90">
-        {children}
-      </ol>
-    ),
-  },
-  listItem: {
-    bullet: ({ children }) => <li className="leading-7">{children}</li>,
-    number: ({ children }) => <li className="leading-7">{children}</li>,
   },
   marks: {
-    strong: ({ children }) => (
-      <strong className="font-semibold text-foreground">{children}</strong>
-    ),
-    em: ({ children }) => (
-      <em className="italic text-foreground/80">{children}</em>
-    ),
     code: ({ children }) => (
-      <code className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-sm font-mono text-foreground lg:whitespace-nowrap">
+      <code className="rounded-md border border-white/10 bg-opacity-5 p-1 text-sm lg:whitespace-nowrap">
         {children}
       </code>
     ),
     customLink: ({ children, value }) => {
       if (!value.href || value.href === "#") {
         return (
-          <span className="underline decoration-dotted underline-offset-4 text-muted-foreground">
+          <span className="underline decoration-dotted underline-offset-2">
             Link Broken
           </span>
         );
@@ -113,7 +72,7 @@ const components: Partial<PortableTextReactComponents> = {
       return (
         <Link
           aria-label={`Link to ${value?.href}`}
-          className="font-medium text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary transition-colors"
+          className="underline decoration-dotted underline-offset-2"
           href={value.href}
           prefetch={false}
           target={value.openInNewTab ? "_blank" : "_self"}
@@ -126,7 +85,7 @@ const components: Partial<PortableTextReactComponents> = {
       if (!value?.href) return <span>{children}</span>;
       return (
         <Link
-          className="font-medium text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary transition-colors"
+          className="underline decoration-dotted underline-offset-2"
           href={value.href}
           prefetch={false}
         >
@@ -138,7 +97,7 @@ const components: Partial<PortableTextReactComponents> = {
       if (!value?.href) return <span>{children}</span>;
       return (
         <Link
-          className="font-medium text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary transition-colors"
+          className="underline decoration-dotted underline-offset-2"
           href={value.href}
           prefetch={false}
           target={value.openInNewTab ? "_blank" : "_self"}
@@ -152,7 +111,7 @@ const components: Partial<PortableTextReactComponents> = {
       if (!value?.href) return <span>{children}</span>;
       return (
         <a
-          className="font-medium text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary transition-colors"
+          className="underline decoration-dotted underline-offset-2"
           href={value.href}
         >
           {children}
@@ -162,17 +121,19 @@ const components: Partial<PortableTextReactComponents> = {
   },
   types: {
     image: ({ value }) => {
-      if (!value?.id) return null;
+      if (!value?.id) {
+        return null;
+      }
       return (
-        <figure className="my-8">
+        <figure className="my-4">
           <SanityImage
-            className="h-auto w-full rounded-lg shadow-sm"
+            className="h-auto w-full rounded-lg"
             height={900}
             image={value}
             width={1600}
           />
           {value?.caption && (
-            <figcaption className="mt-3 text-center text-sm text-muted-foreground leading-snug">
+            <figcaption className="mt-2 text-center text-sm text-zinc-500 dark:text-zinc-400">
               {value.caption}
             </figcaption>
           )}
@@ -190,10 +151,17 @@ export function RichText<T extends SanityRichTextProps>({
   richText?: T | null;
   className?: string;
 }) {
-  if (!richText) return null;
+  if (!richText) {
+    return null;
+  }
 
   return (
-    <div className={cn("", className)}>
+    <div
+      className={cn(
+        "prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-m-24 prose-h2:border-b prose-h2:pb-2 prose-h2:font-semibold prose-h2:text-3xl prose-headings:text-opacity-90 prose-ol:text-opacity-80 prose-p:text-opacity-80 prose-ul:text-opacity-80 prose-a:decoration-dotted prose-h2:first:mt-0",
+        className
+      )}
+    >
       <PortableText
         components={components}
         onMissingComponent={(_, { nodeType, type }) => {
