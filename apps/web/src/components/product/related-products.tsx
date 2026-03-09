@@ -1,26 +1,64 @@
-import { sanityFetch } from "@workspace/sanity/live";
-import { queryRelatedProducts } from "@workspace/sanity/query";
-import type { QueryRelatedProductsResult } from "@workspace/sanity/types";
+import { storefrontQuery } from "@/lib/shopify/client";
+import type { MoneyV2, ShopifyImage } from "@/lib/shopify/types";
 
 import { ProductCard } from "./product-card";
 
-type RelatedProductsProps = {
-  productType: string | null;
-  handle: string;
+const RELATED_PRODUCTS_QUERY = /* graphql */ `
+  query RelatedProducts($productId: ID!) {
+    productRecommendations(productId: $productId) {
+      id
+      handle
+      title
+      vendor
+      featuredImage {
+        url
+        altText
+        width
+        height
+      }
+      priceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+        maxVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+    }
+  }
+`;
+
+type RelatedProductsResponse = {
+  productRecommendations: Array<{
+    id: string;
+    handle: string;
+    title: string;
+    vendor: string;
+    featuredImage: ShopifyImage | null;
+    priceRange: {
+      minVariantPrice: MoneyV2;
+      maxVariantPrice: MoneyV2;
+    };
+  }>;
 };
 
-export async function RelatedProducts({
-  productType,
-  handle,
-}: RelatedProductsProps) {
-  if (!productType) return null;
+type RelatedProductsProps = {
+  productId: string;
+};
 
-  const { data: products } = await sanityFetch({
-    query: queryRelatedProducts,
-    params: { productType, handle },
-  });
+export async function RelatedProducts({ productId }: RelatedProductsProps) {
+  const result = await storefrontQuery<RelatedProductsResponse>(
+    RELATED_PRODUCTS_QUERY,
+    { variables: { productId } },
+  );
 
-  if (!products || products.length === 0) return null;
+  if (!result.ok) return null;
+
+  const products = result.data.productRecommendations.slice(0, 4);
+
+  if (products.length === 0) return null;
 
   return (
     <section className="mt-16">
@@ -28,24 +66,17 @@ export async function RelatedProducts({
         Related Products
       </h2>
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-        {(products as QueryRelatedProductsResult).map((product) => (
+        {products.map((product) => (
           <ProductCard
-            imageUrl={
-              product.store?.previewImageUrl ??
-              product.store?.variantPreviewImageUrl ??
-              null
-            }
-            key={product._id}
+            imageUrl={product.featuredImage?.url ?? null}
+            key={product.id}
             priceRange={{
-              minVariantPrice: product.store?.priceRange?.minVariantPrice ?? 0,
-              maxVariantPrice:
-                product.store?.priceRange?.maxVariantPrice ??
-                product.store?.priceRange?.minVariantPrice ??
-                0,
+              minVariantPrice: Number(product.priceRange.minVariantPrice.amount),
+              maxVariantPrice: Number(product.priceRange.maxVariantPrice.amount),
             }}
-            slug={product.slug ?? ""}
-            title={product.store?.title ?? "Untitled"}
-            vendor={product.store?.vendor}
+            slug={product.handle}
+            title={product.title}
+            vendor={product.vendor}
           />
         ))}
       </div>

@@ -607,20 +607,6 @@ export const queryProductPaths = defineQuery(`
   *[_type == "product" && defined(store.slug.current) && store.status == "active"].store.slug.current
 `);
 
-export const queryRelatedProducts = defineQuery(`
-  *[_type == "product" && store.productType == $productType && store.slug.current != $handle && store.status == "active"][0...4]{
-    _id,
-    "slug": store.slug.current,
-    store{
-      title,
-      priceRange,
-      previewImageUrl,
-      vendor,
-      "variantPreviewImageUrl": variants[0]->store.previewImageUrl
-    }
-  }
-`);
-
 // ── Collection fragments ──
 
 const collectionModulesFragment = /* groq */ `
