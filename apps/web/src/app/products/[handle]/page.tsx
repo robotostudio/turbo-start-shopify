@@ -155,14 +155,24 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   const shopifyProduct = shopifyResult.data.product;
   const variants = shopifyProduct.variants.edges.map((e) => e.node);
   const images = shopifyProduct.images.edges.map((e) => e.node);
+  const defaultVariant = variants[0];
   const selectableOptions = shopifyProduct.options.filter(
     (o) => o.values.length > 1
   );
+  const resolvedSelections: Record<string, string> = {};
+  for (const o of shopifyProduct.options) {
+    const fromUrl = sp[o.name];
+    const fallback =
+      defaultVariant?.selectedOptions.find((so) => so.name === o.name)?.value ??
+      "";
+    resolvedSelections[o.name] = fromUrl ?? fallback;
+  }
   const allOptionsSelected = selectableOptions.every((o) => {
-    const value = sp[o.name];
+    const value = resolvedSelections[o.name];
     return value !== undefined && o.values.includes(value);
   });
-  const selectedVariant = findVariantByOptions(variants, sp) ?? variants[0];
+  const selectedVariant =
+    findVariantByOptions(variants, resolvedSelections) ?? defaultVariant;
   if (!selectedVariant) {
     notFound();
   }
