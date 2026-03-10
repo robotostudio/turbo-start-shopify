@@ -1,6 +1,7 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 
 import { CollectionPagination } from "@/components/collection/collection-pagination";
 import { ProductGrid } from "@/components/collection/product-grid";
@@ -31,15 +32,31 @@ export function CollectionProducts({
   reverse,
   sort,
 }: CollectionProductsProps) {
+  const searchParams = useSearchParams();
+
+  // Extract filter params to include in query key and API calls
+  const filterEntries: [string, string][] = [];
+  for (const [key, value] of searchParams.entries()) {
+    if (key.startsWith("filter.")) {
+      filterEntries.push([key, value]);
+    }
+  }
+  const filterKey = JSON.stringify(filterEntries);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery<CollectionPage>({
-      queryKey: ["collection-products", handle, sort, reverse],
+      queryKey: ["collection-products", handle, sort, reverse, filterKey],
       queryFn: async ({ pageParam }) => {
         const params = new URLSearchParams({
           sort,
           reverse: String(reverse),
         });
         if (pageParam) params.set("after", pageParam as string);
+
+        // Forward filter params to the API route
+        for (const [key, value] of filterEntries) {
+          params.append(key, value);
+        }
 
         const res = await fetch(
           `/api/collections/${handle}/products?${params.toString()}`

@@ -22,7 +22,7 @@ export function CollectionPagination({
         disabled={isLoading}
         onClick={onLoadMore}
         size="lg"
-        variant="outline"
+        className="rounded-none border border-foreground bg-transparent px-6 py-2.5 text-sm text-foreground tracking-wider transition-colors hover:bg-foreground hover:text-background focus-visible:ring-0"
       >
         {isLoading ? (
           <>

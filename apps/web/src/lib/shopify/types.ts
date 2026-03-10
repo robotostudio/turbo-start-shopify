@@ -70,13 +70,29 @@ export type ShopifyCollectionProduct = {
   >;
 };
 
+export type ShopifyFilterValue = {
+  id: string;
+  label: string;
+  count: number;
+  input: string;
+};
+
+export type ShopifyFilter = {
+  id: string;
+  label: string;
+  type: string;
+  values: ShopifyFilterValue[];
+};
+
 export type ShopifyCollection = {
   id: string;
   handle: string;
   title: string;
   description: string;
   image: ShopifyImage | null;
-  products: Connection<ShopifyCollectionProduct>;
+  products: Connection<ShopifyCollectionProduct> & {
+    filters: ShopifyFilter[];
+  };
 };
 
 export type CartLine = {

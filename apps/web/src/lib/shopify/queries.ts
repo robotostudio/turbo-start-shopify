@@ -88,6 +88,7 @@ export const COLLECTION_QUERY = /* graphql */ `
     $after: String
     $sortKey: ProductCollectionSortKeys
     $reverse: Boolean
+    $filters: [ProductFilter!]
   ) {
     collection(handle: $handle) {
       id
@@ -105,7 +106,19 @@ export const COLLECTION_QUERY = /* graphql */ `
         after: $after
         sortKey: $sortKey
         reverse: $reverse
+        filters: $filters
       ) {
+        filters {
+          id
+          label
+          type
+          values {
+            id
+            label
+            count
+            input
+          }
+        }
         edges {
           node {
             id
