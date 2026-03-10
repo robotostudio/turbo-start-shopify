@@ -4,17 +4,17 @@ import {
   queryProductByHandle,
   queryProductPaths,
 } from "@workspace/sanity/query";
+import sanitizeHtml from "sanitize-html";
 import { notFound } from "next/navigation";
 
 import { AddToCart } from "@/components/product/add-to-cart";
-import { SavedItemButton } from "@/components/saved-items/saved-item-button";
 import { PriceDisplay } from "@/components/product/price-display";
 import { ProductBody } from "@/components/product/product-body";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductJsonLd } from "@/components/product/product-json-ld";
 import { RelatedProducts } from "@/components/product/related-products";
 import { VariantSelector } from "@/components/product/variant-selector";
-import DOMPurify from "isomorphic-dompurify";
+import { SavedItemButton } from "@/components/saved-items/saved-item-button";
 import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
 import { PRODUCT_QUERY } from "@/lib/shopify/queries";
@@ -156,7 +156,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   const variants = shopifyProduct.variants.edges.map((e) => e.node);
   const images = shopifyProduct.images.edges.map((e) => e.node);
   const selectableOptions = shopifyProduct.options.filter(
-    (o) => o.values.length > 1,
+    (o) => o.values.length > 1
   );
   const allOptionsSelected = selectableOptions.every((o) => {
     const value = sp[o.name];
@@ -174,7 +174,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   return (
     <>
       <ProductJsonLd handle={handle} product={shopifyProduct} />
-      <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
+      <div className="mx-auto container px-4 py-8 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
           <ProductImage
             images={images}
@@ -235,7 +235,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
                 <div
                   className="prose prose-sm dark:prose-invert text-muted-foreground leading-relaxed"
                   dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(descriptionHtml),
+                    __html: sanitizeHtml(descriptionHtml),
                   }}
                 />
               </div>
