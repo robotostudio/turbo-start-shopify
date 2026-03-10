@@ -11,6 +11,7 @@ import {
   CART_LINES_UPDATE_MUTATION,
   CART_QUERY,
 } from "@/lib/shopify/mutations";
+import { VARIANT_INVENTORY_QUERY } from "@/lib/shopify/queries";
 import type { Cart, CartLineInput } from "@/lib/shopify/types";
 
 const logger = new Logger("CartActions");
@@ -112,6 +113,38 @@ export async function removeCartLine(lineId: string): Promise<CartResult> {
   }
 
   return { ok: true, cart: result.data.cartLinesRemove.cart };
+}
+
+type InventoryResult =
+  | { ok: true; availableForSale: boolean; quantityAvailable: number | null }
+  | { ok: false; error: string };
+
+export async function checkVariantInventory(
+  variantId: string,
+): Promise<InventoryResult> {
+  const result = await storefrontQuery<{
+    node: {
+      id: string;
+      availableForSale: boolean;
+      quantityAvailable: number | null;
+    } | null;
+  }>(VARIANT_INVENTORY_QUERY, { variables: { id: variantId } });
+
+  if (!result.ok) {
+    logger.error(`Failed to check inventory: ${result.error}`);
+    return { ok: false, error: result.error };
+  }
+
+  const node = result.data.node;
+  if (!node) {
+    return { ok: false, error: "Variant not found" };
+  }
+
+  return {
+    ok: true,
+    availableForSale: node.availableForSale,
+    quantityAvailable: node.quantityAvailable,
+  };
 }
 
 export async function getCart(): Promise<Cart | null> {

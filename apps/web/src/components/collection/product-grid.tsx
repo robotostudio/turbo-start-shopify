@@ -3,7 +3,25 @@ import Link from "next/link";
 
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
 import { formatMoney } from "@/lib/shopify/money";
-import type { ShopifyCollectionProduct } from "@/lib/shopify/types";
+import {
+  LOW_STOCK_THRESHOLD,
+  type ShopifyCollectionProduct,
+} from "@/lib/shopify/types";
+
+type StockStatus = "low" | "out" | null;
+
+function getStockStatus(product: ShopifyCollectionProduct): StockStatus {
+  const variant = product.variants.edges[0]?.node;
+  if (!variant?.availableForSale) return "out";
+  if (
+    variant.quantityAvailable !== null &&
+    variant.quantityAvailable > 0 &&
+    variant.quantityAvailable <= LOW_STOCK_THRESHOLD
+  ) {
+    return "low";
+  }
+  return null;
+}
 
 type ProductGridProps = {
   products: ShopifyCollectionProduct[];
@@ -31,6 +49,7 @@ export function ProductGrid({ products }: ProductGridProps) {
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
       {products.map((product) => {
+        const stockStatus = getStockStatus(product);
         const salePercentage = getSalePercentage(product);
         return (
           <div className="group relative" key={product.id}>
@@ -42,6 +61,16 @@ export function ProductGrid({ products }: ProductGridProps) {
                 {salePercentage && (
                   <span className="absolute top-2 left-2 z-10 bg-red-600 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
                     Save {salePercentage}%
+                  </span>
+                )}
+                {stockStatus === "low" && (
+                  <span className="absolute bottom-2 right-2 z-10 bg-amber-600 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
+                    Low Stock
+                  </span>
+                )}
+                {stockStatus === "out" && (
+                  <span className="absolute bottom-2 right-2 z-10 bg-zinc-800 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
+                    Sold Out
                   </span>
                 )}
                 {product.featuredImage ? (

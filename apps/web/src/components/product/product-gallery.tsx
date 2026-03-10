@@ -26,12 +26,12 @@ const MAX_ZOOM = 400;
 function ZoomLayer({
   image,
   isZoomed,
-  zoomPos,
+  zoomRef,
   containerRef,
 }: {
   image: ShopifyImage;
   isZoomed: boolean;
-  zoomPos: { x: number; y: number };
+  zoomRef: React.RefObject<HTMLDivElement | null>;
   containerRef: React.RefObject<HTMLButtonElement | null>;
 }) {
   const containerWidth = containerRef.current?.offsetWidth ?? 0;
@@ -46,6 +46,7 @@ function ZoomLayer({
 
   return (
     <div
+      ref={zoomRef}
       className={cn(
         "absolute inset-0 aspect-3/4 transition-opacity duration-200",
         isZoomed ? "opacity-100" : "pointer-events-none opacity-0"
@@ -53,7 +54,7 @@ function ZoomLayer({
       style={{
         backgroundImage: `url(${image.url})`,
         backgroundSize: `${zoomPct}%`,
-        backgroundPosition: `${zoomPos.x}% ${zoomPos.y}%`,
+        backgroundPosition: "50% 50%",
         backgroundRepeat: "no-repeat",
       }}
     />
@@ -70,8 +71,9 @@ export function ProductGallery({
 
   // Zoom state
   const [isZoomed, setIsZoomed] = useState(false);
-  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
   const zoomContainerRef = useRef<HTMLButtonElement>(null);
+  const zoomLayerRef = useRef<HTMLDivElement>(null);
+  const rafId = useRef(0);
 
   const scrollTo = useCallback(
     (index: number) => {
@@ -122,10 +124,18 @@ export function ProductGallery({
 
   const handleZoomMove = (e: ReactMouseEvent<HTMLButtonElement>) => {
     if (!zoomContainerRef.current) return;
-    const rect = zoomContainerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setZoomPos({ x, y });
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    cancelAnimationFrame(rafId.current);
+    rafId.current = requestAnimationFrame(() => {
+      const container = zoomContainerRef.current;
+      const layer = zoomLayerRef.current;
+      if (!container || !layer) return;
+      const rect = container.getBoundingClientRect();
+      const x = ((clientX - rect.left) / rect.width) * 100;
+      const y = ((clientY - rect.top) / rect.height) * 100;
+      layer.style.backgroundPosition = `${x}% ${y}%`;
+    });
   };
 
   const currentImage = images[selectedIndex];
@@ -193,7 +203,7 @@ export function ProductGallery({
           <ZoomLayer
             image={currentImage}
             isZoomed={isZoomed}
-            zoomPos={zoomPos}
+            zoomRef={zoomLayerRef}
             containerRef={zoomContainerRef}
           />
         )}

@@ -72,7 +72,7 @@ function SavedProductCard({ product }: { product: ShopifyCollectionProduct }) {
             await addLine(firstVariant.id, 1);
             openCart();
           }}
-          size="sm"
+          size="lg"
           variant="outline"
         >
           <ShoppingBag className="mr-2 size-4" />
@@ -96,8 +96,17 @@ export default function SavedPage() {
     return (
       <div className="container mx-auto px-4 py-16">
         <h1 className="mb-8 font-semibold text-3xl">Saved Items</h1>
-        <div className="flex items-center justify-center py-16">
-          <div className="size-8 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+          {Array.from({ length: count }).map((_, i) => (
+            <div className="space-y-3" key={`skeleton-${i.toString()}`}>
+              <div className="aspect-3/4 animate-pulse bg-muted" />
+              <div className="space-y-2">
+                <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+                <div className="h-3 w-1/3 animate-pulse rounded bg-muted" />
+                <div className="h-4 w-1/4 animate-pulse rounded bg-muted" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );

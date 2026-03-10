@@ -1,3 +1,5 @@
+export const LOW_STOCK_THRESHOLD = 5;
+
 export type MoneyV2 = {
   amount: string;
   currencyCode: string;
@@ -63,7 +65,9 @@ export type ShopifyCollectionProduct = {
   compareAtPriceRange?: {
     minVariantPrice: MoneyV2;
   };
-  variants: Connection<Pick<ShopifyVariant, "id" | "availableForSale">>;
+  variants: Connection<
+    Pick<ShopifyVariant, "id" | "availableForSale" | "quantityAvailable">
+  >;
 };
 
 export type ShopifyCollection = {
