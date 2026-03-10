@@ -72,7 +72,7 @@ function SavedProductCard({ product }: { product: ShopifyCollectionProduct }) {
             await addLine(firstVariant.id, 1);
             openCart();
           }}
-          size="sm"
+          size="lg"
           variant="outline"
         >
           <ShoppingBag className="mr-2 size-4" />
