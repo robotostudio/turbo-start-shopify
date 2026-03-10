@@ -54,7 +54,7 @@ export function MobileMenu({ navbarData, settingsData }: NavigationData) {
             <>
               <SheetTitle className="sr-only">{siteTitle || "Menu"}</SheetTitle>
               <div className="[&_img]:w-auto [&_img]:h-6 [&_img]:rounded-none">
-                <Logo alt={siteTitle || ""} image={logo} />
+                <Logo text={siteTitle} />
               </div>
             </>
           ) : (

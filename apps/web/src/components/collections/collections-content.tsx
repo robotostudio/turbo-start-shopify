@@ -30,7 +30,9 @@ function CollectionsGrid({
     <div className="container mx-auto  px-4 py-12">
       <div className="mb-8 flex items-center md:items-end justify-between gap-4">
         <div className="w-6/12 md:max-w-2xl">
-          <h2 className="font-semibold font-(family-name:--font-geist-pixel-square) text-3xl">{title}</h2>
+          <h2 className="font-semibold font-(family-name:--font-geist-pixel-square) text-3xl">
+            {title}
+          </h2>
           {subtitle ? (
             <p className="mt-2 max-w-2xl text-muted-foreground">{subtitle}</p>
           ) : null}

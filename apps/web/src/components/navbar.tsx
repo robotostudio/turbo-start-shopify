@@ -10,11 +10,10 @@ import type { ColumnLink, NavColumn, NavigationData } from "@/types";
 import { CartDrawer } from "./cart/cart-drawer";
 import { CartToggle } from "./cart/cart-toggle";
 import { MenuLink } from "./elements/menu-link";
-import { SanityButtons } from "./elements/sanity-buttons";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
-import { ModeToggle } from "./mode-toggle";
 import { CollectionGroupDropdown } from "./nav/collection-group-dropdown";
+import { SavedItemsToggle } from "./saved-items/saved-items-toggle";
 
 // Fetcher function
 const fetcher = async (url: string): Promise<NavigationData> => {
@@ -157,7 +156,7 @@ export function Navbar({
     settingsData: initialSettingsData,
   };
   const { navbarData, settingsData } = navigationData;
-  const { columns, buttons } = navbarData || {};
+  const { columns } = navbarData || {};
   const { logo, siteTitle } = settingsData || {};
 
   // Show skeleton only on initial mount when no fallback data is available
@@ -201,14 +200,7 @@ export function Navbar({
 
           {/* Logo */}
           <div className="flex h-10 items-center">
-            <Logo
-              alt={siteTitle || ""}
-              height={40}
-              image={logo}
-              priority
-              text={siteTitle}
-              width={120}
-            />
+            <Logo text={siteTitle} />
           </div>
 
           {/* Desktop Actions */}
@@ -220,6 +212,7 @@ export function Navbar({
             >
               <Search className="size-4" />
             </Link>
+            <SavedItemsToggle />
             <CartToggle />
             {/* <SanityButtons
               buttonClassName="rounded-lg"
@@ -237,6 +230,7 @@ export function Navbar({
             >
               <Search className="size-4" />
             </Link>
+            <SavedItemsToggle />
             <CartToggle />
             <MobileMenu navbarData={navbarData} settingsData={settingsData} />
           </div>

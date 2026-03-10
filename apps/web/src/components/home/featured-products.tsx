@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { SavedItemButton } from "@/components/saved-items/saved-item-button";
 import { storefrontQuery } from "@/lib/shopify/client";
 import { formatMoney } from "@/lib/shopify/money";
 import { FEATURED_PRODUCTS_QUERY } from "@/lib/shopify/queries";
@@ -24,34 +25,40 @@ async function getFeaturedProducts(): Promise<FeaturedProduct[]> {
 
 function ProductCard({ product }: { product: FeaturedProduct }) {
   return (
-    <Link className="group block" href={`/products/${product.handle}`}>
-      <div className="relative aspect-3/4 overflow-hidden  bg-background">
-        {product.featuredImage ? (
-          <Image
-            alt={product.featuredImage.altText ?? product.title}
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            fill
-            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-            src={product.featuredImage.url}
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-neutral-400 text-sm">
-            No image
-          </div>
-        )}
-      </div>
-      <div className="mt-4 space-y-1">
-        <h3 className="font-normal text-sm tracking-wide">{product.title}</h3>
-        {product.vendor && (
-          <p className="text-neutral-500 text-xs tracking-wider uppercase">
-            {product.vendor}
+    <div className="group relative">
+      <Link className="block" href={`/products/${product.handle}`}>
+        <div className="relative aspect-3/4 overflow-hidden bg-background">
+          {product.featuredImage ? (
+            <Image
+              alt={product.featuredImage.altText ?? product.title}
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              fill
+              sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+              src={product.featuredImage.url}
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center text-neutral-400 text-sm">
+              No image
+            </div>
+          )}
+        </div>
+        <div className="mt-4 space-y-1">
+          <h3 className="font-normal text-sm tracking-wide">{product.title}</h3>
+          {product.vendor && (
+            <p className="text-neutral-500 text-xs tracking-wider uppercase">
+              {product.vendor}
+            </p>
+          )}
+          <p className="text-sm">
+            {formatMoney(product.priceRange.minVariantPrice)}
           </p>
-        )}
-        <p className="text-sm">
-          {formatMoney(product.priceRange.minVariantPrice)}
-        </p>
-      </div>
-    </Link>
+        </div>
+      </Link>
+      <SavedItemButton
+        className="absolute top-2 right-2 z-10 transition-opacity md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:focus-visible:pointer-events-auto md:focus-visible:opacity-100 md:data-[saved=true]:pointer-events-auto md:data-[saved=true]:opacity-100"
+        handle={product.handle}
+      />
+    </div>
   );
 }
 
