@@ -57,7 +57,7 @@ const components: Partial<PortableTextReactComponents> = {
   },
   marks: {
     code: ({ children }) => (
-      <code className="rounded-md border border-white/10 bg-opacity-5 p-1 text-sm lg:whitespace-nowrap">
+      <code className="border border-white/10 bg-opacity-5 p-1 text-sm lg:whitespace-nowrap">
         {children}
       </code>
     ),
@@ -127,7 +127,7 @@ const components: Partial<PortableTextReactComponents> = {
       return (
         <figure className="my-4">
           <SanityImage
-            className="h-auto w-full rounded-lg"
+            className="h-auto w-full "
             height={900}
             image={value}
             width={1600}
