@@ -222,7 +222,7 @@ function PriceSection({
             min={0}
             value={min}
             onChange={(e) => setMin(e.target.value)}
-            className="h-8 rounded-none text-sm"
+            className="h-8 rounded-none text-sm [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]"
           />
           <span className="text-muted-foreground text-sm">–</span>
           <Input
@@ -231,7 +231,7 @@ function PriceSection({
             min={0}
             value={max}
             onChange={(e) => setMax(e.target.value)}
-            className="h-8 rounded-none text-sm"
+            className="h-8 rounded-none text-sm [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]"
           />
         </div>
         <Button
