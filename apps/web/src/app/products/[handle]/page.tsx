@@ -14,6 +14,7 @@ import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductJsonLd } from "@/components/product/product-json-ld";
 import { RelatedProducts } from "@/components/product/related-products";
 import { VariantSelector } from "@/components/product/variant-selector";
+import DOMPurify from "isomorphic-dompurify";
 import { getSEOMetadata } from "@/lib/seo";
 import { storefrontQuery } from "@/lib/shopify/client";
 import { PRODUCT_QUERY } from "@/lib/shopify/queries";
@@ -233,7 +234,9 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
               <div className="space-y-2">
                 <div
                   className="prose prose-sm dark:prose-invert text-muted-foreground leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(descriptionHtml),
+                  }}
                 />
               </div>
             )}

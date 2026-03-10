@@ -170,11 +170,11 @@ export function PageBuilder({
   }
 
   return (
-    <div
-      className=" my-16 flex flex-col gap-16"
+    <main
+      className="my-16 flex flex-col gap-16"
       data-sanity={containerDataAttribute}
     >
       {blocks.map(renderBlock)}
-    </div>
+    </main>
   );
 }
