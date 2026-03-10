@@ -3,7 +3,7 @@
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
 import {
@@ -14,21 +14,22 @@ import {
 
 export function ActiveFilters() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const active = getActiveFilters(searchParams);
 
   const handleRemove = useCallback(
     (paramKey: string, paramValue: string) => {
       const qs = removeFilterParam(searchParams, paramKey, paramValue);
-      router.push(qs ? `?${qs}` : window.location.pathname);
+      router.push(qs ? `?${qs}` : pathname);
     },
-    [router, searchParams]
+    [router, pathname, searchParams]
   );
 
   const handleClearAll = useCallback(() => {
     const qs = clearAllFilters(searchParams);
-    router.push(qs ? `?${qs}` : window.location.pathname);
-  }, [router, searchParams]);
+    router.push(qs ? `?${qs}` : pathname);
+  }, [router, pathname, searchParams]);
 
   if (active.length === 0) return null;
 

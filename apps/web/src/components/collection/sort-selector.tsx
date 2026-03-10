@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
 import { ArrowUpDown, X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
 const SORT_OPTIONS = [
@@ -31,6 +31,7 @@ export function SortSelector({
   currentReverse,
 }: SortSelectorProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const isDefault =
@@ -58,8 +59,8 @@ export function SortSelector({
     params.delete("reverse");
     params.delete("after");
     const qs = params.toString();
-    router.push(qs ? `?${qs}` : window.location.pathname);
-  }, [router, searchParams]);
+    router.push(qs ? `?${qs}` : pathname);
+  }, [router, pathname, searchParams]);
 
   return (
     <div className="flex items-center gap-2">

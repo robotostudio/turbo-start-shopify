@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "catalog:",
     "next-themes": "catalog:",
+    "radix-ui": "^1.4.3",
     "react": "catalog:",
     "react-dom": "catalog:",
     "tailwind-merge": "^3.4.0",

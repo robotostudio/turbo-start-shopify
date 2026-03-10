@@ -7,8 +7,14 @@ import {
   AccordionTrigger,
 } from "@workspace/ui/components/accordion";
 import { Button } from "@workspace/ui/components/button";
+import { Checkbox } from "@workspace/ui/components/checkbox";
 import { Input } from "@workspace/ui/components/input";
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  type ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useCallback, useState } from "react";
 
 import type { ShopifyFilter } from "@/lib/shopify/types";
@@ -19,6 +25,7 @@ type FilterPanelProps = {
 
 export function FilterPanel({ filters }: FilterPanelProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const updateParam = useCallback(
@@ -38,9 +45,9 @@ export function FilterPanel({ filters }: FilterPanelProps) {
       }
 
       const qs = params.toString();
-      router.push(qs ? `?${qs}` : window.location.pathname);
+      router.push(qs ? `?${qs}` : pathname);
     },
-    [router, searchParams]
+    [router, pathname, searchParams]
   );
 
   const setParam = useCallback(
@@ -55,9 +62,9 @@ export function FilterPanel({ filters }: FilterPanelProps) {
       }
 
       const qs = params.toString();
-      router.push(qs ? `?${qs}` : window.location.pathname);
+      router.push(qs ? `?${qs}` : pathname);
     },
-    [router, searchParams]
+    [router, pathname, searchParams]
   );
 
   // Find specific filter sections from Shopify's response
@@ -110,7 +117,7 @@ export function FilterPanel({ filters }: FilterPanelProps) {
                 params.delete("filter.price.max");
               }
               const qs = params.toString();
-              router.push(qs ? `?${qs}` : window.location.pathname);
+              router.push(qs ? `?${qs}` : pathname);
             }}
           />
         )}
@@ -158,7 +165,7 @@ function AvailabilitySection({
   onToggle,
 }: {
   filter: ShopifyFilter;
-  searchParams: URLSearchParams;
+  searchParams: ReadonlyURLSearchParams;
   onToggle: (checked: boolean) => void;
 }) {
   const isChecked = searchParams.get("filter.available") === "true";
@@ -175,12 +182,12 @@ function AvailabilitySection({
     <AccordionItem value="availability">
       <AccordionTrigger className="hover:no-underline">Availability</AccordionTrigger>
       <AccordionContent>
-        <label className="flex cursor-pointer items-center gap-3">
-          <input
-            type="checkbox"
+        <label htmlFor="filter-available" className="flex cursor-pointer items-center gap-3">
+          <Checkbox
+            id="filter-available"
             checked={isChecked}
-            onChange={(e) => onToggle(e.target.checked)}
-            className="size-4 accent-foreground"
+            onCheckedChange={(checked) => onToggle(checked === true)}
+            className="size-4 rounded-none"
           />
           <span className="text-sm">In Stock</span>
           {inStockValue && (
@@ -198,7 +205,7 @@ function PriceSection({
   searchParams,
   onApply,
 }: {
-  searchParams: URLSearchParams;
+  searchParams: ReadonlyURLSearchParams;
   onApply: (min: string, max: string) => void;
 }) {
   const [min, setMin] = useState(searchParams.get("filter.price.min") ?? "");
@@ -251,7 +258,7 @@ function CheckboxSection({
   label: string;
   filterValues: ShopifyFilter["values"];
   paramKey: string;
-  searchParams: URLSearchParams;
+  searchParams: ReadonlyURLSearchParams;
   onToggle: (key: string, value: string, add: boolean) => void;
 }) {
   const activeValues = new Set(searchParams.getAll(paramKey));
@@ -275,18 +282,21 @@ function CheckboxSection({
 
             const isChecked = activeValues.has(filterLabel);
 
+            const checkboxId = `filter-${paramKey}-${fv.id}`;
+
             return (
               <label
                 key={fv.id}
+                htmlFor={checkboxId}
                 className="flex cursor-pointer items-center gap-3"
               >
-                <input
-                  type="checkbox"
+                <Checkbox
+                  id={checkboxId}
                   checked={isChecked}
-                  onChange={(e) =>
-                    onToggle(paramKey, filterLabel, e.target.checked)
+                  onCheckedChange={(checked) =>
+                    onToggle(paramKey, filterLabel, checked === true)
                   }
-                  className="size-4 accent-foreground"
+                  className="size-4 rounded-none"
                 />
                 <span className="text-sm">{fv.label}</span>
                 <span className="text-muted-foreground text-xs">
