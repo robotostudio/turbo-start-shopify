@@ -23,7 +23,7 @@
     "@biomejs/biome": "2.3.8",
     "@workspace/typescript-config": "workspace:*",
     "tsx": "^4.19.3",
-    "turbo": "^2.7.5",
+    "turbo": "^2.8.15",
     "typescript": "catalog:",
     "ultracite": "5.6.2"
   },
