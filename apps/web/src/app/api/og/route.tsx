@@ -7,8 +7,10 @@ import { getTitleCase } from "@/utils";
 import { getOgMetaData } from "./og-config";
 import {
   getBlogPageOGData,
+  getCollectionOGData,
   getGenericPageOGData,
   getHomePageOGData,
+  getProductOGData,
   getSlugPageOGData,
 } from "./og-data";
 
@@ -110,7 +112,11 @@ const dominantColorSeoImageRender = ({
       <h1 tw="text-5xl font-bold leading-tight max-w-[90%] text-white">
         {title}
       </h1>
-      {description && <p tw="text-lg text-white">{description}</p>}
+      {description && (
+        <p tw="text-lg text-white">
+          {description.replace(/<[^>]*>/g, "")}
+        </p>
+      )}
       {_type && (
         <div
           tw={`bg-white text-[${
@@ -253,6 +259,34 @@ const getBlogPageContent = async ({ id }: ContentProps) => {
   return dominantColorSeoImageRender(result);
 };
 
+const getProductContent = async ({ id }: ContentProps) => {
+  if (!id) {
+    return;
+  }
+  const [result, err] = await getProductOGData(id);
+  if (err || !result) {
+    return;
+  }
+  if (result?.seoImage) {
+    return seoImageRender({ seoImage: result.seoImage });
+  }
+  return dominantColorSeoImageRender(result);
+};
+
+const getCollectionContent = async ({ id }: ContentProps) => {
+  if (!id) {
+    return;
+  }
+  const [result, err] = await getCollectionOGData(id);
+  if (err || !result) {
+    return;
+  }
+  if (result?.seoImage) {
+    return seoImageRender({ seoImage: result.seoImage });
+  }
+  return dominantColorSeoImageRender(result);
+};
+
 const getGenericPageContent = async ({ id }: ContentProps) => {
   if (!id) {
     return;
@@ -271,6 +305,8 @@ const block = {
   homePage: getHomePageContent,
   page: getSlugPageContent,
   blog: getBlogPageContent,
+  product: getProductContent,
+  collection: getCollectionContent,
 } as const;
 
 export async function GET({ url }: Request): Promise<ImageResponse> {

@@ -1,8 +1,10 @@
 import { client } from "@workspace/sanity/client";
 import {
   queryBlogPageOGData,
+  queryCollectionOGData,
   queryGenericPageOGData,
   queryHomePageOGData,
+  queryProductOGData,
   querySlugPageOGData,
 } from "@workspace/sanity/query";
 
@@ -22,4 +24,12 @@ export async function getBlogPageOGData(id: string) {
 
 export async function getGenericPageOGData(id: string) {
   return await handleErrors(client.fetch(queryGenericPageOGData, { id }));
+}
+
+export async function getProductOGData(id: string) {
+  return await handleErrors(client.fetch(queryProductOGData, { id }));
+}
+
+export async function getCollectionOGData(id: string) {
+  return await handleErrors(client.fetch(queryCollectionOGData, { id }));
 }

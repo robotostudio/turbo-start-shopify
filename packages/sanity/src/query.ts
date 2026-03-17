@@ -361,6 +361,56 @@ export const queryGenericPageOGData = defineQuery(`
   }
 `);
 
+export const queryProductOGData = defineQuery(`
+  *[_type == "product" && _id == $id][0]{
+    _id,
+    _type,
+    "title": select(
+      defined(seo.title) => seo.title,
+      store.title
+    ),
+    "description": select(
+      defined(seo.description) => seo.description,
+      store.descriptionHtml
+    ),
+    "image": select(
+      defined(seo.image.asset) => seo.image.asset->url + "?w=566&h=566&dpr=2&fit=max",
+      defined(store.previewImageUrl) => store.previewImageUrl
+    ),
+    "dominantColor": seo.image.asset->metadata.palette.dominant.background,
+    "seoImage": seo.image.asset->url + "?w=1200&h=630&dpr=2&fit=max",
+    "logo": *[_type == "settings"][0].logo.asset->url + "?w=80&h=40&dpr=3&fit=max&q=100",
+    "date": coalesce(store.createdAt, _createdAt)
+  }
+`);
+
+export const queryCollectionOGData = defineQuery(`
+  *[_type == "collection" && _id == $id][0]{
+    _id,
+    _type,
+    "title": select(
+      defined(seo.title) => seo.title,
+      store.title
+    ),
+    "description": select(
+      defined(seo.description) => seo.description,
+      store.descriptionHtml
+    ),
+    "image": select(
+      defined(seo.image.asset) => seo.image.asset->url + "?w=566&h=566&dpr=2&fit=max",
+      defined(hero.image.asset) => hero.image.asset->url + "?w=566&h=566&dpr=2&fit=max",
+      defined(store.imageUrl) => store.imageUrl
+    ),
+    "dominantColor": coalesce(
+      seo.image.asset->metadata.palette.dominant.background,
+      hero.image.asset->metadata.palette.dominant.background
+    ),
+    "seoImage": seo.image.asset->url + "?w=1200&h=630&dpr=2&fit=max",
+    "logo": *[_type == "settings"][0].logo.asset->url + "?w=80&h=40&dpr=3&fit=max&q=100",
+    "date": coalesce(store.createdAt, _createdAt)
+  }
+`);
+
 export const queryPromoBannerData = defineQuery(`
   *[_type == "promoBanner" && _id == "promoBanner"][0]{
     _id,
