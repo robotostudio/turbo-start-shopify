@@ -39,5 +39,9 @@ npm-debug.log*
 *.pem
 .env*.local
 
+# Playwright
+test-results/
+playwright-report/
+
 # Claude
 .claude/settings.local.json

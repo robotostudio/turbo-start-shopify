@@ -7,6 +7,7 @@ import {
 import type { QueryCollectionByHandleResult } from "@workspace/sanity/types";
 import { notFound } from "next/navigation";
 
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ActiveFilters } from "@/components/collection/active-filters";
 import {
   CollectionLayout,
@@ -110,6 +111,15 @@ export default async function CollectionPage({
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Breadcrumbs
+        items={[
+          { label: "Collections", href: "/collections" },
+          {
+            label: shopifyCollection.title,
+            href: `/collections/${handle}`,
+          },
+        ]}
+      />
       <div className="mb-8">
         <h1 className="font-normal font-(family-name:--font-geist-pixel-square) text-3xl md:text-4xl">
           {shopifyCollection.title}

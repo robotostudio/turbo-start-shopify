@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { QuickAddButton } from "@/components/product/quick-add-button";
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
 
 type ProductCardProps = {
@@ -10,6 +11,9 @@ type ProductCardProps = {
   imageUrl: string | null;
   vendor?: string | null;
   mini?: boolean;
+  variantId?: string;
+  availableForSale?: boolean;
+  hasMultipleVariants?: boolean;
 };
 
 export function ProductCard({
@@ -19,6 +23,9 @@ export function ProductCard({
   imageUrl,
   vendor,
   mini,
+  variantId,
+  availableForSale,
+  hasMultipleVariants,
 }: ProductCardProps) {
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -73,6 +80,14 @@ export function ProductCard({
               No image
             </div>
           )}
+          <div className="absolute inset-x-0 bottom-0 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+            <QuickAddButton
+              availableForSale={availableForSale}
+              hasMultipleVariants={hasMultipleVariants}
+              slug={slug}
+              variantId={variantId}
+            />
+          </div>
         </div>
         <div className="space-y-1">
           <h3 className="font-normal text-sm leading-tight">{title}</h3>

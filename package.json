@@ -14,7 +14,10 @@
     "format:check": "turbo run format:check",
     "check-types": "turbo run check-types",
     "seed:shopify": "pnpm --filter studio seed:shopify",
-    "verify:shopify": "pnpm --filter studio verify:shopify"
+    "verify:shopify": "pnpm --filter studio verify:shopify",
+    "analyze": "pnpm --filter web analyze",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "setup": "tsx scripts/setup.ts"
   },
   "dependencies": {
     "@workspace/env": "workspace:*"

@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
 
+import { Toaster } from "@workspace/ui/components/sonner";
 import { CartProvider } from "./cart/cart-context";
 import { SavedItemsProvider } from "./saved-items/saved-items-context";
 
@@ -22,6 +23,7 @@ export function Providers({ children }: PropsWithChildren) {
             enableSystem
           >
             {children}
+            <Toaster />
           </NextThemesProvider>
         </SavedItemsProvider>
       </CartProvider>

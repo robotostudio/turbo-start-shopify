@@ -1,5 +1,6 @@
 import { Badge } from "@workspace/ui/components/badge";
 
+import { FadeIn } from "@/components/motion";
 import type { PagebuilderType } from "@/types";
 import { RichText } from "../elements/rich-text";
 import { SanityButtons } from "../elements/sanity-buttons";
@@ -10,7 +11,7 @@ export function CTABlock({ richText, title, eyebrow, buttons }: CTABlockProps) {
   return (
     <section className="my-6 md:my-16" id="features">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="bg-muted px-4 py-16">
+        <FadeIn className="bg-muted px-4 py-16">
           <div className="mx-auto max-w-3xl space-y-8 text-center">
             {eyebrow && (
               <Badge
@@ -34,7 +35,7 @@ export function CTABlock({ richText, title, eyebrow, buttons }: CTABlockProps) {
               />
             </div>
           </div>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );

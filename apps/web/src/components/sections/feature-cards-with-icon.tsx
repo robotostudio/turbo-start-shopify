@@ -1,5 +1,6 @@
 import { Badge } from "@workspace/ui/components/badge";
 
+import { StaggerGrid, StaggerItem } from "@/components/motion";
 import type { PagebuilderType } from "@/types";
 import { RichText } from "../elements/rich-text";
 import { SanityIcon } from "../elements/sanity-icon";
@@ -48,14 +49,13 @@ export function FeatureCardsWithIcon({
             />
           </div>
         </div>
-        <div className="mx-auto mt-20 grid gap-8 lg:grid-cols-3">
+        <StaggerGrid className="mx-auto mt-20 grid gap-8 lg:grid-cols-3">
           {cards?.map((card, index) => (
-            <FeatureCard
-              card={card}
-              key={`FeatureCard-${card?._key}-${index}`}
-            />
+            <StaggerItem key={`FeatureCard-${card?._key}-${index}`}>
+              <FeatureCard card={card} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGrid>
       </div>
     </section>
   );

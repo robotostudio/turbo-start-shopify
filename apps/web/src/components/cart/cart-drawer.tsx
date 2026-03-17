@@ -9,6 +9,7 @@ import {
   SheetTitle,
 } from "@workspace/ui/components/sheet";
 import { ShoppingBag } from "lucide-react";
+import Link from "next/link";
 
 import { useCart } from "./cart-context";
 import { CartLineItem } from "./cart-line-item";
@@ -30,8 +31,8 @@ export function CartDrawer() {
           <div className="flex flex-1 flex-col items-center justify-center gap-4">
             <ShoppingBag className="size-12 text-muted-foreground" />
             <p className="text-muted-foreground">Your cart is empty</p>
-            <Button onClick={closeCart} variant="outline">
-              Continue Shopping
+            <Button asChild onClick={closeCart} variant="outline">
+              <Link href="/collections">Continue Shopping</Link>
             </Button>
           </div>
         ) : (
