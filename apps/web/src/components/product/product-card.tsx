@@ -2,11 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
+import { formatMoney } from "@/lib/shopify/money";
 
 type ProductCardProps = {
   slug: string;
   title: string;
   priceRange: { minVariantPrice: number; maxVariantPrice: number };
+  currencyCode?: string;
   imageUrl: string | null;
   vendor?: string | null;
   mini?: boolean;
@@ -16,14 +18,20 @@ export function ProductCard({
   slug,
   title,
   priceRange,
+  currencyCode,
   imageUrl,
   vendor,
   mini,
 }: ProductCardProps) {
-  const formattedPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(priceRange.minVariantPrice);
+  const code = currencyCode ?? "GBP";
+  const formattedPrice = formatMoney({
+    amount: String(priceRange.minVariantPrice),
+    currencyCode: code,
+  });
+  const formattedMaxPrice = formatMoney({
+    amount: String(priceRange.maxVariantPrice),
+    currencyCode: code,
+  });
 
   const showRange = priceRange.minVariantPrice !== priceRange.maxVariantPrice;
 
@@ -49,7 +57,10 @@ export function ProductCard({
         <div className="min-w-0">
           <p className="truncate font-medium text-sm">{title}</p>
           <p className="text-muted-foreground text-xs">
-            {showRange ? `From ${formattedPrice}` : formattedPrice}
+            {formattedPrice}
+            {showRange && (
+              <span className="ml-1 line-through">{formattedMaxPrice}</span>
+            )}
           </p>
         </div>
       </Link>
@@ -82,7 +93,12 @@ export function ProductCard({
             </p>
           )}
           <p className="font-normal text-sm">
-            {showRange ? `From ${formattedPrice}` : formattedPrice}
+            {formattedPrice}
+            {showRange && (
+              <span className="ml-1 text-muted-foreground line-through">
+                {formattedMaxPrice}
+              </span>
+            )}
           </p>
         </div>
       </Link>
