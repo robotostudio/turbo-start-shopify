@@ -19,7 +19,10 @@ export function CartToggle() {
     >
       <Handbag className="size-5" />
       {quantity > 0 && (
-        <span className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-medium">
+        <span
+          key={quantity}
+          className="absolute -top-1.5 -right-1.5 flex size-4.5 items-center justify-center bg-foreground text-[10px] text-background font-medium animate-[cartBadgePop_0.3s_ease-out]"
+        >
           {quantity > 99 ? "99+" : quantity}
         </span>
       )}

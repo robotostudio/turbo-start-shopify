@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Lint, Type Check & Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ci-placeholder
+      NEXT_PUBLIC_SANITY_DATASET: production
+      NEXT_PUBLIC_SANITY_API_VERSION: "2025-08-29"
+      NEXT_PUBLIC_SANITY_STUDIO_URL: http://localhost:3333
+      SANITY_API_READ_TOKEN: ci-placeholder
+      SANITY_API_WRITE_TOKEN: ci-placeholder
+      SHOPIFY_STORE_DOMAIN: ci-placeholder.myshopify.com
+      SHOPIFY_STOREFRONT_ACCESS_TOKEN: ci-placeholder
+      SHOPIFY_API_VERSION: "2025-01"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Restore Turborepo cache
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type check
+        run: pnpm check-types
+
+      - name: Build web
+        run: pnpm build:web
+        env:
+          TURBO_CACHE_DIR: .turbo

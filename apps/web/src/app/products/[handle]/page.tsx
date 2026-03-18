@@ -7,6 +7,7 @@ import {
 import sanitizeHtml from "sanitize-html";
 import { notFound } from "next/navigation";
 
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AddToCart } from "@/components/product/add-to-cart";
 import { PriceDisplay } from "@/components/product/price-display";
 import { ProductBody } from "@/components/product/product-body";
@@ -185,6 +186,12 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
     <>
       <ProductJsonLd handle={handle} product={shopifyProduct} />
       <div className="mx-auto container px-4 py-8 lg:px-8">
+        <Breadcrumbs
+          items={[
+            { label: "Products", href: "/collections" },
+            { label: title, href: `/products/${handle}` },
+          ]}
+        />
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
           <ProductImage
             images={images}

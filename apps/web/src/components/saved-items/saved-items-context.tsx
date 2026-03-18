@@ -8,6 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { toast } from "sonner";
 
 const STORAGE_KEY = "saved-items";
 
@@ -61,13 +62,16 @@ export function SavedItemsProvider({
     }
   }, [items, isHydrated]);
 
-  const toggle = useCallback((handle: string) => {
-    setItems((prev) =>
-      prev.includes(handle)
-        ? prev.filter((h) => h !== handle)
-        : [...prev, handle]
-    );
-  }, []);
+  const toggle = useCallback(
+    (handle: string) => {
+      const removing = items.includes(handle);
+      setItems((prev) =>
+        removing ? prev.filter((h) => h !== handle) : [...prev, handle]
+      );
+      toast(removing ? "Item removed from saved" : "Item saved");
+    },
+    [items]
+  );
 
   const remove = useCallback((handle: string) => {
     setItems((prev) => prev.filter((h) => h !== handle));

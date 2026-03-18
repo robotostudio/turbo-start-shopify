@@ -10,6 +10,8 @@ import {
   useTransition,
 } from "react";
 
+import { toast } from "sonner";
+
 import {
   addToCart,
   getCart,
@@ -53,6 +55,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const result = await addToCart([{ merchandiseId: variantId, quantity }]);
       if (result.ok) {
         setCart(result.cart);
+        setIsCartOpen(true);
+        toast.success("Added to cart");
+      } else {
+        toast.error("Failed to add item");
       }
     });
   }, []);
@@ -62,6 +68,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const result = await updateCartLine(lineId, quantity);
       if (result.ok) {
         setCart(result.cart);
+        toast.success("Cart updated");
+      } else {
+        toast.error("Failed to update cart");
       }
     });
   }, []);
@@ -71,6 +80,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const result = await removeCartLine(lineId);
       if (result.ok) {
         setCart(result.cart);
+        toast.success("Item removed");
+      } else {
+        toast.error("Failed to remove item");
       }
     });
   }, []);

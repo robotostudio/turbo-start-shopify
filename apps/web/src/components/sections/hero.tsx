@@ -1,5 +1,6 @@
 import { Badge } from "@workspace/ui/components/badge";
 
+import { FadeIn } from "@/components/motion";
 import type {
   SanityButtonProps,
   SanityImageProps,
@@ -29,7 +30,7 @@ export function HeroBlock({
   return (
     <section className="mt-4 md:my-16" id="hero">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid items-center gap-8 lg:grid-cols-2">
+        <FadeIn className="grid items-center gap-8 lg:grid-cols-2">
           <div className="grid h-full grid-rows-[auto_1fr_auto] items-center justify-items-center gap-4 text-center lg:items-start lg:justify-items-start lg:text-left">
             <Badge variant="secondary">{badge}</Badge>
             <div className="grid gap-4">
@@ -60,7 +61,7 @@ export function HeroBlock({
               />
             </div>
           )}
-        </div>
+        </FadeIn>
       </div>
     </section>
   );

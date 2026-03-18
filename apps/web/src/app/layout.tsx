@@ -1,6 +1,8 @@
 import "@workspace/ui/globals.css";
 
 import { SanityLive } from "@workspace/sanity/live";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GeistMono } from "geist/font/mono";
 import { GeistPixelSquare } from "geist/font/pixel";
 import { GeistSans } from "geist/font/sans";
@@ -10,6 +12,7 @@ import { Suspense } from "react";
 import { preconnect, prefetchDNS } from "react-dom";
 
 import { FooterServer, FooterSkeleton } from "@/components/footer";
+import { GoogleTagManager } from "@/components/gtm";
 import { CombinedJsonLd } from "@/components/json-ld";
 import { Navbar } from "@/components/navbar";
 import { PreviewBar } from "@/components/preview-bar";
@@ -31,6 +34,7 @@ export default async function RootLayout({
   const nav = await getNavigationData();
   return (
     <html lang="en" suppressHydrationWarning>
+      <GoogleTagManager />
       <body
         className={`${fontSans.variable} ${fontMono.variable} ${fontPixel.variable} font-sans antialiased`}
       >
@@ -55,6 +59,8 @@ export default async function RootLayout({
             </>
           )}
         </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

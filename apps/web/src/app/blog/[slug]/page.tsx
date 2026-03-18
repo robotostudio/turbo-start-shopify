@@ -5,6 +5,7 @@ import { queryBlogPaths, queryBlogSlugPageData } from "@workspace/sanity/query";
 import { notFound } from "next/navigation";
 
 import { BlogAuthor } from "@/components/blog-card";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { RichText } from "@/components/elements/rich-text";
 import { SanityImage } from "@/components/elements/sanity-image";
 import { TableOfContent } from "@/components/elements/table-of-content";
@@ -83,6 +84,12 @@ export default async function BlogSlugPage({
   return (
     <div className="container mx-auto px-4 md:px-6 py-16 max-w-7xl">
       <ArticleJsonLd article={data} />
+      <Breadcrumbs
+        items={[
+          { label: "Blog", href: "/blog" },
+          { label: title ?? slug, href: `/blog/${slug}` },
+        ]}
+      />
 
       {/* Hero header — full width, centered */}
       <header className="mb-12 max-w-3xl mx-auto text-center">

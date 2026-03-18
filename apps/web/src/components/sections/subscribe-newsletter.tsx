@@ -2,6 +2,7 @@
 import { Button } from "@workspace/ui/components/button";
 import { LoaderCircle } from "lucide-react";
 import { useFormStatus } from "react-dom";
+import { toast } from "sonner";
 
 import type { PagebuilderType } from "@/types";
 import { RichText } from "../elements/rich-text";
@@ -71,7 +72,13 @@ export function SubscribeNewsletter({
               richText={subTitle}
             />
           )}
-          <form className="mb-4 max-w-md" onSubmit={(e) => e.preventDefault()}>
+          <form
+            className="mb-4 max-w-md"
+            onSubmit={(e) => {
+              e.preventDefault();
+              toast.success("Thanks for subscribing!");
+            }}
+          >
             <div className="flex items-stretch overflow-hidden bg-white dark:bg-white">
               <input
                 className="flex-1 rounded-none bg-transparent px-4 py-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 dark:text-zinc-900"

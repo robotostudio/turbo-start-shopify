@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { StaggerGrid, StaggerItem } from "@/components/motion";
+import { QuickAddButton } from "@/components/product/quick-add-button";
 import { SavedItemButton } from "@/components/saved-items/saved-item-button";
 import { formatMoney } from "@/lib/shopify/money";
 import {
@@ -47,12 +49,19 @@ export function ProductGrid({ products }: ProductGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+    <StaggerGrid className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
       {products.map((product) => {
         const stockStatus = getStockStatus(product);
         const salePercentage = getSalePercentage(product);
+        const firstVariant = product.variants.edges[0]?.node;
+        const variantId = firstVariant?.id;
+        const availableForSale = product.variants.edges.some(
+          (e) => e.node.availableForSale,
+        );
+        const hasMultipleVariants = product.variants.edges.length > 1;
         return (
-          <div className="group relative" key={product.id}>
+          <StaggerItem key={product.id}>
+            <div className="group relative">
             <Link
               className="block space-y-3"
               href={`/products/${product.handle}`}
@@ -68,11 +77,6 @@ export function ProductGrid({ products }: ProductGridProps) {
                     Low Stock
                   </span>
                 )}
-                {stockStatus === "out" && (
-                  <span className="absolute bottom-2 right-2 z-10 bg-zinc-800 px-1.5 py-0.5 text-xs font-semibold uppercase text-white">
-                    Sold Out
-                  </span>
-                )}
                 {product.featuredImage ? (
                   <Image
                     alt={product.featuredImage.altText ?? product.title}
@@ -86,6 +90,14 @@ export function ProductGrid({ products }: ProductGridProps) {
                     No image
                   </div>
                 )}
+                <div className="absolute inset-x-0 bottom-0 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+                  <QuickAddButton
+                    availableForSale={availableForSale}
+                    hasMultipleVariants={hasMultipleVariants}
+                    slug={product.handle}
+                    variantId={variantId}
+                  />
+                </div>
               </div>
               <div className="space-y-1">
                 <h3 className="font-normal text-sm leading-tight">
@@ -110,9 +122,10 @@ export function ProductGrid({ products }: ProductGridProps) {
               className="absolute top-2 right-2 z-10 transition-opacity md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100 md:focus-visible:pointer-events-auto md:focus-visible:opacity-100 md:data-[saved=true]:pointer-events-auto md:data-[saved=true]:opacity-100"
               handle={product.handle}
             />
-          </div>
+            </div>
+          </StaggerItem>
         );
       })}
-    </div>
+    </StaggerGrid>
   );
 }
