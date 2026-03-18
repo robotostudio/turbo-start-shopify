@@ -642,6 +642,7 @@ export const queryProductByHandle = defineQuery(`
     _id,
     _type,
     "slug": store.slug.current,
+    "title": store.title,
     colorTheme->{
       _id,
       title,
@@ -681,6 +682,7 @@ export const queryCollectionByHandle = defineQuery(`
   *[_type == "collection" && store.slug.current == $handle][0]{
     _id,
     _type,
+    "title": store.title,
     showHero,
     hero{
       ...,

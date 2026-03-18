@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: PageProps) {
   if (!collection) return {};
 
   return getSEOMetadata({
-    title: collection.seo?.title ?? "",
+    title: collection.seo?.title || collection.title || "",
     description: collection.seo?.description ?? "",
     slug: `/collections/${handle}`,
     contentId: collection._id,
