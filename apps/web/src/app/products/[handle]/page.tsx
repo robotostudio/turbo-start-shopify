@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: PageProps) {
   if (!product) return {};
 
   return getSEOMetadata({
-    title: product.seo?.title ?? "",
+    title: product.seo?.title || product.title || "",
     description: product.seo?.description ?? "",
     slug: `/products/${handle}`,
     contentId: product._id,
