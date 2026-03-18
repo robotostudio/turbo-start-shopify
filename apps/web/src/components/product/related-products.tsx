@@ -68,6 +68,7 @@ export async function RelatedProducts({ productId }: RelatedProductsProps) {
       <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
         {products.map((product) => (
           <ProductCard
+            currencyCode={product.priceRange.minVariantPrice.currencyCode}
             imageUrl={product.featuredImage?.url ?? null}
             key={product.id}
             priceRange={{
