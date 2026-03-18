@@ -642,6 +642,7 @@ export const queryProductByHandle = defineQuery(`
     _id,
     _type,
     "slug": store.slug.current,
+    "title": store.title,
     colorTheme->{
       _id,
       title,
