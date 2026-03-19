@@ -20,7 +20,7 @@ export function CTABlock({ richText, title, eyebrow, buttons }: CTABlockProps) {
                 {eyebrow}
               </Badge>
             )}
-            <h2 className="text-balance font-semibold text-3xl md:text-5xl">
+            <h2 className="text-balance font-semibold text-3xl md:text-5xl font-(family-name:--font-geist-pixel-square)">
               {title}
             </h2>
             <div className="text-lg text-muted-foreground">
