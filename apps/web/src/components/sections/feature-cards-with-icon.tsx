@@ -14,7 +14,7 @@ type FeatureCardProps = {
 function FeatureCard({ card, index }: FeatureCardProps) {
   const { icon, title, richText } = card ?? {};
   return (
-    <div className="group relative border border-border/60 p-8 transition-all duration-300 hover:border-foreground/20 md:p-10">
+    <div className="group relative border border-border/60 p-8 md:p-10">
       <span className="absolute top-6 right-8 font-mono text-muted-foreground text-xs tracking-widest md:right-10">
         {String(index + 1).padStart(2, "0")}
       </span>
@@ -44,7 +44,7 @@ export function FeatureCardsWithIcon({
     <section className="my-6 md:my-20" id="features">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-14 flex max-w-2xl flex-col items-start gap-4 md:mb-16">
-          <Badge variant="secondary">{eyebrow}</Badge>
+          {eyebrow && <Badge variant="secondary">{eyebrow}</Badge>}
           <h2 className="font-semibold text-3xl tracking-tight md:text-4xl font-(family-name:--font-geist-pixel-square)">
             {title}
           </h2>
