@@ -14,7 +14,7 @@ type FeatureCardProps = {
 function FeatureCard({ card, index }: FeatureCardProps) {
   const { icon, title, richText } = card ?? {};
   return (
-    <div className="group relative border border-border/60 p-8 md:p-10">
+    <div className="group relative border border-border/60 bg-border/60 p-8 md:p-10">
       <span className="absolute top-6 right-8 font-mono text-muted-foreground text-xs tracking-widest md:right-10">
         {String(index + 1).padStart(2, "0")}
       </span>
@@ -53,10 +53,11 @@ export function FeatureCardsWithIcon({
             richText={richText}
           />
         </div>
-        <div className="grid gap-px border border-border/60 bg-border/60 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid  border gap-1   border-border/60 sm:grid-cols-2 lg:grid-cols-3">
           {cards?.map((card, index) => (
             <FeatureCard
               card={card}
+
               index={index}
               key={`FeatureCard-${card?._key}-${index}`}
             />
