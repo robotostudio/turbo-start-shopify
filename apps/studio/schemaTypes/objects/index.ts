@@ -22,7 +22,6 @@ import { callToAction } from "./module/call-to-action";
 import { collectionReference } from "./module/collection-reference";
 import { gridItem } from "./module/grid-item";
 import { grid } from "./module/grid";
-import { hero } from "./module/hero";
 import { imageCallToAction } from "./module/image-call-to-action";
 import { imageFeatures } from "./module/image-features";
 import { imageFeature } from "./module/image-feature";
@@ -60,7 +59,6 @@ export const objects = [
   footer,
   gridItem,
   grid,
-  hero,
   imageCallToAction,
   imageFeatures,
   imageFeature,
