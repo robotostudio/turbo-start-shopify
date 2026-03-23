@@ -30,10 +30,10 @@ export function BlogAuthor({ author }: BlogAuthorProps) {
       {author.image && (
         <SanityImage
           alt={author.name ?? "Author"}
-          className="size-8 flex-none bg-muted"
-          height={40}
+          className="h-8 w-8 flex-none bg-muted object-cover"
+          height={32}
           image={author.image}
-          width={40}
+          width={32}
         />
       )}
       {author.name}
