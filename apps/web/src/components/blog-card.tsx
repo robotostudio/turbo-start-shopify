@@ -28,13 +28,15 @@ export function BlogAuthor({ author }: BlogAuthorProps) {
   return (
     <div className="flex items-center gap-x-2.5 font-semibold text-foreground text-sm/6">
       {author.image && (
-        <SanityImage
-          alt={author.name ?? "Author"}
-          className="h-8 w-8 flex-none bg-muted object-cover"
-          height={32}
-          image={author.image}
-          width={32}
-        />
+        <div className="size-6 flex-none overflow-hidden rounded-full bg-muted">
+          <SanityImage
+            alt={author.name ?? "Author"}
+            className="h-full w-full object-cover"
+            height={24}
+            image={author.image}
+            width={24}
+          />
+        </div>
       )}
       {author.name}
     </div>
