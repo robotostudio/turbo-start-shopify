@@ -25,7 +25,7 @@ A production-ready headless commerce starter built with Shopify, Sanity, and Nex
 
 ### Data Flow
 
-```
+```txt
 Shopify (products, collections, cart)
     ↕ Storefront API
 Next.js 16 (App Router, RSC)
@@ -35,7 +35,7 @@ Sanity CMS (pages, blog, navigation, SEO)
 
 ### Monorepo Structure
 
-```
+```txt
 apps/
   web/              → Next.js 16 frontend
   studio/           → Sanity Studio v5
@@ -122,49 +122,69 @@ Open [http://localhost:3000](http://localhost:3000) for the Next.js app and [htt
 
 ## Environment Variables Reference
 
-### Web App (`apps/web/.env`)
+### Web App (apps/web)
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Yes | Your Sanity project ID |
-| `NEXT_PUBLIC_SANITY_DATASET` | Yes | Sanity dataset name (e.g. `production`) |
-| `NEXT_PUBLIC_SANITY_API_VERSION` | Yes | API version date (default: `2025-08-29`) |
-| `NEXT_PUBLIC_SANITY_STUDIO_URL` | Yes | Studio URL (`http://localhost:3333` for dev) |
-| `SANITY_API_READ_TOKEN` | Yes | Sanity API token with read access |
-| `SANITY_API_WRITE_TOKEN` | Yes | Sanity API token with write access |
-| `SHOPIFY_STORE_DOMAIN` | Yes | Your Shopify store domain (e.g. `your-store.myshopify.com`) |
-| `SHOPIFY_STOREFRONT_ACCESS_TOKEN` | Yes | Shopify Storefront API public access token |
-| `SHOPIFY_API_VERSION` | No | Storefront API version (default: `2025-01`) |
+| Variable                          | Required | Description                                                            |
+| --------------------------------- | -------- | ---------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID`   | Yes      | Your Sanity project ID                                                 |
+| `NEXT_PUBLIC_SANITY_DATASET`      | Yes      | Sanity dataset name (e.g. `production`)                                |
+| `NEXT_PUBLIC_SANITY_API_VERSION`  | Yes      | API version date (default: `2025-08-29`)                               |
+| `NEXT_PUBLIC_SANITY_STUDIO_URL`   | Yes      | Studio URL (`http://localhost:3333` for dev)                           |
+| `SANITY_API_READ_TOKEN`           | Yes      | Sanity API token with read access (role: **Viewer**)                   |
+| `SANITY_API_WRITE_TOKEN`          | Yes      | Sanity API token with write access (role: **Editor** or **Developer**) |
+| `SHOPIFY_STORE_DOMAIN`            | Yes      | Your Shopify store domain (e.g. `your-store.myshopify.com`)            |
+| `SHOPIFY_STOREFRONT_ACCESS_TOKEN` | Yes      | Shopify Storefront API public access token                             |
+| `SHOPIFY_API_VERSION`             | No       | Storefront API version (default: `2025-01`)                            |
 
 ### Sanity Studio (`apps/studio/.env`)
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `SANITY_STUDIO_PROJECT_ID` | Yes | Same Sanity project ID as web |
-| `SANITY_STUDIO_DATASET` | Yes | Same dataset name as web |
-| `SANITY_STUDIO_TITLE` | Yes | Display title for the Studio |
-| `SANITY_STUDIO_PRESENTATION_URL` | Prod | Frontend URL for live preview (auto-detects `localhost:3000` in dev) |
-| `SANITY_STUDIO_PRODUCTION_HOSTNAME` | Deploy | Hostname for deployed Studio (e.g. `my-project` → `my-project.sanity.studio`) |
-| `SANITY_STUDIO_API_VERSION` | No | Sanity API version |
-| `SHOPIFY_STORE_DOMAIN` | Seeds | Your Shopify store domain (for seed scripts) |
-| `SHOPIFY_ADMIN_ACCESS_TOKEN` | Seeds | Shopify Admin API token (for seed scripts) |
+| Variable                            | Required | Description                                                                   |
+| ----------------------------------- | -------- | ----------------------------------------------------------------------------- |
+| `SANITY_STUDIO_PROJECT_ID`          | Yes      | Same Sanity project ID as web                                                 |
+| `SANITY_STUDIO_DATASET`             | Yes      | Same dataset name as web                                                      |
+| `SANITY_STUDIO_TITLE`               | Yes      | Display title for the Studio                                                  |
+| `SANITY_STUDIO_PRESENTATION_URL`    | Prod     | Frontend URL for live preview (auto-detects `localhost:3000` in dev)          |
+| `SANITY_STUDIO_PRODUCTION_HOSTNAME` | Deploy   | Hostname for deployed Studio (e.g. `my-project` → `my-project.sanity.studio`) |
+| `SANITY_STUDIO_API_VERSION`         | No       | Sanity API version                                                            |
+| `SHOPIFY_STORE_DOMAIN`              | Seeds    | Your Shopify store domain (for seed scripts)                                  |
+| `SHOPIFY_ADMIN_ACCESS_TOKEN`        | Seeds    | Shopify Admin API token (for seed scripts)                                    |
+
+### Creating Sanity API Tokens
+
+To create API tokens with the correct permissions:
+
+1. Go to **Sanity Manage** → Your Project → **Settings** → **API**
+2. For **`SANITY_API_READ_TOKEN`**:
+   - Click **+ Add API token**
+   - Give it a name (e.g., `web-read`)
+   - Select the **Viewer** role (read-only access to all datasets)
+   - Click **Save** and copy the token
+3. For **`SANITY_API_WRITE_TOKEN`**:
+   - Click **+ Add API token**
+   - Give it a name (e.g., `web-write`)
+   - Select the **Editor** or **Developer** role (read+write access):
+     - **Editor**: Recommended for most projects (read+write to all datasets, limited project settings access)
+     - **Developer**: If you need project settings access for developers
+   - Click **Save** and copy the token
+
+> **Security Tip:** The write token should only be used in server-side environments (backend/API routes). Never expose it to the client.
 
 ## Available Commands
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start all apps (web on :3000, studio on :3333) |
-| `pnpm dev:web` | Start Next.js only |
-| `pnpm dev:studio` | Start Sanity Studio only |
-| `pnpm build` | Build all apps |
-| `pnpm build:web` | Build Next.js only |
-| `pnpm build:studio` | Build Sanity Studio only |
-| `pnpm lint` | Lint with Biome |
-| `pnpm format` | Format with Biome |
-| `pnpm format:check` | Check formatting without writing |
-| `pnpm check-types` | TypeScript type checking across all packages |
-| `pnpm seed:shopify` | Seed Shopify with test products |
-| `pnpm verify:shopify` | Print Shopify store health report |
+| Command               | Description                                    |
+| --------------------- | ---------------------------------------------- |
+| `pnpm dev`            | Start all apps (web on :3000, studio on :3333) |
+| `pnpm dev:web`        | Start Next.js only                             |
+| `pnpm dev:studio`     | Start Sanity Studio only                       |
+| `pnpm build`          | Build all apps                                 |
+| `pnpm build:web`      | Build Next.js only                             |
+| `pnpm build:studio`   | Build Sanity Studio only                       |
+| `pnpm lint`           | Lint with Biome                                |
+| `pnpm format`         | Format with Biome                              |
+| `pnpm format:check`   | Check formatting without writing               |
+| `pnpm check-types`    | TypeScript type checking across all packages   |
+| `pnpm seed:shopify`   | Seed Shopify with test products                |
+| `pnpm verify:shopify` | Print Shopify store health report              |
 
 ## Deployment
 
@@ -173,7 +193,7 @@ Open [http://localhost:3000](http://localhost:3000) for the Next.js app and [htt
 1. Push your repo to GitHub
 2. Create a new [Vercel](https://vercel.com/) project and connect your repository
 3. Set the **Root Directory** to `apps/web`
-4. Add all required environment variables from the [web app table](#web-app-appsweb-env) above
+4. Add all required environment variables from the [Web App](#web-app-appsweb) section above
 5. Deploy
 
 ### Deploy Sanity Studio
@@ -182,13 +202,13 @@ Open [http://localhost:3000](http://localhost:3000) for the Next.js app and [htt
 
 Add these secrets to your GitHub repository settings:
 
-| Secret | Description |
-|--------|-------------|
-| `SANITY_DEPLOY_TOKEN` | Sanity deploy token |
-| `SANITY_STUDIO_PROJECT_ID` | Sanity project ID |
-| `SANITY_STUDIO_DATASET` | Dataset name |
-| `SANITY_STUDIO_TITLE` | Studio display title |
-| `SANITY_STUDIO_PRESENTATION_URL` | Your deployed frontend URL |
+| Secret                              | Description                                                      |
+| ----------------------------------- | ---------------------------------------------------------------- |
+| `SANITY_DEPLOY_TOKEN`               | Sanity deploy token                                              |
+| `SANITY_STUDIO_PROJECT_ID`          | Sanity project ID                                                |
+| `SANITY_STUDIO_DATASET`             | Dataset name                                                     |
+| `SANITY_STUDIO_TITLE`               | Studio display title                                             |
+| `SANITY_STUDIO_PRESENTATION_URL`    | Your deployed frontend URL                                       |
 | `SANITY_STUDIO_PRODUCTION_HOSTNAME` | Studio hostname (e.g. `my-project` → `my-project.sanity.studio`) |
 
 PR preview builds are created automatically — each PR gets its own Studio at `<branch-name>-<hostname>.sanity.studio`.
@@ -202,9 +222,74 @@ cd apps/studio
 npx sanity deploy
 ```
 
-### Shopify Configuration
+## Syncing Data with Sanity Connect
 
-Ensure your Storefront API custom app has the necessary access scopes for products, collections, and cart operations.
+[Sanity Connect for Shopify](https://www.sanity.io/docs/apis-and-sdks/sanity-connect-for-shopify) is a bidirectional integration that synchronizes product data between your Shopify store and Sanity content lake. This enables you to:
+
+- Automatically sync Shopify products and collections to Sanity
+- Use Sanity as your single source of truth for enhanced product content
+- Sync custom fields and Sanity content back to Shopify as metafields
+- Maintain separate drafts and published states
+
+### Installation
+
+1. Find [Sanity Connect on the Shopify App Store](https://apps.shopify.com/sanity-connect) and click **Add App**
+2. Select your store and approve the required permissions
+3. Log in with your Sanity account (or create one)
+4. Select your Sanity organization, project, and dataset
+5. Choose your sync configuration
+
+### Sync Options
+
+#### Direct Sync (Recommended)
+
+- Automatically syncs all products, variants, and collections as documents to your Sanity content lake
+- Runs automatically when you save products in Shopify
+- Updates are available in your Sanity dataset within seconds
+- Synced documents count toward your Sanity document limit
+
+#### Custom Sync
+
+- Send Shopify data to your custom endpoint (serverless function)
+- Transform and reshape data before storing
+- Reduce document usage by syncing only what you need (e.g., products without variants, or variants as objects)
+
+### Configuration
+
+In Sanity Connect settings, you can:
+
+1. **Choose sync timing:**
+   - **Automatic** — Sync whenever you save products in Shopify
+   - **Manual** — Trigger syncs manually from Sanity Connect settings
+
+2. **Sync collections** — Optionally sync collection data (note: product membership is not synced)
+
+3. **Bidirectional sync** — Enable syncing of custom Sanity fields back to Shopify as metafields and metaobjects
+
+### Best Practices
+
+- **Test first:** Use a non-production dataset to test before enabling on your main dataset
+- **Document limits:** Remember that synced documents count toward your Sanity usage limit
+- **Schema alignment:** This starter already includes Shopify schema types (`shopifyProduct`, `shopifyCollection`, etc.) in `apps/studio/schemaTypes/objects/`
+- **Asset CDN:** Consider using the [Shopify Assets plugin](https://github.com/sanity-io/sanity-plugin-shopify-assets) to serve images from Shopify's CDN
+
+### Querying Synced Data
+
+Once synced, query Shopify products in GROQ:
+
+```groq
+*[_type == "shopifyProduct"] {
+  _id,
+  title,
+  handle,
+  variants,
+  collections
+}
+```
+
+**Note:** The structure of `variants` and `collections` fields may vary depending on your Sanity Connect sync mode — Direct Sync provides full nested documents, while Custom Sync allows you to reshape these as arrays of objects or simplified shapes.
+
+For more information, see the [official Sanity Connect documentation](https://www.sanity.io/docs/apis-and-sdks/sanity-connect-for-shopify).
 
 ## Customization
 
@@ -240,33 +325,33 @@ pnpm verify:shopify                # Print store health report
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| **"Module not found" errors** | Run `pnpm install` from the project root. Check path aliases in `tsconfig.json`. |
-| **Sanity types out of date** | Run `pnpm --filter studio type` to regenerate. |
-| **Visual editing not working** | Enable third-party cookies in your browser. Verify `SANITY_STUDIO_PRESENTATION_URL` is set. |
-| **Shopify products not loading** | Verify `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_STOREFRONT_ACCESS_TOKEN` are correct. |
-| **Seed script fails** | Check that `SHOPIFY_ADMIN_ACCESS_TOKEN` has the required Admin API scopes. |
-| **Build fails on Vercel** | Ensure all env vars are set and the root directory is `apps/web`. |
-| **Draft mode / live preview issues** | Confirm `SANITY_API_READ_TOKEN` is set with correct permissions. |
-| **Tailwind styles not applying** | Ensure `@import "tailwindcss"` is in your CSS entry point. Check `@workspace/ui` transpile config. |
-| **Redirects not working** | Redirects are fetched from Sanity at build time. Redeploy after creating new redirects. |
+| Problem                              | Solution                                                                                           |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| **"Module not found" errors**        | Run `pnpm install` from the project root. Check path aliases in `tsconfig.json`.                   |
+| **Sanity types out of date**         | Run `pnpm --filter studio type` to regenerate.                                                     |
+| **Visual editing not working**       | Enable third-party cookies in your browser. Verify `SANITY_STUDIO_PRESENTATION_URL` is set.        |
+| **Shopify products not loading**     | Verify `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_STOREFRONT_ACCESS_TOKEN` are correct.                   |
+| **Seed script fails**                | Check that `SHOPIFY_ADMIN_ACCESS_TOKEN` has the required Admin API scopes.                         |
+| **Build fails on Vercel**            | Ensure all env vars are set and the root directory is `apps/web`.                                  |
+| **Draft mode / live preview issues** | Confirm `SANITY_API_READ_TOKEN` is set with correct permissions.                                   |
+| **Tailwind styles not applying**     | Ensure `@import "tailwindcss"` is in your CSS entry point. Check `@workspace/ui` transpile config. |
+| **Redirects not working**            | Redirects are fetched from Sanity at build time. Redeploy after creating new redirects.            |
 
 ## Tech Stack
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| [Next.js](https://nextjs.org/) | 16 | React framework (App Router, RSC, Turbopack) |
-| [React](https://react.dev/) | 19 | UI library |
-| [Sanity](https://www.sanity.io/) | 5 | Headless CMS with visual editing |
-| [Shopify Storefront API](https://shopify.dev/docs/api/storefront) | 2025-01 | Commerce engine |
-| [Turborepo](https://turbo.build/) | 2 | Monorepo build orchestration |
-| [Tailwind CSS](https://tailwindcss.com/) | 4 | Utility-first CSS framework |
-| [Shadcn UI](https://ui.shadcn.com/) | — | Accessible component primitives |
-| [Biome](https://biomejs.dev/) | 2 | Linter and formatter |
-| [TypeScript](https://www.typescriptlang.org/) | 5 | Type safety |
-| [Zod](https://zod.dev/) | 4 | Runtime env validation |
-| [pnpm](https://pnpm.io/) | 10 | Package manager |
+| Technology                                                        | Version | Purpose                                      |
+| ----------------------------------------------------------------- | ------- | -------------------------------------------- |
+| [Next.js](https://nextjs.org/)                                    | 16      | React framework (App Router, RSC, Turbopack) |
+| [React](https://react.dev/)                                       | 19      | UI library                                   |
+| [Sanity](https://www.sanity.io/)                                  | 5       | Headless CMS with visual editing             |
+| [Shopify Storefront API](https://shopify.dev/docs/api/storefront) | 2025-01 | Commerce engine                              |
+| [Turborepo](https://turbo.build/)                                 | 2       | Monorepo build orchestration                 |
+| [Tailwind CSS](https://tailwindcss.com/)                          | 4       | Utility-first CSS framework                  |
+| [Shadcn UI](https://ui.shadcn.com/)                               | —       | Accessible component primitives              |
+| [Biome](https://biomejs.dev/)                                     | 2       | Linter and formatter                         |
+| [TypeScript](https://www.typescriptlang.org/)                     | 5       | Type safety                                  |
+| [Zod](https://zod.dev/)                                           | 4       | Runtime env validation                       |
+| [pnpm](https://pnpm.io/)                                          | 10      | Package manager                              |
 
 ## Contributing
 
