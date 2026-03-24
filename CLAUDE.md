@@ -38,7 +38,7 @@ No test framework is configured.
 
 ## Architecture
 
-```
+```txt
 apps/
   web/          → Next.js 16 (App Router, Turbopack, React Compiler, RSC)
   studio/       → Sanity Studio v5 (custom structure, plugins, blueprints)
@@ -96,8 +96,10 @@ packages/
 ## Environment Variables
 
 **Web** (`apps/web/.env`):
+
 - `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_SANITY_API_VERSION`, `NEXT_PUBLIC_SANITY_STUDIO_URL`
 - `SANITY_API_READ_TOKEN`, `SANITY_API_WRITE_TOKEN`
 
 **Studio** (`apps/studio/.env`):
+
 - `SANITY_STUDIO_PROJECT_ID`, `SANITY_STUDIO_DATASET`, `SANITY_STUDIO_TITLE`, `SANITY_STUDIO_PRESENTATION_URL`
