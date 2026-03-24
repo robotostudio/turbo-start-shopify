@@ -287,6 +287,8 @@ Once synced, query Shopify products in GROQ:
 }
 ```
 
+**Note:** The structure of `variants` and `collections` fields may vary depending on your Sanity Connect sync mode — Direct Sync provides full nested documents, while Custom Sync allows you to reshape these as arrays of objects or simplified shapes.
+
 For more information, see the [official Sanity Connect documentation](https://www.sanity.io/docs/apis-and-sdks/sanity-connect-for-shopify).
 
 ## Customization
