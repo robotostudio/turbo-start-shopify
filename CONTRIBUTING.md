@@ -42,7 +42,7 @@ pnpm --filter studio type
 
 We use [Conventional Commits](https://www.conventionalcommits.org/):
 
-```
+```txt
 feat: add wishlist page
 fix: resolve cart quantity sync issue
 refactor: simplify product variant selection
@@ -62,6 +62,7 @@ Keep commit messages concise and focused on the "why" rather than the "what".
 2. **Keep PRs focused** — one feature or fix per PR. Smaller PRs get reviewed faster.
 
 3. **Before opening a PR**, make sure:
+
    ```bash
    pnpm format:check   # Formatting passes
    pnpm lint            # No lint errors
@@ -78,7 +79,7 @@ Keep commit messages concise and focused on the "why" rather than the "what".
 
 ## Project Structure
 
-```
+```txt
 apps/
   web/              → Next.js 16 frontend
   studio/           → Sanity Studio v5
