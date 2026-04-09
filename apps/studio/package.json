@@ -24,7 +24,7 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/asset-utils": "^1.3.0",
+    "@sanity/asset-utils": "^2.3.0",
     "@sanity/assist": "^5.0.4",
     "@sanity/client": "catalog:",
     "@sanity/color-input": "^6.0.4",
