@@ -2,6 +2,8 @@
 
 A production-ready headless commerce starter built with Shopify, Sanity, and Next.js — monorepo architecture with visual editing, type-safe data, and everything you need to ship fast.
 
+Built by [Roboto Studio](https://robotostudio.com/services/shopify) and used in production client builds.
+
 ![Turbo Start Shopify](https://raw.githubusercontent.com/robotostudio/turbo-start-shopify/main/turbo-start-sanity-og.png)
 
 [![Node.js](https://img.shields.io/badge/node-%3E%3D22-brightgreen)](https://nodejs.org/)
