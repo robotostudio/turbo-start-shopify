@@ -15,18 +15,24 @@ import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
  * The agreed behaviour once hydrated: sections open independently, as the FAQ
  * rows do, rather than one at a time as the Radix version enforced.
  *
- * And the open tween has to be measurable. Motion resolves an `auto` target by
+ * The open tween has to be measurable. Motion resolves an `auto` target by
  * measuring the panel in the commit's effects, and a panel still inside a
- * closed <details> measures 0 — so `[open]` must land in the same commit as
- * the target, or the row snaps to full height instead of tweening.
+ * closed <details> may measure 0 — so `[open]` must land in the same commit
+ * as the target, or the row snaps to full height instead of tweening.
  *
- * Motion is stood in for by a div that prints its `animate` prop and, per
- * commit, records whether its <details> was open at that moment; jsdom lays
- * nothing out, so that is the only observable.
+ * And a closing row has to stay `[open]` until the collapse finishes, or the
+ * body vanishes the moment the click lands; `onAnimationComplete` is the only
+ * thing that releases it.
+ *
+ * Motion is stood in for by a div that prints its `animate` prop, records per
+ * commit whether its <details> was open at that moment, and keeps its
+ * `onAnimationComplete` so a test can end an animation by hand; jsdom lays
+ * nothing out, so those are the only observables.
  */
 
 type Commit = { title?: string; animate: unknown; detailsOpen?: boolean };
 const commits: Commit[] = [];
+const completions = new Map<Element, () => void>();
 
 vi.mock("motion/react", () => ({
   motion: {
@@ -34,7 +40,7 @@ vi.mock("motion/react", () => ({
       animate,
       initial: _initial,
       transition: _transition,
-      onAnimationComplete: _onAnimationComplete,
+      onAnimationComplete,
       ...rest
     }: Record<string, unknown>) => {
       const ref = useRef<HTMLDivElement>(null);
@@ -45,6 +51,9 @@ vi.mock("motion/react", () => ({
           animate,
           detailsOpen: details?.open,
         });
+        if (ref.current && typeof onAnimationComplete === "function") {
+          completions.set(ref.current, onAnimationComplete as () => void);
+        }
       });
       return createElement("div", {
         ...rest,
@@ -87,6 +96,7 @@ beforeAll(() => {
 afterEach(() => {
   container?.remove();
   commits.length = 0;
+  completions.clear();
 });
 
 /** Server-renders, lets `beforeBundle` play the visitor, then hydrates. */
@@ -160,5 +170,27 @@ describe("ProductAccordion once hydrated", () => {
     );
     expect(firstAuto).toBeDefined();
     expect(firstAuto?.detailsOpen).toBe(true);
+  });
+
+  it("holds a closing section open until the collapse completes", async () => {
+    const rows = await hydrate();
+    const description = rows[0] as HTMLDetailsElement;
+    const panel = description.querySelector("[data-animate]");
+    if (!panel) throw new Error("no motion panel in the description row");
+
+    await act(async () => {
+      description.querySelector("summary")?.click();
+    });
+
+    // Collapsing: the target is 0, but `[open]` stays so the body is visible
+    // while it shrinks.
+    expect(motionTarget(description)).toEqual({ height: 0 });
+    expect(description.open).toBe(true);
+
+    await act(async () => {
+      completions.get(panel)?.();
+    });
+
+    expect(description.open).toBe(false);
   });
 });
