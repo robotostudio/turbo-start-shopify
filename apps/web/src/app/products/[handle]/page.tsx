@@ -4,6 +4,7 @@ import {
   queryProductByHandle,
   queryProductPaths,
 } from "@workspace/sanity/query";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import sanitizeHtml from "sanitize-html";
 
@@ -175,6 +176,12 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   const title = shopifyProduct.title;
   const vendor = shopifyProduct.vendor;
   const category = shopifyProduct.productType;
+  // The product's category collection (Shirts, Accessories, …) — the first that
+  // isn't a store-wide bucket. Linked by its real Shopify handle per issue #92.
+  const BUCKET_HANDLES = new Set(["all-products", "new-arrivals", "sale"]);
+  const collection = shopifyProduct.collections.edges
+    .map((e) => e.node)
+    .find((c) => !BUCKET_HANDLES.has(c.handle));
 
   const lineMetadata = buildLineMetadata({
     productTitle: title,
@@ -220,9 +227,17 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
 
             {/* Category + title + price */}
             <div className="flex flex-col gap-2">
-              {category && (
-                <p className="text-muted-foreground text-sm">{category}</p>
-              )}
+              {category &&
+                (collection ? (
+                  <Link
+                    className="w-fit text-muted-foreground text-sm transition-colors hover:text-foreground focus-visible:text-foreground"
+                    href={`/collections/${collection.handle.toLowerCase()}`}
+                  >
+                    {category}
+                  </Link>
+                ) : (
+                  <p className="text-muted-foreground text-sm">{category}</p>
+                ))}
               <h1 className="font-medium text-2xl tracking-tight lg:text-3xl">
                 {title}
               </h1>

@@ -73,6 +73,13 @@ const PRODUCT_FIELDS_FRAGMENT = /* graphql */ `
     vendor
     productType
     tags
+    collections(first: 20) {
+      edges {
+        node {
+          handle
+        }
+      }
+    }
     options {
       id
       name
