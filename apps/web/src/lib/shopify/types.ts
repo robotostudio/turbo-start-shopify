@@ -52,6 +52,7 @@ export type ShopifyProduct = {
   vendor: string;
   productType: string;
   tags: string[];
+  collections: Connection<{ handle: string }>;
   options: ShopifyProductOption[];
   variants: Connection<ShopifyVariant>;
   images: Connection<ShopifyImage>;
