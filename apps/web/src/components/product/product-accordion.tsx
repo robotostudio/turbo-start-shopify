@@ -99,7 +99,7 @@ function ProductAccordionEntry({
 
   return (
     <details
-      className="group border-border border-b"
+      className="group border-border border-b last:border-b-0"
       open={rendered}
       ref={detailsRef}
     >
