@@ -100,6 +100,14 @@ function ProductAccordionEntry({
   return (
     <details
       className="group border-border border-b last:border-b-0"
+      onToggle={(event) => {
+        // See faq-entry.tsx: the browser opens a closed <details> for
+        // find-in-page and fragment links without clicking <summary>, so
+        // `toggle` never runs and the body stays clipped at `height: 0`.
+        const next = event.currentTarget.open;
+        setOpen(next);
+        if (next) setRendered(true);
+      }}
       open={rendered}
       ref={detailsRef}
     >
