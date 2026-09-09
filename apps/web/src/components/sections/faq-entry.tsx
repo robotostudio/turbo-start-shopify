@@ -79,7 +79,25 @@ export function FaqEntry({
       )}
       variants={motionVariants}
     >
-      <details className="group" open={rendered} ref={detailsRef}>
+      <details
+        className="group"
+        onToggle={(event) => {
+          // The browser can open a closed <details> on its own — Chrome does it
+          // for find-in-page and for a fragment link into the body — by setting
+          // the attribute directly, without a click on <summary>. `toggle`
+          // above never runs for that, so React would keep `open` false and the
+          // panel would sit at Motion's inline `height: 0` under
+          // `overflow-hidden`: an expanded row showing a clipped, empty answer.
+          // Re-reading the element's own state here puts React back in step.
+          // Idempotent on the click path, where our own state change is what
+          // moved the attribute.
+          const next = event.currentTarget.open;
+          setOpen(next);
+          if (next) setRendered(true);
+        }}
+        open={rendered}
+        ref={detailsRef}
+      >
         {/* biome-ignore lint/a11y/noStaticElementInteractions: <summary> is natively interactive + keyboard-operable */}
         <summary
           className={cn(
