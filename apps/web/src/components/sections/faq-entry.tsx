@@ -54,13 +54,18 @@ export function FaqEntry({
     setHydrated(true);
   }, []);
 
-  useEffect(() => {
-    if (open) setRendered(true);
-  }, [open]);
-
   const toggle = (event: MouseEvent) => {
     event.preventDefault(); // hand the toggle to JS/motion; native fallback still works with JS off
-    setOpen((prev) => !prev);
+    const next = !open;
+    setOpen(next);
+    // Opening puts `[open]` on the element in the same commit as the `auto`
+    // target below, so the <details> is already open when Motion measures the
+    // panel for `auto` in that commit's effects. Whether a closed one still
+    // lays its content out is up to the browser, and a panel that measures 0
+    // there resolves `auto` to 0 and snaps open instead of tweening. Closing
+    // leaves `rendered` to `onAnimationComplete`, so the body stays visible
+    // while it collapses.
+    if (next) setRendered(true);
   };
 
   const card = variant === "card";
@@ -101,7 +106,16 @@ export function FaqEntry({
           </span>
         </summary>
         <motion.div
-          animate={hydrated ? { height: open ? "auto" : 0 } : undefined}
+          /* `auto` until hydrated rather than no target at all. Motion only
+           * starts tracking a property once `animate` names it, and it treats
+           * the first target it sees as the initial render — which
+           * `initial={false}` tells it not to animate. Gated on `hydrated`, the
+           * `0` a closed row needed as its starting point was that first
+           * target, so it was never applied and every panel's first open
+           * snapped to full height instead of tweening. `auto` is also the
+           * honest server value: the native <details> sizes an open body itself
+           * and hides a closed one regardless. */
+          animate={{ height: !hydrated || open ? "auto" : 0 }}
           className={cn(hydrated && "overflow-hidden")}
           initial={false}
           onAnimationComplete={() => {

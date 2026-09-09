@@ -41,7 +41,7 @@ const nextConfig: NextConfig = {
       "base-uri 'self'",
       "form-action 'self'",
       "object-src 'none'",
-      `frame-ancestors 'self' ${env.NEXT_PUBLIC_SANITY_STUDIO_URL} https://*.sanity.studio`,
+      `frame-ancestors 'self' ${env.NEXT_PUBLIC_SANITY_STUDIO_URL}`,
     ].join("; ");
 
     return [
