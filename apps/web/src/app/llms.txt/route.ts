@@ -42,6 +42,12 @@ type SitemapDoc = {
   path: string | null;
   title: string | null;
   description: string | null;
+  /**
+   * Shopify-backed keys only. Merchant HTML, used when the editor left the
+   * plain `seo.description` empty. Kept separate from `description` so only
+   * this one is ever handed to the tag stripper.
+   */
+  descriptionHtml?: string | null;
 };
 
 /** One file-list entry: a URL to name, and optionally to describe. */
@@ -49,7 +55,7 @@ type Entry = {
   path: string;
   title?: string | null;
   description?: string | null;
-  /** Description is merchant HTML (`store.descriptionHtml`), not plain text. */
+  /** The description is merchant HTML, so it needs tags stripped. */
   html?: boolean;
 };
 
@@ -133,16 +139,23 @@ function section(base: string, title: string, entries: Entry[]): string | null {
 /** Drops the pathless documents Sanity can return, then prefixes the rest. */
 function entries(
   docs: readonly SitemapDoc[],
-  { prefix = "", html = false }: { prefix?: string; html?: boolean } = {}
+  { prefix = "" }: { prefix?: string } = {}
 ): Entry[] {
   return docs
     .filter((doc): doc is SitemapDoc & { path: string } => Boolean(doc.path))
-    .map((doc) => ({
-      path: `${prefix}${doc.path}`,
-      title: doc.title,
-      description: doc.description,
-      html,
-    }));
+    .map((doc) => {
+      // The flag follows whichever source won, because only one of the two is
+      // HTML. Flagging a whole section instead would send a plain description
+      // reading "Sizes <XS> to <XL> in stock" through `htmlToText`, which reads
+      // the sizes as unknown tags and returns "Sizes to in stock".
+      const plain = oneLine(doc.description ?? "");
+      return {
+        path: `${prefix}${doc.path}`,
+        title: doc.title,
+        description: plain || doc.descriptionHtml || null,
+        html: !plain && Boolean(doc.descriptionHtml),
+      };
+    });
 }
 
 export async function GET(): Promise<Response> {
@@ -180,13 +193,9 @@ export async function GET(): Promise<Response> {
     section(base, "Collections", [
       // Has a markdown handler and sitemap entry but no `querySitemapData` key.
       { path: "/collections", title: "All collections" },
-      ...entries(docs.collection, { prefix: "/collections/", html: true }),
+      ...entries(docs.collection, { prefix: "/collections/" }),
     ]),
-    section(
-      base,
-      "Products",
-      entries(docs.product, { prefix: "/products/", html: true })
-    ),
+    section(base, "Products", entries(docs.product, { prefix: "/products/" })),
     section(base, "Blog", [...entries(docs.blogIndex), ...entries(docs.blog)]),
     // `sitemap.xml` is not a Markdown twin, so it is spelled out rather than
     // run through `listItem`. `## Optional` is the spec's own convention for

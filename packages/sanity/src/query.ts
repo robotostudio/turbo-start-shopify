@@ -710,6 +710,10 @@ export const queryNavbarData = defineQuery(`
 // a matching projection here is a typecheck failure rather than a page that is
 // silently missing from the sitemap.
 //
+// Shopify-backed keys split their two description sources rather than
+// coalescing them: `seo.description` is plain text an editor typed, while
+// `descriptionHtml` is merchant HTML. llms.txt strips tags from the second, and
+// putting the first through that stripper would eat any angle-bracketed text.
 // `title` and `description` are unused by the sitemap and exist for
 // apps/web/src/app/llms.txt/route.ts, which reads this same query: the llms.txt
 // spec requires `- [name](url)` links, and a bare URL is not a link. Both
@@ -739,14 +743,16 @@ export const querySitemapData = defineQuery(`{
   "product": *[_type == "product" && defined(store.slug.current) && store.status == "active" && store.isDeleted != true]{
     "path": store.slug.current,
     "lastModified": _updatedAt,
-    "title": store.title,
-    "description": coalesce(seo.description, store.descriptionHtml)
+    "title": coalesce(seo.title, store.title),
+    "description": seo.description,
+    "descriptionHtml": store.descriptionHtml
   },
   "collection": *[_type == "collection" && defined(store.slug.current) && store.isDeleted != true]{
     "path": store.slug.current,
     "lastModified": _updatedAt,
-    "title": store.title,
-    "description": coalesce(seo.description, store.descriptionHtml)
+    "title": coalesce(seo.title, store.title),
+    "description": seo.description,
+    "descriptionHtml": store.descriptionHtml
   }
 }`);
 export const queryGlobalSeoSettings = defineQuery(`

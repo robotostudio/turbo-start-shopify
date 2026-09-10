@@ -52,6 +52,8 @@ function fixture(overrides: Record<string, unknown> = {}) {
     blogIndex: [{ path: "/blog", title: "Blog", description: null }],
     product: [],
     collection: [],
+    // Shopify keys carry both description sources; `seo.description` is plain
+    // text and `descriptionHtml` is merchant HTML.
     ...overrides,
   };
 }
@@ -75,9 +77,21 @@ describe("llms.txt route", () => {
     readDocs.mockResolvedValue(
       fixture({
         collection: [
-          { path: "tees", title: "Tees", description: "<p>Cotton.</p>" },
+          {
+            path: "tees",
+            title: "Tees",
+            description: null,
+            descriptionHtml: "<p>Cotton.</p>",
+          },
         ],
-        product: [{ path: "a", title: "A", description: "<p>Soft.</p>" }],
+        product: [
+          {
+            path: "a",
+            title: "A",
+            description: null,
+            descriptionHtml: "<p>Soft.</p>",
+          },
+        ],
       })
     );
 
@@ -114,7 +128,51 @@ describe("llms.txt route", () => {
             title: "Tee",
             // The list is the discriminating part: without a space inserted
             // before each tag, `</p><ul><li>` welds "strong." to "100%".
-            description:
+            description: null,
+            descriptionHtml:
+              "<p>Soft &amp; strong.</p><ul><li>100% cotton</li></ul>",
+          },
+        ],
+      })
+    );
+
+    expect(await bodyOf()).toContain(
+      "- [Tee](https://base.test/products/tee.md): Soft & strong. 100% cotton"
+    );
+  });
+
+  it("leaves a plain seo.description alone rather than stripping tags from it", async () => {
+    // The regression eve caught: flagging the whole section as HTML sent plain
+    // editor text through sanitize-html, and "Sizes <XS> to <XL> in stock" came
+    // back as "Sizes to in stock" because the sizes parse as unknown tags.
+    readDocs.mockResolvedValue(
+      fixture({
+        product: [
+          {
+            path: "tee",
+            title: "Tee",
+            description: "Sizes <XS> to <XL> in stock",
+            descriptionHtml: "<p>ignored, the plain one wins</p>",
+          },
+        ],
+      })
+    );
+
+    const body = await bodyOf();
+
+    expect(body).toContain("Sizes \\<XS\\> to \\<XL\\> in stock");
+    expect(body).not.toContain("Sizes to in stock");
+  });
+
+  it("falls back to merchant HTML only when there is no plain description", async () => {
+    readDocs.mockResolvedValue(
+      fixture({
+        product: [
+          {
+            path: "tee",
+            title: "Tee",
+            description: null,
+            descriptionHtml:
               "<p>Soft &amp; strong.</p><ul><li>100% cotton</li></ul>",
           },
         ],
