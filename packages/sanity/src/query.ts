@@ -709,29 +709,50 @@ export const queryNavbarData = defineQuery(`
 // apps/web/src/app/sitemap.ts is typed against — adding a source there without
 // a matching projection here is a typecheck failure rather than a page that is
 // silently missing from the sitemap.
+//
+// Shopify-backed keys split their two description sources rather than
+// coalescing them: `seo.description` is plain text an editor typed, while
+// `descriptionHtml` is merchant HTML. llms.txt strips tags from the second, and
+// putting the first through that stripper would eat any angle-bracketed text.
+// `title` and `description` are unused by the sitemap and exist for
+// apps/web/src/app/llms.txt/route.ts, which reads this same query: the llms.txt
+// spec requires `- [name](url)` links, and a bare URL is not a link. Both
+// surfaces share one query so their URL sets cannot drift apart.
 export const querySitemapData = defineQuery(`{
   "page": *[_type == "page" && defined(slug.current) && seoNoIndex != true]{
     "path": slug.current,
-    "lastModified": _updatedAt
+    "lastModified": _updatedAt,
+    "title": coalesce(seoTitle, title),
+    "description": coalesce(seoDescription, description)
   },
   "blog": *[_type == "blog" && defined(slug.current) && seoNoIndex != true]{
     "path": slug.current,
-    "lastModified": _updatedAt
+    "lastModified": _updatedAt,
+    "title": coalesce(seoTitle, title),
+    "description": coalesce(seoDescription, description)
   },
   "blogIndex": *[_type == "blogIndex"]{
     // Literal, not the stored slug: this singleton saves it bare ("blog", no
     // leading slash) and the sitemap joins path straight onto the origin, so
     // the stored value emits "https://siteblog".
     "path": "/blog",
-    "lastModified": _updatedAt
+    "lastModified": _updatedAt,
+    "title": coalesce(seoTitle, title),
+    "description": coalesce(seoDescription, description)
   },
   "product": *[_type == "product" && defined(store.slug.current) && store.status == "active" && store.isDeleted != true]{
     "path": store.slug.current,
-    "lastModified": _updatedAt
+    "lastModified": _updatedAt,
+    "title": coalesce(seo.title, store.title),
+    "description": seo.description,
+    "descriptionHtml": store.descriptionHtml
   },
   "collection": *[_type == "collection" && defined(store.slug.current) && store.isDeleted != true]{
     "path": store.slug.current,
-    "lastModified": _updatedAt
+    "lastModified": _updatedAt,
+    "title": coalesce(seo.title, store.title),
+    "description": seo.description,
+    "descriptionHtml": store.descriptionHtml
   }
 }`);
 export const queryGlobalSeoSettings = defineQuery(`
