@@ -160,9 +160,11 @@ function startEditing(
   });
 
   const onBeforeInput = (event: InputEvent) => {
-    // Drops skip the paste cleanup, and stale undo would edit a detached node.
+    // Drops skip the paste cleanup, and a move is a delete plus a drop: cancel
+    // both or the source text is lost. Stale undo would edit a detached node.
     if (
       event.inputType === "insertFromDrop" ||
+      event.inputType === "deleteByDrag" ||
       (staleUndo && event.inputType.startsWith("history"))
     ) {
       event.preventDefault();
