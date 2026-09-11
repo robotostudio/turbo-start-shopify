@@ -100,7 +100,7 @@ function startEditing(
   let missedRender = false;
   // Text and selection as the IME started, to rebuild from after a missed render.
   let composeFrom = { text: typed, start: caret, end: caret };
-  // Set once a paste or re-home replaces nodes the undo history points at.
+  // Set once a re-home replaces nodes the undo history points at.
   let staleUndo = false;
   let cancelled = false;
   let aborted = false;
@@ -247,29 +247,18 @@ function startEditing(
 
   const onPaste = (event: ClipboardEvent) => {
     const text = event.clipboardData?.getData("text/plain") ?? "";
-    // A one-line paste goes through the browser, so undo still covers it.
-    if (!/[\r\n\t]/.test(text)) {
-      return;
-    }
+    // The browser's own paste can split React's node, which disables undo.
+    // `insertText` edits in place and fires `input`, so undo still covers it.
     event.preventDefault();
-    const selection = element.ownerDocument.getSelection();
-    if (!selection?.rangeCount) {
+    if (!text) {
       return;
     }
     // Newlines to spaces: `textContent` drops line breaks and glues the words.
-    const pasted = element.ownerDocument.createTextNode(
-      text.replace(/\s+/g, " ")
+    element.ownerDocument.execCommand(
+      "insertText",
+      false,
+      /[\r\n\t]/.test(text) ? text.replace(/\s+/g, " ") : text
     );
-    const range = selection.getRangeAt(0);
-    range.deleteContents();
-    range.insertNode(pasted);
-    range.setStartAfter(pasted);
-    range.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    staleUndo = true;
-    // A DOM insert fires no `input` event.
-    onInput();
   };
 
   const end = () => {
