@@ -14,7 +14,7 @@ type MediaQueryResult = {
   removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
 };
 
-export function useIsMobile(mobileScreenSize = 768) {
+export function useIsMobile(breakpoint = "48rem") {
   const [isMobile, setIsMobile] = React.useState(() => {
     if (
       typeof window === "undefined" ||
@@ -22,7 +22,7 @@ export function useIsMobile(mobileScreenSize = 768) {
     ) {
       return;
     }
-    return window.matchMedia(`(max-width: ${mobileScreenSize}px)`).matches;
+    return window.matchMedia(`(width < ${breakpoint})`).matches;
   });
 
   const checkIsMobile = React.useCallback((event: MediaQueryListEvent) => {
@@ -38,7 +38,7 @@ export function useIsMobile(mobileScreenSize = 768) {
     }
 
     const mediaListener: MediaQueryResult = window.matchMedia(
-      `(max-width: ${mobileScreenSize}px)`
+      `(width < ${breakpoint})`
     );
 
     const attachListener = () => {
@@ -59,7 +59,7 @@ export function useIsMobile(mobileScreenSize = 768) {
 
     attachListener();
     return removeListener;
-  }, [mobileScreenSize, checkIsMobile]);
+  }, [breakpoint, checkIsMobile]);
 
   return isMobile;
 }

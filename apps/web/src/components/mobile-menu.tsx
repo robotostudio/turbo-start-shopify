@@ -28,7 +28,7 @@ import { Logo } from "./logo";
 
 export function MobileMenu({ navbarData, settingsData }: NavigationData) {
   const [isOpen, setIsOpen] = useState(false);
-  const isMobile = useIsMobile(1023);
+  const isMobile = useIsMobile("64rem");
 
   if (isOpen && !isMobile) {
     setIsOpen(false);
