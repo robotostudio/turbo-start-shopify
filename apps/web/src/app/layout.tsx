@@ -4,8 +4,8 @@ import { SanityLive } from "@workspace/sanity/live";
 import { Toaster } from "@workspace/ui/components/sonner";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import { draftMode } from "next/headers";
-import { VisualEditing } from "next-sanity/visual-editing";
+import { cookies, draftMode } from "next/headers";
+import { resolvePerspectiveFromCookies } from "next-sanity/live";
 import { preconnect, prefetchDNS } from "react-dom";
 
 import { CartToasts } from "@/components/cart/cart-toasts";
@@ -15,6 +15,7 @@ import { Navbar } from "@/components/navbar";
 import { PreviewBar } from "@/components/preview-bar";
 import { PromoBanner } from "@/components/promo-banner";
 import { Providers } from "@/components/providers";
+import { VisualEditingLayer } from "@/components/visual-editing-layer";
 import { getLayoutData } from "@/lib/navigation";
 import { getSEOMetadata, SITE_LANG } from "@/lib/seo";
 
@@ -45,6 +46,13 @@ export default async function RootLayout({
   preconnect("https://cdn.sanity.io");
   prefetchDNS("https://cdn.sanity.io");
   const layoutData = await getLayoutData();
+  const isDraftMode = (await draftMode()).isEnabled;
+  // The perspective `sanityFetch` renders in draft mode. Cookies are read only
+  // then, so a visitor's request stays static.
+  const inlineEditing =
+    isDraftMode &&
+    (await resolvePerspectiveFromCookies({ cookies: await cookies() })) ===
+      "drafts";
   return (
     <html lang={SITE_LANG} suppressHydrationWarning>
       <body
@@ -83,10 +91,10 @@ export default async function RootLayout({
           <Toaster position="bottom-right" richColors />
           <SanityLive />
           <CombinedJsonLd includeOrganization includeWebsite />
-          {(await draftMode()).isEnabled && (
+          {isDraftMode && (
             <>
               <PreviewBar />
-              <VisualEditing />
+              <VisualEditingLayer inlineEditing={inlineEditing} />
             </>
           )}
         </Providers>
