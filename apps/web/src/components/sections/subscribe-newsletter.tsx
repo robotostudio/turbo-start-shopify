@@ -78,7 +78,10 @@ export function SubscribeNewsletter({
           <p className="mb-6 text-sm uppercase tracking-widest text-foreground/50">
             Newsletter
           </p>
-          <h2 className="mb-6 font-normal text-3xl text-foreground md:text-5xl">
+          <h2
+            className="mb-6 font-normal text-3xl text-foreground md:text-5xl"
+            data-inline-edit
+          >
             {title}
           </h2>
           {subTitle && (

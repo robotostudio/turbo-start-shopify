@@ -30,7 +30,10 @@ export function ExploreCategories({
   return (
     <section className="site-container py-12 md:py-20">
       <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
-        <h2 className="font-normal text-3xl tracking-tight md:text-4xl">
+        <h2
+          className="font-normal text-3xl tracking-tight md:text-4xl"
+          data-inline-edit
+        >
           {title}
         </h2>
         {buttons?.map((button) =>

@@ -15,12 +15,16 @@ export function CTABlock({ richText, title, eyebrow, buttons }: CTABlockProps) {
             {eyebrow && (
               <Badge
                 className="bg-zinc-200 dark:text-black"
+                data-inline-edit
                 variant="secondary"
               >
                 {eyebrow}
               </Badge>
             )}
-            <h2 className="text-balance font-semibold text-3xl md:text-5xl">
+            <h2
+              className="text-balance font-semibold text-3xl md:text-5xl"
+              data-inline-edit
+            >
               {title}
             </h2>
             <div className="text-lg text-muted-foreground">

@@ -116,10 +116,17 @@ function ClassicHero({
       <div className="site-container">
         <div className="grid items-center gap-8 lg:grid-cols-2">
           <div className="grid h-full grid-rows-[auto_1fr_auto] items-center justify-items-center gap-4 text-center lg:items-start lg:justify-items-start lg:text-left">
-            {badge && <Badge variant="secondary">{badge}</Badge>}
+            {badge && (
+              <Badge data-inline-edit variant="secondary">
+                {badge}
+              </Badge>
+            )}
             <div className="grid gap-4">
               {title && (
-                <h1 className="text-balance font-bold text-4xl lg:text-6xl">
+                <h1
+                  className="text-balance font-bold text-4xl lg:text-6xl"
+                  data-inline-edit
+                >
                   {title}
                 </h1>
               )}
@@ -198,7 +205,11 @@ function FullBleedHero({
               )}
             >
               <div className={pos.lockup}>
-                {title && <h1 className={pos.title}>{title}</h1>}
+                {title && (
+                  <h1 className={pos.title} data-inline-edit>
+                    {title}
+                  </h1>
+                )}
                 {buttons?.map((button) =>
                   button.href ? (
                     <Link
