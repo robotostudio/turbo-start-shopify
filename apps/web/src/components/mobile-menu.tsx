@@ -20,6 +20,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
+import { useIsMobile } from "@/hooks/use-is-mobile";
 import type { ColumnLink, NavigationData } from "@/types";
 import { MenuLink } from "./elements/menu-link";
 import { SanityButtons } from "./elements/sanity-buttons";
@@ -27,6 +28,11 @@ import { Logo } from "./logo";
 
 export function MobileMenu({ navbarData, settingsData }: NavigationData) {
   const [isOpen, setIsOpen] = useState(false);
+  const isMobile = useIsMobile("64rem");
+
+  if (isOpen && !isMobile) {
+    setIsOpen(false);
+  }
 
   function closeMenu() {
     setIsOpen(false);
