@@ -18,8 +18,15 @@ export function ImageLinkCards({
       <div className="site-container">
         <div className="flex w-full flex-col items-center">
           <div className="flex flex-col items-center space-y-4 text-center sm:space-y-6 md:text-center">
-            {eyebrow && <Badge variant="secondary">{eyebrow}</Badge>}
-            <h2 className="text-balance font-semibold text-3xl md:text-5xl">
+            {eyebrow && (
+              <Badge data-inline-edit variant="secondary">
+                {eyebrow}
+              </Badge>
+            )}
+            <h2
+              className="text-balance font-semibold text-3xl md:text-5xl"
+              data-inline-edit
+            >
               {title}
             </h2>
             <RichText className="text-balance" richText={richText} />

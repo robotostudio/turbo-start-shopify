@@ -13,7 +13,12 @@ export function FaqAccordion({ _key, title, faqs, link }: FaqAccordionProps) {
       <FaqJsonLd faqs={faqs} id={`faq-json-ld-${_key}`} />
       <div className="site-container">
         <div className="flex flex-col items-center">
-          <h2 className="mb-10 font-normal text-3xl md:text-4xl">{title}</h2>
+          <h2
+            className="mb-10 font-normal text-3xl md:text-4xl"
+            data-inline-edit
+          >
+            {title}
+          </h2>
         </div>
         <div className="mx-auto max-w-3xl">
           <div className="flex w-full flex-col gap-3">
@@ -29,7 +34,9 @@ export function FaqAccordion({ _key, title, faqs, link }: FaqAccordionProps) {
 
           {link?.href && (
             <div className="w-full py-6">
-              <p className="mb-1 text-xs">{link?.title}</p>
+              <p className="mb-1 text-xs" data-inline-edit>
+                {link?.title}
+              </p>
               <Link
                 className="flex items-center gap-2"
                 href={link.href ?? "#"}

@@ -39,11 +39,17 @@ export function CollectionBanner({
 
         <div className="relative flex flex-col items-center justify-center gap-3 px-6 py-24 text-center md:gap-6 md:py-36">
           {eyebrow && (
-            <p className="mb-4 text-white text-md tracking-widest uppercase">
+            <p
+              className="mb-4 text-white text-md tracking-widest uppercase"
+              data-inline-edit
+            >
               {eyebrow}
             </p>
           )}
-          <h2 className="max-w-lg text-3xl font-light tracking-tight md:text-5xl">
+          <h2
+            className="max-w-lg text-3xl font-light tracking-tight md:text-5xl"
+            data-inline-edit
+          >
             {title}
           </h2>
           {description && (
