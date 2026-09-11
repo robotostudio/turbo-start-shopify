@@ -79,10 +79,46 @@ Tests are Vitest, scoped to `apps/web`, and run from the root through Turbo (`pn
 
 - **SEO**: `getSEOMetadata()` in `apps/web/src/lib/seo.ts`, OG images via `/api/og`
 - **AI agent surfaces**: content negotiation serves Markdown to agents (`apps/web/src/proxy.ts`, `apps/web/src/app/api/markdown/route.ts`), plus `apps/web/src/app/llms.txt/route.ts`
-- **Visual editing**: `VisualEditing` from `next-sanity` + `createDataAttribute` per block; draft mode via `/api/presentation-draft`
+- **Visual editing**: `VisualEditingLayer` (`VisualEditing` from `next-sanity/visual-editing` plus this app's overlay components) in the root layout, draft mode only; `createDataAttribute` per block; draft mode via `/api/presentation-draft`
 - **Redirects**: fetched from Sanity at Next.js build time via `queryRedirects` in `next.config.ts`
 - **Node** >=24.10, **pnpm** 11.24.0 (workspace protocol, catalog in `pnpm-workspace.yaml`)
 - **CI** (`.github/workflows/ci.yml`): lint, format:check, check-types, `test:coverage`, a SonarQube Cloud scan, then a Studio build against `apps/studio/.env.example` — Vercel builds `apps/web` on every PR but not `apps/studio`, so that last step is the only thing catching a dependency that breaks `sanity build`
+
+### Double-click to type (custom Presentation overlay)
+
+`apps/web/src/components/overlay-components.tsx` is the resolver handed to
+`<VisualEditing components={...} />` through `visual-editing-layer.tsx` (its own
+client component, because a function cannot cross the server/client boundary).
+It returns `InlineText` when `isInlineEditable` in `inline-text.tsx` allows it:
+the element holds a single text node, sits outside any link, button, summary
+or label (the click capture would swallow their handlers), and either
+
+- **Plain strings**: carries the bare `data-inline-edit` flag over a `string` field. Never flag a multi-line `text` field: nothing at runtime can tell the two apart, Enter saves, and a paste collapses newlines. The page builder sections in `apps/web/src/components/sections/` flag their plain-string eyebrows, titles, headings and card titles. Opt-in, because the resolver also sees every nav link, button label and badge. Never flag commerce data — `store.*` fields (product and collection titles, prices) are synced read-only from Shopify, and anything fetched from the Storefront API carries no stega
+- **Rich text**: has a Portable Text span path (`…children[_key=="s"].text`). The words in a one-span paragraph, or in the bold/italic run inside one, can be typed over. Plain runs in a paragraph that also has marks, and marks, links and new paragraphs themselves, stay in the Studio form
+
+`inline-text.tsx` makes the element `contentEditable="plaintext-only"` on
+double-click and saves once on blur through `useDocuments()`, to the overlay
+node's own `id` and `path`. Sanity ships nothing official for inline typing;
+this is custom on that documented API. The rules that keep typing and page
+updates from trampling each other (strip stega first, save only on blur, put
+typed text back over a render, rewrite React's text node in place, restore on
+cancel, empty or a locally rejected patch (the Studio's own write is
+fire-and-forget, so a server rejection is not reported back), end without
+saving if React restructures the text mid-edit, clean up if the element is
+removed) live as comments in `inline-text.tsx`. No real click on an editable
+element reaches the overlay: a click opening the field makes the Studio focus
+its input, which ends an edit mid-word. A single click is replayed after the
+double-click window, and Enter opens the field with the saved value. Saving is
+last-write-wins, as in the Studio form. Inline editing is on only when the
+preview's perspective is drafts: the root layout resolves it with
+`resolvePerspectiveFromCookies` (the same call `sanityFetch` makes in draft
+mode) and passes that to `VisualEditingLayer`, because saves always write
+`drafts.<id>`, which a published or release preview never shows. In a drafts
+preview, text from the published document stays editable, because a page with
+no draft renders from it and the first save creates the draft.
+
+Visitors never mount any of it: `VisualEditingLayer` renders only in draft
+mode, and the `data-inline-edit` attribute is inert outside Presentation.
 
 ## Environment Variables
 
