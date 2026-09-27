@@ -22,10 +22,10 @@
     "@workspace/env": "workspace:*"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.13",
+    "@biomejs/biome": "2.5.14",
     "@workspace/typescript-config": "workspace:*",
-    "tsx": "^4.23.13",
-    "turbo": "^2.10.12",
+    "tsx": "^4.23.15",
+    "turbo": "^2.11.2",
     "typescript": "catalog:"
   },
   "packageManager": "pnpm@11.24.0",

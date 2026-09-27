@@ -29,7 +29,7 @@
     "@sanity/assist": "6.1.17",
     "@sanity/client": "catalog:",
     "@sanity/color-input": "6.1.1",
-    "@sanity/functions": "^1.7.2",
+    "@sanity/functions": "^1.8.0",
     "@sanity/icons": "^3.8.0",
     "@sanity/orderable-document-list": "2.0.18",
     "@sanity/ui": "^3.5.5",
@@ -57,7 +57,7 @@
     "@types/lodash.get": "^4.4.9",
     "@types/react": "catalog:",
     "@types/styled-components": "^5.1.36",
-    "tsx": "^4.23.13",
+    "tsx": "^4.23.15",
     "typescript": "catalog:",
     "vite": "^8.3.0",
     "vite-plugin-tsconfig-paths": "^1.4.1"
