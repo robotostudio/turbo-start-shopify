@@ -13,12 +13,12 @@ catalog:
   # which v8 removed. Unpin when next-sanity ships a v8-compatible release.
   "@sanity/client": ^7.27.0
   "@tailwindcss/postcss": ^4.3.3
-  "@types/node": ^24.13.6
+  "@types/node": ^24.19.0
   "@types/react": ^19.3.0
   "@types/react-dom": ^19.3.0
   "@vitest/coverage-v8": ^4.1.11
   jsdom: ^29.1.1
-  lucide-react: ^1.47.0
+  lucide-react: ^1.48.0
   next-themes: ^0.4.6
   react: ^19.2.8
   react-dom: ^19.2.8
@@ -35,7 +35,7 @@ catalog:
 overrides:
   # Dedupes sanity-plugin-lucide-icon-picker (depends on ^0.532.0) onto the
   # catalog copy: two copies means it offers icon names the renderers can't draw.
-  lucide-react: ^1.47.0
+  lucide-react: ^1.48.0
   # Transitive: @sanity/orderable-document-list asks for ^2.0.13, and 2.0.14 is
   # already on @sanity/ui v4.
   sanity-plugin-utils: 2.0.18

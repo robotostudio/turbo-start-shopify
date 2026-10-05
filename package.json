@@ -25,7 +25,7 @@
     "@biomejs/biome": "2.5.14",
     "@workspace/typescript-config": "workspace:*",
     "tsx": "^4.23.15",
-    "turbo": "^2.11.2",
+    "turbo": "^2.11.5",
     "typescript": "catalog:"
   },
   "packageManager": "pnpm@11.24.0",
