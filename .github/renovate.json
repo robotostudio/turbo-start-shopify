@@ -22,7 +22,8 @@
         "sanity-plugin-asset-source-unsplash",
         "sanity-plugin-hotspot-array",
         "sanity-plugin-lucide-icon-picker",
-        "sanity-plugin-media"
+        "sanity-plugin-media",
+        "sanity-plugin-utils"
       ],
       "enabled": false
     },
