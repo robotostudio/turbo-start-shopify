@@ -39,3 +39,12 @@ overrides:
   # Transitive: @sanity/orderable-document-list asks for ^2.0.13, and 2.0.14 is
   # already on @sanity/ui v4.
   sanity-plugin-utils: 2.0.22
+  # Security floors for transitive deps flagged by `pnpm audit`. Drop each once
+  # its parent ships the fixed version.
+  adm-zip: ^0.6.1
+  dompurify@3: ^3.4.17
+  js-yaml@3: ^3.15.2
+  markdown-it@14: ^14.3.3
+  markdown-it@15: ^15.0.3
+  smol-toml: ^1.9.1
+  undici@7: ^7.30.1
