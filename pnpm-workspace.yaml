@@ -38,4 +38,4 @@ overrides:
   lucide-react: ^1.59.0
   # Transitive: @sanity/orderable-document-list asks for ^2.0.13, and 2.0.14 is
   # already on @sanity/ui v4.
-  sanity-plugin-utils: 2.0.22
+  sanity-plugin-utils: 2.0.13
