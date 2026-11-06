@@ -2,7 +2,6 @@ import path from "node:path";
 import { Logger } from "@workspace/logger";
 import "dotenv/config";
 import { defineCliConfig } from "sanity/cli";
-import tsconfigPaths from "vite-plugin-tsconfig-paths";
 
 const logger = new Logger("SanityCLI");
 
@@ -61,7 +60,6 @@ export default defineCliConfig({
     autoUpdates: false,
   },
   vite: {
-    plugins: [tsconfigPaths()],
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "."),
