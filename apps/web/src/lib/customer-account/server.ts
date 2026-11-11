@@ -4,12 +4,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 
-import { getCustomerAccountConfig } from "./oauth";
+import { getCustomerAccountConfig, refreshSession } from "./oauth";
 import {
   type CustomerSession,
   cookieOptions,
   isExpired,
   loginPath,
+  needsRefresh,
   readSession,
   SESSION_COOKIE,
   SESSION_MAX_AGE,
@@ -35,6 +36,47 @@ export async function getSession(): Promise<CustomerSession | null> {
   );
   if (!session || isExpired(session)) return null;
   return session;
+}
+
+/**
+ * Route handlers and server actions only. The session with a usable access
+ * token, refreshing it here when it is about to expire — the proxy refreshes
+ * only on `/account/*`, so outside it the 30-day cookie routinely outlives the
+ * access token. A refresh that fails clears the cookie and reports no session.
+ */
+export async function getFreshSession(): Promise<CustomerSession | null> {
+  const config = getCustomerAccountConfig();
+  if (!config) return null;
+  const cookieStore = await cookies();
+  const session = readSession(
+    cookieStore.get(SESSION_COOKIE)?.value,
+    config.sessionSecret
+  );
+  if (!session) return null;
+  if (!needsRefresh(session)) return session;
+
+  const refreshed = await refreshSession(config, session);
+  if (!refreshed.ok) {
+    cookieStore.delete(SESSION_COOKIE);
+    return null;
+  }
+  await setSessionCookie(refreshed.session, config.sessionSecret);
+  return refreshed.session;
+}
+
+/**
+ * The sealed session whether or not its access token has expired. For sign-out
+ * only, which needs just the `idToken` as a hint to Shopify's end-session
+ * endpoint — never use it to act as the customer.
+ */
+export async function readStoredSession(): Promise<CustomerSession | null> {
+  const config = getCustomerAccountConfig();
+  if (!config) return null;
+  const cookieStore = await cookies();
+  return readSession(
+    cookieStore.get(SESSION_COOKIE)?.value,
+    config.sessionSecret
+  );
 }
 
 /** The session, or a redirect to sign-in that comes back to `returnTo`. */

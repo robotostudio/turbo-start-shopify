@@ -97,7 +97,7 @@ const SCENARIOS: Scenario[] = [
 
 const FIND_CUSTOMER = /* graphql */ `
   query FindCustomer($query: String!) {
-    customers(first: 1, query: $query) { nodes { id } }
+    customers(first: 1, query: $query) { nodes { id tags } }
   }
 `;
 
@@ -207,19 +207,22 @@ function fail(message: string): never {
   process.exit(1);
 }
 
-async function findCustomer(email: string): Promise<string | null> {
-  const result = await adminQuery<{ customers: { nodes: { id: string }[] } }>(
+type FoundCustomer = { id: string; tags: string[] };
+
+async function findCustomer(email: string): Promise<FoundCustomer | null> {
+  const result = await adminQuery<{ customers: { nodes: FoundCustomer[] } }>(
     FIND_CUSTOMER,
     { query: `email:${email}` }
   );
-  return result.data?.customers.nodes[0]?.id ?? null;
+  return result.data?.customers.nodes[0] ?? null;
 }
 
 async function ensureCustomer(email: string): Promise<string> {
   const existing = await findCustomer(email);
   if (existing) {
-    log.info(`Customer ${email} already exists (${existing}) — reusing`);
-    return existing;
+    // Reused as-is, without the seed tag, so `--clean` leaves it in place.
+    log.info(`Customer ${email} already exists (${existing.id}) — reusing`);
+    return existing.id;
   }
   const result = await adminQuery<{
     customerCreate: { customer: { id: string } | null; userErrors: UserError[] };
@@ -446,7 +449,10 @@ async function seed(email: string): Promise<void> {
 async function clean(email: string): Promise<void> {
   const orders = await adminQuery<{
     orders: { nodes: { id: string; name: string }[] };
-  }>(SEEDED_ORDERS, { query: `tag:${SEED_TAG}` });
+  }>(SEEDED_ORDERS, {
+    // Scoped to this email: another seeded customer's orders carry the same tag.
+    query: `tag:${SEED_TAG} AND email:"${email}"`,
+  });
   await Promise.all(
     (orders.data?.orders.nodes ?? []).map(async function deleteOrder(order) {
       const result = await adminQuery<{
@@ -458,14 +464,20 @@ async function clean(email: string): Promise<void> {
     })
   );
 
-  const customerId = await findCustomer(email);
-  if (!customerId) {
+  const customer = await findCustomer(email);
+  if (!customer) {
     log.info(`No customer ${email} to delete`);
+    return;
+  }
+  // Only a customer this script created carries the tag; one that already
+  // existed was reused, and its profile and addresses are not ours to delete.
+  if (!customer.tags.includes(SEED_TAG)) {
+    log.info(`Customer ${email} was not created by the seeder — keeping it`);
     return;
   }
   const result = await adminQuery<{
     customerDelete: { userErrors: UserError[] };
-  }>(DELETE_CUSTOMER, { input: { id: customerId } });
+  }>(DELETE_CUSTOMER, { input: { id: customer.id } });
   if (!hasUserErrors(result.data?.customerDelete.userErrors, "customerDelete")) {
     log.info(`Deleted customer ${email}`);
   }

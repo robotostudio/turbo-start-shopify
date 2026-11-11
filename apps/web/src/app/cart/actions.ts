@@ -20,7 +20,7 @@ import {
   setCartId,
 } from "@/lib/cart/server";
 import type { CartActionResult, CartErrorCode } from "@/lib/cart/types";
-import { getSession } from "@/lib/customer-account/server";
+import { getFreshSession } from "@/lib/customer-account/server";
 import {
   type StorefrontFailureKind,
   storefrontQuery,
@@ -112,8 +112,10 @@ export async function createCart(
   const parsed = linesSchema.safeParse(lines);
   if (!parsed.success) return invalidInput(parsed.error);
 
-  // A cart created while signed in starts out linked to the customer.
-  const session = await getSession();
+  // A cart created while signed in starts out linked to the customer. Refresh
+  // first: off `/account/*` nothing else has, and an expired token here would
+  // create a guest cart that a later refresh never relinks.
+  const session = await getFreshSession();
   const result = await storefrontQuery<{ cartCreate: CartMutationPayload }>(
     CART_CREATE_MUTATION,
     {
