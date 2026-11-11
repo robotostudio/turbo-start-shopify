@@ -8,6 +8,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@workspace/ui"],
+  // Customer sign-in needs an HTTPS callback, so local testing runs through a
+  // tunnel set as NEXT_PUBLIC_SITE_URL. Without this, Next's dev server blocks
+  // its own assets when the page is loaded from the tunnel's host.
+  allowedDevOrigins: env.NEXT_PUBLIC_SITE_URL
+    ? [new URL(env.NEXT_PUBLIC_SITE_URL).hostname]
+    : [],
   reactCompiler: true,
   cacheComponents: true,
   partialPrefetching: true,
@@ -42,7 +48,9 @@ const nextConfig: NextConfig = {
     // No `script-src`: the inline JSON-LD and Next bootstrap need nonces first.
     const csp = [
       "base-uri 'self'",
-      "form-action 'self'",
+      // Sign-out is a POST that redirects to Shopify's end-session endpoint,
+      // and Chrome applies form-action to the redirect target too.
+      "form-action 'self' https://shopify.com",
       "object-src 'none'",
       `frame-ancestors 'self' ${env.NEXT_PUBLIC_SANITY_STUDIO_URL} https://*.sanity.studio`,
     ].join("; ");

@@ -35,6 +35,9 @@
   "[graphql]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "emmet.showExpandedAbbreviation": "never"
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "emmet.showExpandedAbbreviation": "never",
+  "cSpell.words": [
+    "prerendered"
+  ]
 }

@@ -18,6 +18,7 @@
     "type": "sanity schema extract --enforce-required-fields --force && sanity typegen generate && pnpm --filter @workspace/sanity format",
     "seed:shopify": "tsx scripts/seed-shopify/index.ts",
     "migrate:handoff": "tsx scripts/migrate-handoff/index.ts",
+    "seed:customers": "tsx scripts/seed-customers/index.ts",
     "verify:shopify": "tsx scripts/verify-shopify.ts",
     "postinstall": "sanity exec scripts/cli-alert-for-data.ts"
   },
