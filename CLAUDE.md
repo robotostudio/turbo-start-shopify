@@ -27,6 +27,7 @@ packages/
 pnpm dev              # all apps
 pnpm dev:web          # Next.js only
 pnpm dev:studio       # Sanity Studio only
+pnpm dev:tunnel       # Next.js behind your ngrok domain, for customer sign-in (prints the URIs to register)
 
 # Build
 pnpm build            # all
@@ -48,7 +49,8 @@ pnpm --filter studio run deploy    # publish the Studio
 # Seed data
 pnpm seed:shopify     # faker products → Shopify Admin API (needs SHOPIFY_ADMIN_ACCESS_TOKEN)
 pnpm verify:shopify   # check store state
-pnpm --filter studio exec sanity dataset import ./seed-data.tar.gz production --replace
+pnpm seed:customers -- --email=you+shop@example.com  # test customer + orders for /account
+pnpm --filter studio exec sanity dataset import ./seed-data.tar.gz --dataset production --replace
 ```
 
 `schema extract` runs with `--force` — it refuses to overwrite an existing `schema.json` without it. `pnpm --filter studio type` also runs a Biome pass over `packages/sanity` as its third step, so expect a formatting diff alongside the regenerated types.
@@ -59,16 +61,16 @@ Tests are Vitest, scoped to `apps/web`, and run from the root through Turbo (`pn
 
 `.claude/skills/` holds tested playbooks. Prefer them over improvising:
 
-| Skill | Use for |
-|---|---|
-| `add-pagebuilder-block` | Adding a block to the Sanity page builder |
-| `enable-ai-assistant` | Adding the turbo-start-aisle AI shopping assistant |
-| `generate-thumbnails-agentic` | Page builder block thumbnails via Playwright MCP |
+| Skill                         | Use for                                            |
+| ----------------------------- | -------------------------------------------------- |
+| `add-pagebuilder-block`       | Adding a block to the Sanity page builder          |
+| `enable-ai-assistant`         | Adding the turbo-start-aisle AI shopping assistant |
+| `generate-thumbnails-agentic` | Page builder block thumbnails via Playwright MCP   |
 
 ## Sanity Studio
 
 - **Documents**: `blog`, `page`, `faq`, `author`, `category`, `product`, `collection`, `productVariant`, `redirect`
-- **Singletons**: `homePage`, `blogIndex`, `collectionsIndex`, `settings`, `footer`, `navbar`, `promoBanner` — the `singletons` array in `apps/studio/schemaTypes/documents/index.ts` is the list. `sanity.config.ts` keeps a *second*, hardcoded list in `document.newDocumentOptions`; the two have already drifted, so a new singleton needs both
+- **Singletons**: `homePage`, `blogIndex`, `collectionsIndex`, `settings`, `footer`, `navbar`, `promoBanner` — the `singletons` array in `apps/studio/schemaTypes/documents/index.ts` is the list. `sanity.config.ts` keeps a _second_, hardcoded list in `document.newDocumentOptions`; the two have already drifted, so a new singleton needs both
 - **Page builder blocks**: defined in `apps/studio/schemaTypes/blocks/`, registered in `blocks/index.ts` — **the Studio-side registry, and the list to read before assuming which blocks exist**. Rendering needs two more registrations to agree: the GROQ fragment in `packages/sanity/src/query.ts` and `BLOCK_COMPONENTS` in `apps/web/src/components/pagebuilder.tsx`. A block present in one but not the others fails distinctly — see the `add-pagebuilder-block` skill
 - **Shopify objects** (`apps/studio/schemaTypes/objects/shopify/`): synced read-only by Sanity Connect; never write to `store.*`
 - **Blueprint** (`sanity.blueprint.ts`): auto-redirect function creating `redirect` documents on slug change
@@ -80,6 +82,7 @@ Tests are Vitest, scoped to `apps/web`, and run from the root through Turbo (`pn
 - **SEO**: `getSEOMetadata()` in `apps/web/src/lib/seo.ts`, OG images via `/api/og`
 - **AI agent surfaces**: content negotiation serves Markdown to agents (`apps/web/src/proxy.ts`, `apps/web/src/app/api/markdown/route.ts`), plus `apps/web/src/app/llms.txt/route.ts`
 - **Visual editing**: `VisualEditingLayer` (`VisualEditing` from `next-sanity/visual-editing` plus this app's overlay components) in the root layout, draft mode only; `createDataAttribute` per block; draft mode via `/api/presentation-draft`
+- **Customer accounts**: `apps/web/src/lib/customer-account/` — Customer Account API (OAuth public client + PKCE). Every call goes through `customerAccountQuery()`, never cached. Session is an encrypted cookie refreshed in `proxy.ts` (a server component cannot set cookies), then re-checked by `loadCustomerData()` in each page — see `docs/adr/0001-customer-session-in-encrypted-cookie.md`
 - **Redirects**: fetched from Sanity at Next.js build time via `queryRedirects` in `next.config.ts`
 - **Node** >=24.10, **pnpm** 11.24.0 (workspace protocol, catalog in `pnpm-workspace.yaml`)
 - **CI** (`.github/workflows/ci.yml`): lint, format:check, check-types, `test:coverage`, a SonarQube Cloud scan, then a Studio build against `apps/studio/.env.example` — Vercel builds `apps/web` on every PR but not `apps/studio`, so that last step is the only thing catching a dependency that breaks `sanity build`
@@ -128,6 +131,7 @@ mode, and the `data-inline-edit` attribute is inert outside Presentation.
 - `SANITY_API_READ_TOKEN`, `SANITY_API_WRITE_TOKEN`
 - `SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_ACCESS_TOKEN` — required; `SHOPIFY_API_VERSION` defaults to `2025-01`
 - `NEXT_PUBLIC_STORE_CURRENCY` — ISO 4217, defaults to `GBP`
+- `SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID`, `CUSTOMER_SESSION_SECRET` — optional; customer accounts (`/account`) switch on only when both are set. Sign-in needs an HTTPS callback registered in the Headless channel, so local testing runs through `pnpm dev:tunnel` (`apps/web/scripts/dev-tunnel.mjs`): it starts ngrok on the account's fixed dev domain (or `NGROK_URL`) and hands that URL to `next dev` as `NEXT_PUBLIC_SITE_URL` in the process env, never in `.env`. It launches `next` through `node_modules/.bin/next`, not next's entry file: pnpm's wrapper sets `NODE_PATH`, and without it Turbopack cannot resolve `@tailwindcss/postcss` and every page 500s. Orders from `seed:customers` need the Dev Dashboard app's offline token; a `shopify store auth` token is refused by `orderCreate`. Preview deploys cannot sign in (their URL changes per deploy). README → Customer Accounts covers local and production
 - `NEXT_PUBLIC_SITE_URL` — canonical origin, no trailing slash. Checked _before_ the Vercel vars, so it also overrides the generated `*.vercel.app` URL. Required off Vercel: `getBaseUrl()` otherwise falls back to `localhost:3000` and every canonical, OG URL and sitemap entry ships pointing there
 
 **Studio** (`apps/studio/.env`): `SANITY_STUDIO_PROJECT_ID`, `SANITY_STUDIO_DATASET`, `SANITY_STUDIO_TITLE`, `SANITY_STUDIO_PRESENTATION_URL`, `SHOPIFY_ADMIN_ACCESS_TOKEN` (seed scripts only)

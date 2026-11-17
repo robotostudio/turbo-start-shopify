@@ -190,3 +190,32 @@ export function CopyIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function UserIcon({ className }: Readonly<{ className?: string }>) {
+  return (
+    // Same 18x18 box and 1.3 stroke as BagIcon, ink spanning 2.8125 -> 15.1875.
+    <svg
+      className={className}
+      fill="none"
+      height="18"
+      viewBox="0 0 18 18"
+      width="18"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>Account</title>
+      <circle
+        cx="9"
+        cy="6.1"
+        r="3.2875"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      <path
+        d="M2.8125 15.1875C3.4 12.3 5.9 10.6 9 10.6C12.1 10.6 14.6 12.3 15.1875 15.1875"
+        stroke="currentColor"
+        strokeLinecap="square"
+        strokeWidth="1.3"
+      />
+    </svg>
+  );
+}

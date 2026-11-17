@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 
 import type { ColumnLink, NavColumn, NavigationData } from "@/types";
+import { AccountLink } from "./account/account-link";
 import { CartDrawer } from "./cart/cart-drawer";
 import { CartToggle } from "./cart/cart-toggle";
 import { MenuLink } from "./elements/menu-link";
@@ -70,7 +71,11 @@ function DesktopColumnLink({
   );
 }
 
-export function Navbar({ navbarData, settingsData }: NavigationData) {
+export function Navbar({
+  navbarData,
+  settingsData,
+  accountEnabled = false,
+}: NavigationData & { accountEnabled?: boolean }) {
   const { columns } = navbarData || {};
   const { siteTitle, logo } = settingsData || {};
 
@@ -124,6 +129,7 @@ export function Navbar({ navbarData, settingsData }: NavigationData) {
           {/* Desktop Actions */}
           <div className="hidden flex-1 items-center justify-end gap-6 lg:flex">
             <SavedItemsToggle variant="text" />
+            {accountEnabled && <AccountLink variant="text" />}
             <SearchToggle />
             <CartToggle />
           </div>
@@ -132,6 +138,7 @@ export function Navbar({ navbarData, settingsData }: NavigationData) {
           <div className="flex items-center gap-4 lg:hidden">
             <SearchToggle />
             <SavedItemsToggle />
+            {accountEnabled && <AccountLink />}
             <CartToggle />
             <MobileMenu navbarData={navbarData} settingsData={settingsData} />
           </div>

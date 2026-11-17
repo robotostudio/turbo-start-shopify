@@ -9,6 +9,7 @@
     "dev": "turbo run dev",
     "dev:studio": "turbo run dev --filter=studio",
     "dev:web": "turbo run dev --filter=web",
+    "dev:tunnel": "pnpm --filter web dev:tunnel",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "test:coverage": "turbo run test:coverage",
@@ -16,6 +17,7 @@
     "format:check": "turbo run format:check",
     "check-types": "turbo run check-types",
     "seed:shopify": "pnpm --filter studio seed:shopify",
+    "seed:customers": "pnpm --filter studio seed:customers",
     "verify:shopify": "pnpm --filter studio verify:shopify"
   },
   "dependencies": {

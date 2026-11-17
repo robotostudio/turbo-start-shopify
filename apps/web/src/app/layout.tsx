@@ -16,6 +16,7 @@ import { PreviewBar } from "@/components/preview-bar";
 import { PromoBanner } from "@/components/promo-banner";
 import { Providers } from "@/components/providers";
 import { VisualEditingLayer } from "@/components/visual-editing-layer";
+import { isCustomerAccountEnabled } from "@/lib/customer-account/oauth";
 import { getLayoutData } from "@/lib/navigation";
 import { getSEOMetadata, SITE_LANG } from "@/lib/seo";
 
@@ -68,6 +69,7 @@ export default async function RootLayout({
           <div className="flex min-h-screen flex-col">
             <PromoBanner data={layoutData.promoBannerData} />
             <Navbar
+              accountEnabled={isCustomerAccountEnabled()}
               navbarData={layoutData.navbarData}
               settingsData={layoutData.settingsData}
             />

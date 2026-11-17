@@ -81,8 +81,11 @@ const CART_MUTATION_RESULT_FRAGMENT = /* graphql */ `
 
 export const CART_CREATE_MUTATION = /* graphql */ `
   ${CART_FRAGMENT}
-  mutation CartCreate($lines: [CartLineInput!]!) {
-    cartCreate(input: { lines: $lines }) {
+  mutation CartCreate(
+    $lines: [CartLineInput!]!
+    $buyerIdentity: CartBuyerIdentityInput
+  ) {
+    cartCreate(input: { lines: $lines, buyerIdentity: $buyerIdentity }) {
       cart {
         ...CartFields
       }
@@ -132,6 +135,27 @@ export const CART_LINES_REMOVE_MUTATION = /* graphql */ `
         ...CartFields
       }
       ${CART_MUTATION_RESULT_FRAGMENT}
+    }
+  }
+`;
+
+/**
+ * Attaches a signed-in customer to a cart, so checkout opens signed in. The
+ * token is the Customer Account API access token.
+ */
+export const CART_BUYER_IDENTITY_UPDATE_MUTATION = /* graphql */ `
+  mutation CartBuyerIdentityUpdate(
+    $cartId: ID!
+    $buyerIdentity: CartBuyerIdentityInput!
+  ) {
+    cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+      cart {
+        id
+      }
+      userErrors {
+        field
+        message
+      }
     }
   }
 `;
